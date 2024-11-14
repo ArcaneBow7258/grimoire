@@ -1,0 +1,12 @@
+{{ $data := dict}}
+{{ with resources.GetRemote (.Get "srv")}}
+
+  {{ $data := .}}
+
+{{end}}
+{{if $data }}
+  {{$data}}
+    {{ "Up :smile:"  | emojify }}
+{{else}}
+    {{ "Down :sleepy:"  | emojify }}
+{{end}}

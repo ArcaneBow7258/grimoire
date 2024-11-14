@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://alvintran.net/status/</loc>
+    <lastmod>2024-11-12T21:53:35-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/writeups/ncl/pc_complexity/</loc>
+    <lastmod>2024-11-12T12:28:45-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/writeups/ncl/</loc>
+    <lastmod>2024-11-12T11:46:59-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/writeups/</loc>
+    <lastmod>2024-11-12T11:46:50-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/homelab/</loc>
+    <lastmod>2024-11-12T10:17:14-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/</loc>
+    <lastmod>2024-11-11T21:13:19-05:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/archives/</loc>
+  </url><url>
+    <loc>https://alvintran.net/categories/</loc>
+  </url><url>
+    <loc>https://alvintran.net/tags/</loc>
+  </url>
+</urlset>

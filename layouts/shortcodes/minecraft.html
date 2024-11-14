@@ -1,0 +1,29 @@
+{{ $data := dict }}
+{{ $icon := "" }}
+{{ $url := (.Get "srv") | printf "https://api.mcsrvstat.us/3/%s"  }}
+{{ $opts := dict
+  "method" "get"
+}}
+
+{{ with resources.GetRemote $url $opts }}
+
+  {{ with . | transform.Unmarshal }}
+    {{ $data = .}}
+    
+  {{ end }}
+{{end}}
+{{if $data.online }}
+    Online!  <br>
+    {{$icon := printf  $data.icon | safeURL }}
+    <img src="{{ $icon | safeURL }}" style="display:inline; align:left"/>  <br>
+    {{ $data.players.online }} / {{ $data.players.max }}
+    {{if $data.players.list}}
+    <li>
+      {{range $data.players.list}}
+        <ul>{{.name}}</ul>
+      {{end}}
+    </li>
+    {{end}}
+{{else}}
+    {{ "Down :sleepy:"  | emojify }}
+{{end}}

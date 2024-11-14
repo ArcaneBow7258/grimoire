@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NCL on Alvin Tran</title>
+    <link>https://alvintran.net/writeups/ncl/</link>
+    <description>Recent content in NCL on Alvin Tran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 12 Nov 2024 11:46:59 -0500</lastBuildDate><atom:link href="https://alvintran.net/writeups/ncl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Writeups / NCL / PC_complexity</title>
+      <link>https://alvintran.net/writeups/ncl/pc_complexity/</link>
+      <pubDate>Tue, 12 Nov 2024 12:28:45 -0500</pubDate>
+      
+      <guid>https://alvintran.net/writeups/ncl/pc_complexity/</guid>
+      <description>Walkthrough of Fall 2024 NCL Password Cracking (Hard)! Going through basic &lt;code&gt;hashcat&lt;/code&gt; to adding rules to match with complexity requirements</description>
+      <content:encoded><![CDATA[<h1 id="prerequisites">Prerequisites</h1>
+<ul>
+<li>Probably have <a href="https://github.com/hashcat/hashcat">hashcat</a> installed. I have it on some local directory on my Windows PC</li>
+<li>Figure out your hash type <a href="https://nth.skerritt.blog/">NameThatHash</a>. Usually for these its md5 (-m 500, is also default on hashcat but having it on makes it faster.)</li>
+</ul>
+<h1 id="loading-passwords">Loading passwords</h1>
+<p>Load the first two hashes (Easy) into a txt file like. Say the file is easy.txt, should just look like:</p>
+<pre tabindex="0"><code>$1$abcd$cM9oWl3gP.t.Cz2dWWm7L1
+$1$efgh$Fmv8YRcVm3phgfR0MwVYw0
+$1$lmno$mDFxTnfk0Ad3di11sVbNj.
+</code></pre><p>For taxonomoy:</p>
+<pre tabindex="0"><code>$1$ -&gt; Transaction ID ( i think )
+$abcd$ -&gt; Salt (prepended/appended to a password before feeding. Make it longer to password crack.
+  Example: &#34;password&#34; is actually used for all 3 above, but salt makes them all different. &lt;br&gt;
+  Thus if you wanted to crack &#34;password&#34;, you&#39;d have to try 3x as many combinatons.
+$restofthestuff -&gt; actual password hash
+</code></pre><p>Command to generate: <code>openssl passwd -aixmd5 -salt abcd password</code>. Added <code>$1$</code> to front later.
+I keep the real passwords out per NCL guidelines.</p>
+<h1 id="easy-passwords-1-2">Easy (passwords 1-2)</h1>
+<p><code>hashcat.exe -m 500 easy.txt -a 0 path/to/rockyou.txt</code><br>
+-m 500 -&gt; Mode for md5. Usually what they use for these problems, check NameThatHash.<br>
+-a 0 -&gt; attack mode 0, dictonary attack. This is default I think as well. Goes through wordlist(s).<br>
+Format is generally &ldquo;hashcat.exe [hashfile] [options] [dict1] [dict2] [dict&hellip;]</p>
+<p>If you read the problem, the password-maker is <em>really</em> lazy and keeps the same pattern for all his passwords!(ex. password12 and 44password)<br>
+They also use the <em>bare minimum</em> number of characters required. Useful to limit your search.<br>
+Now we have the keyword, we can start using more complex rules</p>
+<h1 id="medium-categories-mask-passwords-3-4">Medium Categories (Mask) (passwords 3-4)</h1>
+<p>Assuming hash file is in &lsquo;medium.txt&rsquo;.<br>
+This time they&rsquo;ve updated their game and require 2 of:</p>
+<ul>
+<li>Uppercase</li>
+<li>Lowercase</li>
+<li>Number
+Luckily there two functions of hashcat that can help: mask attack and rules.
+I would refer to official hashcat documentation on details but I&rsquo;m here to just run you down to do the problem.</li>
+</ul>
+<h2 id="mask-attacks">Mask Attacks</h2>
+<p>With attack mode <code>-a 6</code> or <code>a -7</code>, you can try characters at end or beginning of a password.</p>
+<table>
+  <thead>
+      <tr>
+          <th>option</th>
+          <th>characters</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>?d</td>
+          <td>0123&hellip;9</td>
+      </tr>
+      <tr>
+          <td>?l</td>
+          <td>abcd&hellip;z</td>
+      </tr>
+      <tr>
+          <td>?u</td>
+          <td>ABCD&hellip;Z</td>
+      </tr>
+      <tr>
+          <td>?a</td>
+          <td>01..9..AB..Z..ab..z..?!&lt;&gt;*$&hellip;~</td>
+      </tr>
+  </tbody>
+</table>
+<p>So for example, say we have a file named <code>password.txt</code> that only contains:</p>
+<pre tabindex="0"><code>password
+PASSWORD
+</code></pre><p>We can run <code>hashcat.exe -m 500 medium.txt -a 6 password.txt ?d?d</code> which will do <code>password11 -&gt; password99</code> and <code>PASSWORD11 -&gt; PASSWORD99</code>.<br>
+We can reverse this with  <code>hashcat.exe -m 500 medium.txt -a 7 ?d?d password.txt</code>, which <em>prepends</em> to beginning of word i.e <code>12password</code> and so on.<br>
+If you&rsquo;d like to combine categories, i.e. both digits and uppercase, we can assign custom codes with <code>-1 ?d?u</code> then instead we insert <code>password.txt ?1?1</code>.<br>
+Everything behind <code>-1</code> gets added to a charcter list, so if you wanted only a certain set you could define it as <code>-1 ABCD1234</code> which will only try those 8 characters in any <code>?1</code> space.</p>
+<h2 id="rules">Rules</h2>
+<p>Can only be used with dictionary attacks (according to my machine, the wiki says something different). Does a lot of fancy things, like substitutions, duplications, case-toggles, etc, really over my head.<br>
+Good ones to know:
+<a href="https://github.com/NotSoSecure/password_cracking_rules/blob/master/OneRuleToRuleThemAll.rule">OneRuleToRuleThemAll</a> and its <a href="https://github.com/stealthsploit/OneRuleToRuleThemStill">brother</a>
+Base hashcat rules: <code>rules/toggles1.rule</code> - <code>rules/toggles5.rule</code>,   <code>rules/leetspeak.rule</code></p>
+<p>ORtRTA (?) takes long time but is mostly thourough, don&rsquo;t do unless you have lotta time.<br>
+Toggle rules are easy and work really good for our next case (Medium+).<br>
+Leetspeak will work with when NCL adds specifciation &ldquo;Passwords must not contain any word from english dictionary&rdquo;.</p>
+<h2 id="solving-the-problem">Solving the problem</h2>
+<p>I think I got it trying the ones below and masking sure <code>password.txt</code> had an uppercase KEYWORD and lowercase keyword:</p>
+<pre tabindex="0"><code>hashcat.exe -m 500 medium.txt -a 6 -1 ?d?u?l password.txt ?1?1  
+hashcat.exe -m 500 medium.txt -a 7 -1 ?d?u?l ?1?1 password.txt
+</code></pre><p>Note_1: The amount of <code>?a</code> I add is depndent on minimum length and keyword length. They keyword itself was 6 characters so if the minimum was 10, I would add 4 <code>?d</code> to end like above.<br>
+Note_2: Using custom <code>?d?u?l</code> since <code>?1</code> includes special characters which we won&rsquo;t use (problem states bare minimum safe to assume usually).
+I was missing one from this category :(</p>
+<h3 id="addendum-mask-on-front-and-back">Addendum: Mask on front and back</h3>
+<p>Unforunately, you can&rsquo;t put both at front and end at same time, so we have to do it one at a time. hashcat allows for outputting your combinations to a file, so the sequence below would do it:</p>
+<pre tabindex="0"><code>hashcat.exe  --stdout -a 6 password.txt ?a  &gt; back.txt
+hashcat.exe -m 500 medium.txt -a 7 ?a back.txt
+</code></pre><p>This will try <code>1password1</code> all the way to <code>ZpasswordZ</code>. This could get the last one I&rsquo;m missing. Also note for brevity I use <code>?a</code> here instead of the custom.
+You can chain and combine different attack modes as well, like if I wanted to combine two wordlists <code>-a 1 first.name last.name &gt; full.name</code> then do my append <code>-a 6 full.name ?d?d</code>. Not necessary here, but good to know.</p>
+<h1 id="medium-categories-rules-passwords-5-6">Medium+ Categories+ (Rules) (passwords 5-6)</h1>
+<p>NCL now wants the passwords to have ALL of the categories, and a minimum length of 10.<br>
+To get all the categories, I did something similar above and used hashcat rules to ALL capitalizations of my kEyWOrd:<br>
+<code>hashcat.exe  --stdout -a 0 password.txt -r rules/toggles5.rule  &gt; all.txt</code> (or type it by hand)<br>
+Then I just ran what I basically did before but at a larger minimum:</p>
+<pre tabindex="0"><code>hashcat.exe -m 500 medium.txt -a 6 all.txt ?d?d?d?d  
+hashcat.exe -m 500 medium.txt -a 7 ?d?d?d?d all.txt
+</code></pre><p>I try digits first since the <code>all.txt</code> fulfills upper and lowercase already AND its faster to check. This alone got 2 passwords so safe bet. Otherwise you can use <code>-1 ?d?u?l</code> or whatever.</p>
+<p>Got the one easy enough.</p>
+<h1 id="hard-no-english-password-7">Hard No English (password 7)</h1>
+<p>I just took everything from above and threw a rule on it since we can&rsquo;t have &ldquo;english&rdquo; but we can certainly have &ldquo;3ng1!sh&rdquo;</p>
+<pre tabindex="0"><code>hashcat.exe --stdout -a 6 all.txt ?d?d?d?d &gt; back.txt
+hashcat.exe --stdout -a 7 ?d?d?d?d all.txt &gt; front.txt
+hashcat.exe -m 500 hard.txt -a 6 back.txt -r rules/leetspeak.rule
+hashcat.exe -m 500 hard.txt -a 6 front.txt -r rules/leetspeak.rule
+OR
+hashcat.exe -m 500 hard.txt -a 6 front.txt back.txt -r rules/leetspeak.rule
+</code></pre><p>I got my one and out. Happened to be in format <code>?d?d?d?dK3yW0rD</code></p>
+<h1 id="hardest-passwords-7">Hardest (passwords 7+)</h1>
+<p>I did not get to these but I think its combination of above plus:</p>
+<ul>
+<li>including special characters (leetspeek and ?a or ?s will w ork)</li>
+<li>higher minimum number (12)
+I hear this is where it gets computationally prohibitive, so will take a while to try different orders and combinations.</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

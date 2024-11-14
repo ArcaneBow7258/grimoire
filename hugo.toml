@@ -1,0 +1,72 @@
+baseURL = 'https://alvintran.net/'
+languageCode = 'en-us'
+title = 'Alvin Tran'
+theme =  "PaperModX"
+contentDir = "content" 
+assetDir = "assets"
+ignoreLogs = ['warning-goldmark-raw-html']
+defaultTheme = 'dark'
+enableEmoji = true
+[params]
+    Email = 'mail@alvintran.net'
+    MaskedEmail = 'mail@alvintran.net'
+    disableHLJS = true
+    favicon = "images/favicon-16x16.png?"
+    favicon16x16 = "/favicon-16x16.png"
+    favicon32x32 = "/favicon-32x32.png"
+    apple_touch_icon = "/apple-touch-icon.png"
+    safari_pinned_tab = "/safari-pinned-tab.svg"
+
+        
+
+    [params.homeInfoParams]
+        [[params.socialIcons]]
+            name = "LinkedIn"
+            url = "https://www.linkedin.com/in/alvin-tran-arcane"
+
+        [[params.socialIcons]]
+            name = "github"
+            url = "https://github.com/ArcaneBow7258"
+        [[params.socialIcons]]
+            name = "email"
+            url = "email"
+            Email = "mail@alvintran.net"
+            # [LinkedIn]
+
+[menus]
+    [[menus.main]]
+        name = 'Home'
+        pageRef = '/'
+        weight = 1
+    [[menus.main]]
+        name = 'Homelab'
+        pageRef = '/homelab'
+        weight = 10
+    [[menus.main]]
+        name = 'Writeups'
+        pageRef = '/writeups'
+        weight = 20
+    [[menus.main]]
+        name = 'Status'
+        pageRef = '/status'
+        weight = 30
+ 
+[module]
+    # [[module.mounts]]
+    #     source = 'assets'
+    #     target = 'assets'
+    # # [[module.mounts]]
+    # #     source = 'static'
+    # #     target = 'static'
+
+[markup]
+    [markup.goldmark.renderHooks.image]
+        enableDefault = true
+    [markup.goldmark.renderHooks.link]
+        enableDefault = true
+    [markup.goldmark.renderer]
+        unsafe = true
+    [markup.goldmark.parser.attribute]
+        block = true
+        [markup.goldmark]
+ 
