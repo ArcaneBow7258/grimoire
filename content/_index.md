@@ -5,6 +5,7 @@ title = 'Home Page'
 ShowToc = true
 TocOpen = true
 TocSide = "right"
+lastMod =  '2024-11-11T21:13:19-05:00'
 +++
 <!-- #  https://archives.bulbagarden.net/media/upload/3/37/0479Rotom.png
 https://archives.bulbagarden.net/media/upload/thumb/6/64/0855Polteageist.png/1024px-0855Polteageist.png
@@ -23,14 +24,18 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
 
 
 ## Achievements {{<image_icon "images/pkm/aegislash.png">}}
+> I go by [**sclstice or Arcane[x]**] for my competitions usually for validity purposes.
 - [National Cyber League](https://nationalcyberleague.org/competition)
     - Spring 2024 Individual [110/7400, top 2%] -- Team [52/412, top 2%]
     - Fall 2024 Individual [43/8482, top 0.5%] -- Team [12/534, top 2%], experience student bracket
 - [Hivestorm Cyber Defense Competition](https://www.hivestorm.org/)
     - Fall 2024 Team [68/413]
+- [MetaCTF](https://metactf.com/)
+    - Jan. 2025 Flash CTF [37/1044, top 3.5%]
 - [UofL IEEE Outstanding CSE Student Award](https://engineering.louisville.edu/about/ourstudents/honorsawards/)
 - CompTIA Security+ Certification
 - CSA CCSK 
+- Working on: HTB Certified Junior Penetration Tester
 
  ## Papers {{<image_icon "images/pkm/dragapult.png" >}}
 
@@ -67,8 +72,9 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
 
 - Computer Forenics
 - Computer Architecture
-- Newtork / Information / AI Security 
+- Newtork / Information / AI / Software / Info Security 
 - Operating Systems
+- Distributed Systems
 {{< column >}}
 
 - Optimization and Moden Heuristics

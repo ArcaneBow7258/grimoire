@@ -5,9 +5,15 @@ theme =  "PaperModX"
 contentDir = "content" 
 assetDir = "assets"
 ignoreLogs = ['warning-goldmark-raw-html']
-defaultTheme = 'dark'
+
+enableGitInfo = true
+disableThemeToggle = true
 enableEmoji = true
+[frontmatter]
+lastmod = ["lastmod", ":git", "date", "publishDate"]
+
 [params]
+    defaultTheme = 'dark'
     Email = 'mail@alvintran.net'
     MaskedEmail = 'mail@alvintran.net'
     disableHLJS = true
