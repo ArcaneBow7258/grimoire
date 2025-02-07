@@ -1,1 +1,6 @@
+.gitignore
 run.sh
+
+.git/*
+!.git/hooks/
+.git/hooks/*.sample
