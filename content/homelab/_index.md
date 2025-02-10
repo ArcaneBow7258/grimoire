@@ -19,7 +19,7 @@ TocSide = "right"
 
 ## Actual Homelab
 Here's the general layout of how everything is organized:
-{{< figure-img-size placeholder 100px 100px >}}/images/pkm/mimikyu.png{{</ figure-img-size >}}
+{{< figure-img-size "Still need to update" >}}/images/network_map.drawio.png{{</ figure-img-size >}}
 ### EdgeRouter X
 - Depreciated piece of hardware I should replace
 - Runs wireguard tunnel to Phone, PC, and Laptop, allowing access to homelab anywhere securely.

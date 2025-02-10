@@ -8,6 +8,166 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 11 Nov 2024 21:13:19 -0500</lastBuildDate><atom:link href="https://alvintran.net/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Payloads and MSFvenom</title>
+      <link>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</link>
+      <pubDate>Fri, 07 Feb 2025 14:25:46 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</guid>
+      <description>Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.</description>
+      <content:encoded><![CDATA[<!---  --->
+<h1 id="seashells-br--payloads-br--and-msfvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom</h1>
+<p>
+  <img loading="lazy" src="https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale%28%29:focal%28990x769:991x770%29/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg" alt="bg right:40%"  />
+UofL Cyber Defense</p>
+<hr>
+<!-- paginate: true -->
+<h1 id="disclaimer">Disclaimer</h1>
+<ul>
+<li>Don&rsquo;t try at home <br />(okay at home but not at other people while at home)</li>
+<li>Regurgtating information I did a module on</li>
+<li>Not super practical unless you&rsquo;re advanced (i am not)</li>
+</ul>
+<hr>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ol>
+<li>Payloads</li>
+<li>Shells</li>
+<li>MSFVenom</li>
+<li>File Upload Example</li>
+<li>Avoiding AV&rsquo;s</li>
+<li>.Exe Embedding</li>
+</ol>
+<hr>
+<h1 id="whats-a-payload">What&rsquo;s a Payload?</h1>
+<p>
+  <img loading="lazy" src="https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824" alt="bg contain right:40%"  /></p>
+<ul>
+<li>A bomb you sent/upload to a server
+<ul>
+<li>Triggers RCE</li>
+<li>Injects</li>
+<li>Creates <em>shells</em></li>
+</ul>
+</li>
+<li>Resources
+<ul>
+<li>Payload all the Things</li>
+<li>Metasploit Framework</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="shells">Shells</h1>
+<p>
+  <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png" alt="bg contain  right:40%"  /></p>
+<ul>
+<li><strong>S</strong>ecure <strong>SH</strong>ell</li>
+<li>ba<strong>sh</strong>, power<strong>shell</strong>, z<strong>sh</strong></li>
+<li>interacts with the terminal</li>
+<li>Metepreter</li>
+<li>Web Shells</li>
+</ul>
+<hr>
+<p>
+  <img loading="lazy" src="https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png" alt="bg contain  right:40%"  /></p>
+<h1 id="how-to-get-to-the-shell-part">How to get to the shell part</h1>
+<ul>
+<li>Find an attack vector!
+<ul>
+<li>FTP</li>
+<li>Webserver file uploads</li>
+<li>Dropped a USB</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="types-of-connections">Types of connections</h1>
+<ul>
+<li>Bind - Target listens for connection
+<ul>
+<li>opens port</li>
+</ul>
+</li>
+<li>Reverse - Host listens, Target Initiates
+<ul>
+<li>Circumvents firewalls and rules</li>
+<li>Need a listener
+<ul>
+<li>ncat / netcat</li>
+<li>MSF multi/handler</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>[Demo Cue]</p>
+<!-- footer: https://www.revshells.com/ --> 
+<hr>
+<h1 id="web-shells">Web Shells</h1>
+<p>
+  <img loading="lazy" src="https://i.redd.it/5ofaq45gfmpb1.jpg" alt="bg contain right:40%"  /></p>
+<ul>
+<li>File upload vulnerability
+<ul>
+<li>PHP</li>
+<li>dotnet ASP</li>
+<li>Javascript Server Pages (JSP)</li>
+<li>Usually after you get admin access to a website</li>
+</ul>
+</li>
+<li>Laudanum</li>
+<li>MSFvenom</li>
+</ul>
+<!-- footer: "" -->
+<hr>
+<h1 id="damn-vulnerable-web-app">Damn Vulnerable Web App</h1>
+<p>
+  <img loading="lazy" src="https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658" alt="bg contain right:20% "  /></p>
+<ul>
+<li>Part of kali environment (i think)</li>
+<li>whole host of vulnerabilities</li>
+<li>Alternatvies:
+OWASP Juicebox, Metasploitable, OWASP Mutillidae II,
+DV RESTurant, DV bank</li>
+</ul>
+<p><a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php</a></p>
+<!-- footer: "https://github.com/digininja/DVWA " -->
+<hr>
+<h1 id="msfvenom-for-payload-creation">MSFvenom for payload creation</h1>
+<p>
+  <img loading="lazy" src="https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png" alt="bg contain right:20%"  /></p>
+<ul>
+<li>Different payloads (shells, meterpreter)</li>
+<li>Different platforms / arch</li>
+<li>Encodings</li>
+<li>File formants include ASPX, WAR, PHP, EXE, ELF</li>
+</ul>
+<p>[Demo Cue]</p>
+<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" --> 
+<!---
+"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main" 
+-->
+<hr>
+<h1 id="evasion">Evasion</h1>
+<p>
+  <img loading="lazy" src="https://www.serebii.net/games/evasion.jpg" alt="bg contain right:40%"  /></p>
+<ul>
+<li>Encoding</li>
+<li>Templates
+<ul>
+<li>Modify existing ones</li>
+<li>Use examples (injection)</li>
+<li>Modify existing ones
+<a href="https://www.ired.team/offensive-security/code-injection-process-injection/process-injection">https://www.ired.team/offensive-security/code-injection-process-injection/process-injection</a></li>
+</ul>
+</li>
+</ul>
+<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Writeups / NCL / PC_complexity</title>
       <link>https://alvintran.net/writeups/ncl/pc_complexity/</link>
       <pubDate>Tue, 12 Nov 2024 12:28:45 -0500</pubDate>
