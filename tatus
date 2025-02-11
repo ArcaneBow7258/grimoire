@@ -1,0 +1,2115 @@
+[33mcommit 0c3d08b7fb8c0dc3ab28d7134968363f0d5050bd[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Alvin <AlvinTran7258@gmail.com>
+Date:   Mon Feb 10 03:19:41 2025 +0000
+
+    Cyber-defense presentation for Payloads mostly done
+
+[1mdiff --git a/content/homelab/_index.md b/content/homelab/_index.md[m
+[1mindex 51a2084..9a34eb1 100644[m
+[1m--- a/content/homelab/_index.md[m
+[1m+++ b/content/homelab/_index.md[m
+[36m@@ -19,7 +19,7 @@[m [mTocSide = "right"[m
+ [m
+ ## Actual Homelab[m
+ Here's the general layout of how everything is organized:[m
+[31m-{{< figure-img-size placeholder 100px 100px >}}/images/pkm/mimikyu.png{{</ figure-img-size >}}[m
+[32m+[m[32m{{< figure-img-size "Still need to update" >}}/images/network_map.drawio.png{{</ figure-img-size >}}[m
+ ### EdgeRouter X[m
+ - Depreciated piece of hardware I should replace[m
+ - Runs wireguard tunnel to Phone, PC, and Laptop, allowing access to homelab anywhere securely.[m
+[1mdiff --git a/content/writeups/Cyber Defense/Payloads and MSFvenom.md b/content/writeups/Cyber Defense/Payloads and MSFvenom.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..8668330[m
+[1m--- /dev/null[m
+[1m+++ b/content/writeups/Cyber Defense/Payloads and MSFvenom.md[m	
+[36m@@ -0,0 +1,123 @@[m
+[32m+[m[32m---[m
+[32m+[m[32mmarp: true[m
+[32m+[m[32mtheme: gaia[m
+[32m+[m
+[32m+[m[32mdate: '2025-02-07T14:25:46Z'[m
+[32m+[m[32mdraft: false[m
+[32m+[m[32mtitle: 'Payloads and MSFvenom'[m
+[32m+[m[32msummary: 'Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.'[m
+[32m+[m[32mShowToc: true[m
+[32m+[m[32mTocOpen: true[m
+[32m+[m[32mTocSide: "right"[m
+[32m+[m[32mclass: "invert"[m
+[32m+[m[32m---[m
+[32m+[m[32m<!---  --->[m
+[32m+[m
+[32m+[m[32m# (sea)Shells <br /> Payloads <br /> and MSFvenom[m
+[32m+[m[32m![bg right:40%](https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale():focal(990x769:991x770)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg)[m
+[32m+[m[32mUofL Cyber Defense[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m[32m<!-- paginate: true -->[m
+[32m+[m[32m# Disclaimer[m
+[32m+[m[32m- Don't try at home <br />(okay at home but not at other people while at home)[m
+[32m+[m[32m- Regurgtating information I did a module on[m
+[32m+[m[32m- Not super practical unless you're advanced (i am not)[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m[32m# Table of Contents[m
+[32m+[m[32m1. Payloads[m
+[32m+[m[32m2. Shells[m
+[32m+[m[32m3. MSFVenom[m
+[32m+[m[32m4. File Upload Example[m
+[32m+[m[32m5. Avoiding AV's[m
+[32m+[m[32m6. .Exe Embedding[m
+[32m+[m
+[32m+[m[32m---[m
+[32m+[m[32m# What's a Payload?[m
+[32m+[m[32m![bg contain right:40%](https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824)[m
+[32m+[m[32m- A bomb you sent/upload to a server[m
+[32m+[m[32m    - Triggers RCE[m
+[32m+[m[32m    - Injects[m
+[32m+[m[32m    - Creates *shells*[m
+[32m+[m[32m- Resources[m
+[32m+[m[32m    - Payload all the Things[m
+[32m+[m[32m    - Metasploit Framework[m
+[32m+[m[32m    -[m[41m [m
+[32m+[m[32m---[m
+[32m+[m[32m# Shells[m
+[32m+[m[32m![bg contain  right:40%](https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png)[m
+[32m+[m[32m- **S**ecure **SH**ell[m
+[32m+[m[32m- ba**sh**, power**shell**, z**sh**[m
+[32m+[m[32m- interacts with the terminal[m
+[32m+[m[32m- Metepreter[m
+[32m+[m[32m- Web Shells[m
+[32m+[m[32m---[m
+[32m+[m[32m![bg contain  right:40%](https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png)[m
+[32m+[m[32m# How to get to the shell part[m
+[32m+[m[32m- Find an attack vector![m
+[32m+[m[32m    - FTP[m
+[32m+[m[32m    - Webserver file uploads[m
+[32m+[m[32m    - Dropped a USB[m
+[32m+[m[32m---[m
+[32m+[m[32m# Types of connections[m
+[32m+[m[32m- Bind - Target listens for connection[m
+[32m+[m[32m    - opens port[m
+[32m+[m[32m- Reverse - Host listens, Target Initiates[m
+[32m+[m[32m    - Circumvents firewalls and rules[m
+[32m+[m[32m    - Need a listener[m
+[32m+[m[32m        - ncat / netcat[m
+[32m+[m[32m        - MSF multi/handler[m
+[32m+[m[41m    [m
+[32m+[m[32m[Demo Cue][m
+[32m+[m
+[32m+[m[32m<!-- footer: https://www.revshells.com/ -->[m[41m [m
+[32m+[m[32m---[m
+[32m+[m[32m# Web Shells[m
+[32m+[m[32m![bg contain right:40%](https://i.redd.it/5ofaq45gfmpb1.jpg)[m
+[32m+[m[32m- File upload vulnerability[m
+[32m+[m[32m    - PHP[m
+[32m+[m[32m    - dotnet ASP[m
+[32m+[m[32m    - Javascript Server Pages (JSP)[m
+[32m+[m[32m    - Usually after you get admin access to a website[m
+[32m+[m[32m- Laudanum[m
+[32m+[m[32m- MSFvenom[m
+[32m+[m
+[32m+[m[32m<!-- footer: "" -->[m
+[32m+[m[32m---[m
+[32m+[m[32m# Damn Vulnerable Web App[m
+[32m+[m[32m![bg contain right:20% ](https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658)[m
+[32m+[m[32m- Part of kali environment (i think)[m
+[32m+[m[32m- whole host of vulnerabilities[m
+[32m+[m[32m- Alternatvies:[m[41m [m
+[32m+[m[32mOWASP Juicebox, Metasploitable, OWASP Mutillidae II,[m[41m [m
+[32m+[m[32mDV RESTurant, DV bank[m
+[32m+[m
+[32m+[m[32mhttps://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php[m
+[32m+[m[32m<!-- footer: "https://github.com/digininja/DVWA " -->[m
+[32m+[m[32m---[m
+[32m+[m[32m# MSFvenom for payload creation[m
+[32m+[m[32m![bg contain right:20%](https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png)[m
+[32m+[m[32m- Different payloads (shells, meterpreter)[m
+[32m+[m[32m- Different platforms / arch[m
+[32m+[m[32m- Encodings[m
+[32m+[m[32m- File formants include ASPX, WAR, PHP, EXE, ELF[m
+[32m+[m
+[32m+[m[32m[Demo Cue][m
+[32m+[m[32m<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" -->[m[41m [m
+[32m+[m
+[32m+[m
+[32m+[m[32m<!---[m
+[32m+[m[32m"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main"[m[41m [m
+[32m+[m[32m-->[m
+[32m+[m[32m---[m
+[32m+[m[32m# Evasion[m
+[32m+[m[32m![bg contain right:40%](https://www.serebii.net/games/evasion.jpg)[m
+[32m+[m[32m- Encoding[m
+[32m+[m[32m- Templates[m
+[32m+[m[32m    - Modify existing ones[m
+[32m+[m[32m    - Use examples (injection)[m
+[32m+[m[32m    - Modify existing ones[m
+[32m+[m[32mhttps://www.ired.team/offensive-security/code-injection-process-injection/process-injection[m
+[32m+[m[32m<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->[m
+[32m+[m
+[1mdiff --git a/content/writeups/Cyber Defense/_index.md b/content/writeups/Cyber Defense/_index.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..2d4d89c[m
+[1m--- /dev/null[m
+[1m+++ b/content/writeups/Cyber Defense/_index.md[m	
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32m+++[m
+[32m+[m[32mdate = '2025-02-07T14:24:26Z'[m
+[32m+[m[32mdraft = false[m
+[32m+[m[32mtitle = 'Cyber Defense'[m
+[32m+[m
+[32m+[m[32m+++[m
+[1mdiff --git a/content/writeups/Cyber Defense/image.png b/content/writeups/Cyber Defense/image.png[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6ed6bb6[m
+Binary files /dev/null and b/content/writeups/Cyber Defense/image.png differ
+[1mdiff --git a/public/homelab/index.html b/public/homelab/index.html[m
+[1mindex c748117..f38d80e 100644[m
+[1m--- a/public/homelab/index.html[m
+[1m+++ b/public/homelab/index.html[m
+[36m@@ -30,7 +30,7 @@[m [mHere&rsquo;s the general layout of how everything is organized:[m
+     [m
+   [m
+ [m
+[31m-  placeholder[m
+[32m+[m[32m  Still need to update[m
+ [m
+ [m
+ EdgeRouter X[m
+[36m@@ -257,9 +257,9 @@[m [mfunction toggleThemeListener() {[m
+ [m
+         <div class="inner"><ul>[m
+                 <li>[m
+[31m-                    <a href="#breadbox-workstation-hahahugoshortcode45s0hbhb" aria-label="Breadbox (Workstation) ">Breadbox (Workstation) <img src= /images/ball/ub.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+[32m+[m[32m                    <a href="#breadbox-workstation-hahahugoshortcode97s0hbhb" aria-label="Breadbox (Workstation) ">Breadbox (Workstation) <img src= /images/ball/ub.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+                 <li>[m
+[31m-                    <a href="#vanillapi-rpi-3b-hahahugoshortcode45s1hbhb" aria-label="VanillaPi (RPi 3B) ">VanillaPi (RPi 3B) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+[32m+[m[32m                    <a href="#vanillapi-rpi-3b-hahahugoshortcode97s1hbhb" aria-label="VanillaPi (RPi 3B) ">VanillaPi (RPi 3B) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+                 <li>[m
+                     <a href="#actual-homelab" aria-label="Actual Homelab">Actual Homelab</a><ul>[m
+                         [m
+[36m@@ -267,10 +267,10 @@[m [mfunction toggleThemeListener() {[m
+                     <a href="#edgerouter-x" aria-label="EdgeRouter X">EdgeRouter X</a></li></ul>[m
+                 </li>[m
+                 <li>[m
+[31m-                    <a href="#fruitpi-rpi-4-hahahugoshortcode45s3hbhb" aria-label="FruitPi (RPi 4) ">FruitPi (RPi 4) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+[32m+[m[32m                    <a href="#fruitpi-rpi-4-hahahugoshortcode97s3hbhb" aria-label="FruitPi (RPi 4) ">FruitPi (RPi 4) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+                         [m
+                 <li>[m
+[31m-                    <a href="#leyline-proxmox-hahahugoshortcode45s4hbhb" aria-label="Leyline (Proxmox) ">Leyline (Proxmox) <img src= /images/ball/gb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+[32m+[m[32m                    <a href="#leyline-proxmox-hahahugoshortcode97s4hbhb" aria-label="Leyline (Proxmox) ">Leyline (Proxmox) <img src= /images/ball/gb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+                         [m
+                 <li>[m
+                     <a href="#arcane-arch-linux-vm" aria-label="Arcane (Arch Linux VM)">Arcane (Arch Linux VM)</a></li>[m
+[36m@@ -289,7 +289,7 @@[m [mfunction toggleThemeListener() {[m
+ </div>[m
+ [m
+ [m
+[31m-<div class="post-content"><h2 id="breadbox-workstation-hahahugoshortcode45s0hbhb">Breadbox (Workstation) <img src= /images/ball/ub.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#breadbox-workstation-hahahugoshortcode45s0hbhb">¶</a></h2>[m
+[32m+[m[32m<div class="post-content"><h2 id="breadbox-workstation-hahahugoshortcode97s0hbhb">Breadbox (Workstation) <img src= /images/ball/ub.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#breadbox-workstation-hahahugoshortcode97s0hbhb">¶</a></h2>[m
+ <ul>[m
+ <li>Generic Windows 10 (for now)</li>[m
+ <li>Ryzen 5600</li>[m
+[36m@@ -297,7 +297,7 @@[m [mfunction toggleThemeListener() {[m
+ <li>GTX 1660 Super</li>[m
+ <li>Gaming</li>[m
+ </ul>[m
+[31m-<h2 id="vanillapi-rpi-3b-hahahugoshortcode45s1hbhb">VanillaPi (RPi 3B) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#vanillapi-rpi-3b-hahahugoshortcode45s1hbhb">¶</a></h2>[m
+[32m+[m[32m<h2 id="vanillapi-rpi-3b-hahahugoshortcode97s1hbhb">VanillaPi (RPi 3B) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#vanillapi-rpi-3b-hahahugoshortcode97s1hbhb">¶</a></h2>[m
+ <ul>[m
+ <li>nginx reverse proxy</li>[m
+ <li>camera server</li>[m
+[36m@@ -307,12 +307,12 @@[m [mfunction toggleThemeListener() {[m
+ <p>Here&rsquo;s the general layout of how everything is organized:[m
+ [m
+ <figure class="center align-center">[m
+[31m-  <div class="image-size-control" style="max-width: 100px;height: 100px;">[m
+[32m+[m[32m  <div class="image-size-control" style="">[m
+     [m
+[31m-    <img src="/images/pkm/mimikyu.png"/>[m
+[32m+[m[32m    <img src="/images/network_map.drawio.png"/>[m
+   </div>[m
+ [m
+[31m-  <figcaption><p>placeholder</p></figcaption>[m
+[32m+[m[32m  <figcaption><p>Still need to update</p></figcaption>[m
+ </figure>[m
+ </p>[m
+ <h3 id="edgerouter-x">EdgeRouter X<a hidden class="anchor" aria-hidden="true" href="#edgerouter-x">¶</a></h3>[m
+[36m@@ -328,13 +328,13 @@[m [mfunction toggleThemeListener() {[m
+ <li>DNS Forwarding to FruitPi below (PiHole)</li>[m
+ <li>DHCP server for Homelab subnet</li>[m
+ </ul>[m
+[31m-<h2 id="fruitpi-rpi-4-hahahugoshortcode45s3hbhb">FruitPi (RPi 4) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#fruitpi-rpi-4-hahahugoshortcode45s3hbhb">¶</a></h2>[m
+[32m+[m[32m<h2 id="fruitpi-rpi-4-hahahugoshortcode97s3hbhb">FruitPi (RPi 4) <img src= /images/ball/pb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#fruitpi-rpi-4-hahahugoshortcode97s3hbhb">¶</a></h2>[m
+ <ul>[m
+ <li>Hugo Webserver</li>[m
+ <li>Caddy Reverse Proxy</li>[m
+ <li>PiHole DNS Server</li>[m
+ </ul>[m
+[31m-<h3 id="leyline-proxmox-hahahugoshortcode45s4hbhb">Leyline (Proxmox) <img src= /images/ball/gb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#leyline-proxmox-hahahugoshortcode45s4hbhb">¶</a></h3>[m
+[32m+[m[32m<h3 id="leyline-proxmox-hahahugoshortcode97s4hbhb">Leyline (Proxmox) <img src= /images/ball/gb.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#leyline-proxmox-hahahugoshortcode97s4hbhb">¶</a></h3>[m
+ <ul>[m
+ <li><a href="https://aoostar.com/products/aoostar-gem10-amd-ryzen-7-7840hs-mini-pc-with-win-11-pro-3-nvme-oculink-2-2-5g-lan?variant=47484035891498">Aoostar Gem10</a>[m
+ <ul>[m
+[36m@@ -369,7 +369,7 @@[m [mfunction toggleThemeListener() {[m
+ [m
+ [m
+ <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[31m-  <span>November 13, 2024</span></span><div class="social-icons">[m
+[32m+[m[32m  <span>February 7, 2025</span></span><div class="social-icons">[m
+     <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">[m
+         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"[m
+     stroke-linecap="round" stroke-linejoin="round">[m
+[1mdiff --git a/public/images/network_map.drawio.png b/public/images/network_map.drawio.png[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c13aef2[m
+Binary files /dev/null and b/public/images/network_map.drawio.png differ
+[1mdiff --git a/public/index.html b/public/index.html[m
+[1mindex e116794..ee5665d 100644[m
+[1m--- a/public/index.html[m
+[1m+++ b/public/index.html[m
+[36m@@ -178,14 +178,14 @@[m [mfunction toggleThemeListener() {[m
+ [m
+         <div class="inner"><ul>[m
+                 <li>[m
+[31m-                    <a href="#about-me--hahahugoshortcode60s0hbhb" aria-label="About Me ">About Me  <img src= images/pkm/mimikyu.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+[32m+[m[32m                    <a href="#about-me--hahahugoshortcode62s0hbhb" aria-label="About Me ">About Me  <img src= images/pkm/mimikyu.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+                         [m
+                 <li>[m
+[31m-                    <a href="#achievements-hahahugoshortcode60s1hbhb" aria-label="Achievements ">Achievements <img src= images/pkm/aegislash.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+[32m+[m[32m                    <a href="#achievements-hahahugoshortcode62s1hbhb" aria-label="Achievements ">Achievements <img src= images/pkm/aegislash.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+                 <li>[m
+[31m-                    <a href="#papers-hahahugoshortcode60s2hbhb" aria-label="Papers ">Papers <img src= images/pkm/dragapult.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+[32m+[m[32m                    <a href="#papers-hahahugoshortcode62s2hbhb" aria-label="Papers ">Papers <img src= images/pkm/dragapult.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a></li>[m
+                 <li>[m
+[31m-                    <a href="#related-experience--hahahugoshortcode60s3hbhb" aria-label="Related Experience ">Related Experience  <img src= images/pkm/palossand.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+[32m+[m[32m                    <a href="#related-experience--hahahugoshortcode62s3hbhb" aria-label="Related Experience ">Related Experience  <img src= images/pkm/palossand.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> </a><ul>[m
+                         <ul>[m
+                         <ul>[m
+                         [m
+[36m@@ -217,11 +217,11 @@[m [mhttps://archives.bulbagarden.net/media/upload/c/cc/0987Flutter_Mane.png[m
+ https://archives.bulbagarden.net/media/upload/a/ad/0292Shedinja.png[m
+ https://archives.bulbagarden.net/media/upload/3/3e/0911Skeledirge.png[m
+ -->[m
+[31m-<h1 id="about-me--hahahugoshortcode60s0hbhb">About Me  <img src= images/pkm/mimikyu.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#about-me--hahahugoshortcode60s0hbhb">¶</a></h1>[m
+[32m+[m[32m<h1 id="about-me--hahahugoshortcode62s0hbhb">About Me  <img src= images/pkm/mimikyu.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#about-me--hahahugoshortcode62s0hbhb">¶</a></h1>[m
+ <img src="/images/me.jpg" style="width: 25%;height: 50%; float:right; margin-top: 0">[m
+ Hi! I'm Alvin Tran, a current Master of Engineering in Computer Science and Engineering student at the University of Louisville.  [m
+ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an active member of the ACM Cyber Defense SIG, and a graduate research assistant for Engineering Fundamentals working with machine learning.  [m
+[31m-<h2 id="achievements-hahahugoshortcode60s1hbhb">Achievements <img src= images/pkm/aegislash.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#achievements-hahahugoshortcode60s1hbhb">¶</a></h2>[m
+[32m+[m[32m<h2 id="achievements-hahahugoshortcode62s1hbhb">Achievements <img src= images/pkm/aegislash.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#achievements-hahahugoshortcode62s1hbhb">¶</a></h2>[m
+ <blockquote>[m
+ <p>I go by [<strong>sclstice or Arcane[x]</strong>] for my competitions usually for validity purposes.</p>[m
+ </blockquote>[m
+[36m@@ -247,14 +247,14 @@[m [mI'm apart of the CyberCorps: Scholarship for Service program at my unversity, an[m
+ <li>CSA CCSK</li>[m
+ <li>Working on: HTB Certified Junior Penetration Tester</li>[m
+ </ul>[m
+[31m-<h2 id="papers-hahahugoshortcode60s2hbhb">Papers <img src= images/pkm/dragapult.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#papers-hahahugoshortcode60s2hbhb">¶</a></h2>[m
+[32m+[m[32m<h2 id="papers-hahahugoshortcode62s2hbhb">Papers <img src= images/pkm/dragapult.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#papers-hahahugoshortcode62s2hbhb">¶</a></h2>[m
+ <ul>[m
+ <li>1st Author: Categorical Variable Coding for Machine Learning in Engineering Education in 2024 IEEE FIE</li>[m
+ <li>2nd Author: C. R. Bego, A. Tran, P. A. S. Ralston, C. Crockett, R. J. Chastain and K. B. Lyle, &ldquo;Spaced Retrieval Practice Improves Engineering Student Performance in Physics,&rdquo; 2023 IEEE Frontiers in Education Conference (FIE) <a href="https://ieeexplore.ieee.org/abstract/document/10343025">link</a></li>[m
+ <li>GRA: Bego, C. R., &amp; Withorn, T., &amp; Danovitch, J., &amp; Thompson, A., &amp; Thomas, E., &amp; Gatsos, G. E., &amp; Tran, A. (2024, June), Working Towards GenAI Literacy: Assessing First-Year Engineering Students’ Attitudes towards, Trust in, and Ethical Opinions of ChatGPT <a href="https://peer.asee.org/working-towards-genai-literacy-assessing-first-year-engineering-students-attitudes-towards-trust-in-and-ethical-opinions-of-chatgpt">link</a></li>[m
+ <li>Two more underway!</li>[m
+ </ul>[m
+[31m-<h2 id="related-experience--hahahugoshortcode60s3hbhb">Related Experience  <img src= images/pkm/palossand.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#related-experience--hahahugoshortcode60s3hbhb">¶</a></h2>[m
+[32m+[m[32m<h2 id="related-experience--hahahugoshortcode62s3hbhb">Related Experience  <img src= images/pkm/palossand.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#related-experience--hahahugoshortcode62s3hbhb">¶</a></h2>[m
+ <p><p><details class="post-entry tag-eentry" >[m
+   <summary markdown="span">Software</summary>[m
+   <h5 id="cybersecurity--img-src-imagespkmrotompng-stylewidth-30pxheight-30px-displayinline-vertical-align-bottom-margin-bottom0">Cybersecurity  <img src= images/pkm/rotom.png style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"><a hidden class="anchor" aria-hidden="true" href="#cybersecurity--img-src-imagespkmrotompng-stylewidth-30pxheight-30px-displayinline-vertical-align-bottom-margin-bottom0">¶</a></h5>[m
+[36m@@ -356,6 +356,25 @@[m [mI'm apart of the CyberCorps: Scholarship for Service program at my unversity, an[m
+ [m
+ [m
+ <article class="post-entry tag-entry"> [m
+[32m+[m[32m  <header class="entry-header">[m
+[32m+[m[32m    <h2>Payloads and MSFvenom[m
+[32m+[m[32m    </h2>[m
+[32m+[m[32m  </header>[m
+[32m+[m[32m  <section class="entry-content">[m
+[32m+[m[41m    [m
+[32m+[m[32m      <p>Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.</p>[m
+[32m+[m[41m    [m
+[32m+[m[32m  </section>[m
+[32m+[m[32m  <footer class="entry-footer"><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m  <a class="entry-link" aria-label="post link to Payloads and MSFvenom" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"></a>[m
+[32m+[m[32m</article>[m
+[32m+[m
+[32m+[m[32m<article class="post-entry">[m[41m [m
+   <header class="entry-header">[m
+     <h2>Writeups / NCL / PC_complexity[m
+     </h2>[m
+[1mdiff --git a/public/index.xml b/public/index.xml[m
+[1mindex 4bcbb2b..c0f49ff 100644[m
+[1m--- a/public/index.xml[m
+[1m+++ b/public/index.xml[m
+[36m@@ -7,6 +7,166 @@[m
+     <generator>Hugo -- gohugo.io</generator>[m
+     <language>en-us</language>[m
+     <lastBuildDate>Mon, 11 Nov 2024 21:13:19 -0500</lastBuildDate><atom:link href="https://alvintran.net/index.xml" rel="self" type="application/rss+xml" />[m
+[32m+[m[32m    <item>[m
+[32m+[m[32m      <title>Payloads and MSFvenom</title>[m
+[32m+[m[32m      <link>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</link>[m
+[32m+[m[32m      <pubDate>Fri, 07 Feb 2025 14:25:46 +0000</pubDate>[m
+[32m+[m[41m      [m
+[32m+[m[32m      <guid>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</guid>[m
+[32m+[m[32m      <description>Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.</description>[m
+[32m+[m[32m      <content:encoded><![CDATA[<!---  --->[m
+[32m+[m[32m<h1 id="seashells-br--payloads-br--and-msfvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale%28%29:focal%28990x769:991x770%29/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg" alt="bg right:40%"  />[m
+[32m+[m[32mUofL Cyber Defense</p>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<!-- paginate: true -->[m
+[32m+[m[32m<h1 id="disclaimer">Disclaimer</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Don&rsquo;t try at home <br />(okay at home but not at other people while at home)</li>[m
+[32m+[m[32m<li>Regurgtating information I did a module on</li>[m
+[32m+[m[32m<li>Not super practical unless you&rsquo;re advanced (i am not)</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="table-of-contents">Table of Contents</h1>[m
+[32m+[m[32m<ol>[m
+[32m+[m[32m<li>Payloads</li>[m
+[32m+[m[32m<li>Shells</li>[m
+[32m+[m[32m<li>MSFVenom</li>[m
+[32m+[m[32m<li>File Upload Example</li>[m
+[32m+[m[32m<li>Avoiding AV&rsquo;s</li>[m
+[32m+[m[32m<li>.Exe Embedding</li>[m
+[32m+[m[32m</ol>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="whats-a-payload">What&rsquo;s a Payload?</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>A bomb you sent/upload to a server[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Triggers RCE</li>[m
+[32m+[m[32m<li>Injects</li>[m
+[32m+[m[32m<li>Creates <em>shells</em></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Resources[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Payload all the Things</li>[m
+[32m+[m[32m<li>Metasploit Framework</li>[m
+[32m+[m[32m<li></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="shells">Shells</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li><strong>S</strong>ecure <strong>SH</strong>ell</li>[m
+[32m+[m[32m<li>ba<strong>sh</strong>, power<strong>shell</strong>, z<strong>sh</strong></li>[m
+[32m+[m[32m<li>interacts with the terminal</li>[m
+[32m+[m[32m<li>Metepreter</li>[m
+[32m+[m[32m<li>Web Shells</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<h1 id="how-to-get-to-the-shell-part">How to get to the shell part</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Find an attack vector![m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>FTP</li>[m
+[32m+[m[32m<li>Webserver file uploads</li>[m
+[32m+[m[32m<li>Dropped a USB</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="types-of-connections">Types of connections</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Bind - Target listens for connection[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>opens port</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Reverse - Host listens, Target Initiates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Circumvents firewalls and rules</li>[m
+[32m+[m[32m<li>Need a listener[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>ncat / netcat</li>[m
+[32m+[m[32m<li>MSF multi/handler</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: https://www.revshells.com/ -->[m[41m [m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="web-shells">Web Shells</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://i.redd.it/5ofaq45gfmpb1.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>File upload vulnerability[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>PHP</li>[m
+[32m+[m[32m<li>dotnet ASP</li>[m
+[32m+[m[32m<li>Javascript Server Pages (JSP)</li>[m
+[32m+[m[32m<li>Usually after you get admin access to a website</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Laudanum</li>[m
+[32m+[m[32m<li>MSFvenom</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "" -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="damn-vulnerable-web-app">Damn Vulnerable Web App</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658" alt="bg contain right:20% "  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Part of kali environment (i think)</li>[m
+[32m+[m[32m<li>whole host of vulnerabilities</li>[m
+[32m+[m[32m<li>Alternatvies:[m
+[32m+[m[32mOWASP Juicebox, Metasploitable, OWASP Mutillidae II,[m
+[32m+[m[32mDV RESTurant, DV bank</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p><a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php</a></p>[m
+[32m+[m[32m<!-- footer: "https://github.com/digininja/DVWA " -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="msfvenom-for-payload-creation">MSFvenom for payload creation</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png" alt="bg contain right:20%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Different payloads (shells, meterpreter)</li>[m
+[32m+[m[32m<li>Different platforms / arch</li>[m
+[32m+[m[32m<li>Encodings</li>[m
+[32m+[m[32m<li>File formants include ASPX, WAR, PHP, EXE, ELF</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" -->[m[41m [m
+[32m+[m[32m<!---[m
+[32m+[m[32m"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main"[m[41m [m
+[32m+[m[32m-->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="evasion">Evasion</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.serebii.net/games/evasion.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Encoding</li>[m
+[32m+[m[32m<li>Templates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Modify existing ones</li>[m
+[32m+[m[32m<li>Use examples (injection)</li>[m
+[32m+[m[32m<li>Modify existing ones[m
+[32m+[m[32m<a href="https://www.ired.team/offensive-security/code-injection-process-injection/process-injection">https://www.ired.team/offensive-security/code-injection-process-injection/process-injection</a></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->[m
+[32m+[m[32m]]></content:encoded>[m
+[32m+[m[32m    </item>[m
+[32m+[m[41m    [m
+     <item>[m
+       <title>Writeups / NCL / PC_complexity</title>[m
+       <link>https://alvintran.net/writeups/ncl/pc_complexity/</link>[m
+[1mdiff --git a/public/sitemap.xml b/public/sitemap.xml[m
+[1mindex f7c0862..2a53818 100644[m
+[1m--- a/public/sitemap.xml[m
+[1m+++ b/public/sitemap.xml[m
+[36m@@ -15,10 +15,10 @@[m
+     <lastmod>2024-11-13T23:07:56-05:00</lastmod>[m
+   </url><url>[m
+     <loc>https://alvintran.net/homelab/</loc>[m
+[31m-    <lastmod>2024-11-13T23:07:56-05:00</lastmod>[m
+[32m+[m[32m    <lastmod>2025-02-07T06:01:21+00:00</lastmod>[m
+   </url><url>[m
+     <loc>https://alvintran.net/</loc>[m
+[31m-    <lastmod>2024-11-13T23:07:56-05:00</lastmod>[m
+[32m+[m[32m    <lastmod>2024-11-11T21:13:19-05:00</lastmod>[m
+   </url><url>[m
+     <loc>https://alvintran.net/archives/</loc>[m
+     <lastmod>2024-11-13T23:07:56-05:00</lastmod>[m
+[1mdiff --git a/public/status/index.html b/public/status/index.html[m
+[1mindex a7d04df..f7a37c3 100644[m
+[1m--- a/public/status/index.html[m
+[1m+++ b/public/status/index.html[m
+[36m@@ -205,7 +205,7 @@[m [mfunction toggleThemeListener() {[m
+ </div>[m
+ </header>[m
+ [m
+[31m-<div class="post-content"><h2 id="minecraft-hahahugoshortcode46s0hbhb">Minecraft <img src= https://minecraft.wiki/images/Grass_Block_JE7_BE6.png?424c1 style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#minecraft-hahahugoshortcode46s0hbhb">¶</a></h2>[m
+[32m+[m[32m<div class="post-content"><h2 id="minecraft-hahahugoshortcode65s0hbhb">Minecraft <img src= https://minecraft.wiki/images/Grass_Block_JE7_BE6.png?424c1 style="width: 30px;height: 30px; display:inline; vertical-align: bottom; margin-bottom:0"> <a hidden class="anchor" aria-hidden="true" href="#minecraft-hahahugoshortcode65s0hbhb">¶</a></h2>[m
+ [m
+ [m
+ [m
+[1mdiff --git a/public/writeups/cyber-defense/image-1.png b/public/writeups/cyber-defense/image-1.png[m
+[1mnew file mode 100644[m
+[1mindex 0000000..42eb8d2[m
+Binary files /dev/null and b/public/writeups/cyber-defense/image-1.png differ
+[1mdiff --git a/public/writeups/cyber-defense/image.png b/public/writeups/cyber-defense/image.png[m
+[1mnew file mode 100644[m
+[1mindex 0000000..6ed6bb6[m
+Binary files /dev/null and b/public/writeups/cyber-defense/image.png differ
+[1mdiff --git a/public/writeups/cyber-defense/index.html b/public/writeups/cyber-defense/index.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..80236af[m
+[1m--- /dev/null[m
+[1m+++ b/public/writeups/cyber-defense/index.html[m
+[36m@@ -0,0 +1,344 @@[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en" dir="auto">[m
+[32m+[m
+[32m+[m[32m<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">[m
+[32m+[m[32m<meta http-equiv="X-UA-Compatible" content="IE=edge">[m
+[32m+[m[32m<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">[m
+[32m+[m[32m<meta name="robots" content="index, follow">[m
+[32m+[m[32m<title>Cyber Defense | Alvin Tran</title>[m
+[32m+[m[32m<meta name="keywords" content="">[m
+[32m+[m[32m<meta name="description" content="Cyber Defense - Alvin Tran">[m
+[32m+[m[32m<meta name="author" content="">[m
+[32m+[m[32m<link rel="canonical" href="https://alvintran.net/writeups/cyber-defense/">[m
+[32m+[m[32m<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">[m
+[32m+[m[32m<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">[m
+[32m+[m[32m<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">[m
+[32m+[m[32m<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/cyber-defense/index.xml">[m
+[32m+[m[32m<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/cyber-defense/">[m
+[32m+[m
+[32m+[m[32m<meta name="twitter:title" content="Cyber Defense | Alvin Tran" />[m
+[32m+[m[32m<meta name="twitter:description" content="" />[m
+[32m+[m[32m<meta property="og:title" content="Cyber Defense | Alvin Tran" />[m
+[32m+[m[32m<meta property="og:description" content="" />[m
+[32m+[m[32m<meta property="og:type" content="website" />[m
+[32m+[m[32m<meta property="og:url" content="https://alvintran.net/writeups/cyber-defense/" />[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script type="application/ld+json">[m
+[32m+[m[32m{[m
+[32m+[m[32m  "@context": "https://schema.org",[m
+[32m+[m[32m  "@type": "BreadcrumbList",[m
+[32m+[m[32m  "itemListElement": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  1 ,[m
+[32m+[m[32m      "name": "Writeups",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/"[m
+[32m+[m[32m    },[m[41m [m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  2 ,[m
+[32m+[m[32m      "name": "Cyber Defense",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/cyber-defense/"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  ][m
+[32m+[m[32m}[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<noscript>[m
+[32m+[m[32m    <style>[m
+[32m+[m[32m        #theme-toggle,[m
+[32m+[m[32m        .top-link {[m
+[32m+[m[32m            display: none;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    </style>[m
+[32m+[m[32m</noscript>[m
+[32m+[m
+[32m+[m[32m</head>[m
+[32m+[m
+[32m+[m[32m<body class="list-page dark type-writeups kind-section layout-" id="top"><script data-no-instant>[m
+[32m+[m[32mfunction switchTheme(theme) {[m
+[32m+[m[32m  switch (theme) {[m
+[32m+[m[32m    case 'light':[m
+[32m+[m[32m      document.body.classList.remove('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[32m    case 'dark':[m
+[32m+[m[32m      document.body.classList.add('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[41m    [m
+[32m+[m[32m    default:[m
+[32m+[m[32m      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {[m
+[32m+[m[32m        document.body.classList.add('dark');[m
+[32m+[m[32m      }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction isDarkTheme() {[m
+[32m+[m[32m  return document.body.className.includes("dark");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction getPrefTheme() {[m
+[32m+[m[32m  return localStorage.getItem("pref-theme");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction setPrefTheme(theme) {[m
+[32m+[m[32m  switchTheme(theme)[m
+[32m+[m[32m  localStorage.setItem("pref-theme", theme);[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mconst toggleThemeCallbacks = {}[m
+[32m+[m[32mtoggleThemeCallbacks['main'] = (isDark) => {[m
+[32m+[m[41m  [m
+[32m+[m[32m  if (isDark) {[m
+[32m+[m[32m    setPrefTheme('light');[m
+[32m+[m[32m  } else {[m
+[32m+[m[32m    setPrefTheme('dark');[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mwindow.addEventListener('toggle-theme', function() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  const isDark = isDarkTheme()[m
+[32m+[m[32m  for (const key in toggleThemeCallbacks) {[m
+[32m+[m[32m    toggleThemeCallbacks[key](isDark)[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
+[32m+[m
+[32m+[m
+[32m+[m[32mfunction toggleThemeListener() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  window.dispatchEvent(new CustomEvent('toggle-theme'));[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[41m  [m
+[32m+[m[32m  (function() {[m
+[32m+[m[32m    const defaultTheme = 'dark';[m
+[32m+[m[32m    const prefTheme = getPrefTheme();[m
+[32m+[m[32m    const theme = prefTheme ? prefTheme : defaultTheme;[m
+[32m+[m
+[32m+[m[32m    switchTheme(theme);[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<header class="header">[m
+[32m+[m[32m    <nav class="nav">[m
+[32m+[m[32m        <div class="logo">[m
+[32m+[m[32m            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>[m
+[32m+[m[32m            <span class="logo-switches">[m
+[32m+[m[32m                <button id="theme-toggle" accesskey="t" title="(Alt + T)">[m
+[32m+[m[32m                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <circle cx="12" cy="12" r="5"></circle>[m
+[32m+[m[32m                        <line x1="12" y1="1" x2="12" y2="3"></line>[m
+[32m+[m[32m                        <line x1="12" y1="21" x2="12" y2="23"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>[m
+[32m+[m[32m                        <line x1="1" y1="12" x2="3" y2="12"></line>[m
+[32m+[m[32m                        <line x1="21" y1="12" x2="23" y2="12"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                </button>[m
+[32m+[m[32m            </span>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m        <ul id="menu">[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/" title="Home" class="active"[m
+[32m+[m[32m                >Home[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/homelab/" title="Homelab"[m
+[32m+[m[32m                >Homelab[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"[m
+[32m+[m[32m                >Writeups[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/status/" title="Status"[m
+[32m+[m[32m                >Status[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m    </nav>[m
+[32m+[m[32m</header>[m
+[32m+[m[32m<main class="main">[m[41m [m
+[32m+[m[32m<header class="page-header">[m
+[32m+[m[32m  <h1>[m
+[32m+[m[32m    Cyber Defense</h1><div class="inline-links">[m
+[32m+[m[41m  [m
+[32m+[m[41m  [m
+[32m+[m[41m  [m
+[32m+[m[32m</div>[m
+[32m+[m[32m</header>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><div class="social-icons">[m
+[32m+[m[32m    <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>[m
+[32m+[m[32m    <rect x="2" y="9" width="4" height="12"></rect>[m
+[32m+[m[32m    <circle cx="4" cy="4" r="2"></circle>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m    <a href="https://github.com/ArcaneBow7258" target="_blank" rel="noopener noreferrer me" title="Github">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path[m
+[32m+[m[32m        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">[m
+[32m+[m[32m    </path>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m    <a href="mailto:mail@alvintran.net" title="Email">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>[m
+[32m+[m[32m    <polyline points="22,6 12,13 2,6"></polyline>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<article class="post-entry">[m[41m [m
+[32m+[m[32m  <header class="entry-header">[m
+[32m+[m[32m    <h2>Payloads and MSFvenom[m
+[32m+[m[32m    </h2>[m
+[32m+[m[32m  </header>[m
+[32m+[m[32m  <section class="entry-content">[m
+[32m+[m[41m    [m
+[32m+[m[32m      <p>Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.</p>[m
+[32m+[m[41m    [m
+[32m+[m[32m  </section>[m
+[32m+[m[32m  <footer class="entry-footer"><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m  <a class="entry-link" aria-label="post link to Payloads and MSFvenom" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"></a>[m
+[32m+[m[32m</article>[m
+[32m+[m[32m    </main>[m
+[32m+[m[41m    [m
+[32m+[m[32m<footer class="footer">[m
+[32m+[m[32m  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m  <span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    Powered by[m
+[32m+[m[32m    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &[m
+[32m+[m[32m    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">[m
+[32m+[m[32m    <path d="M12 6H0l6-6z" />[m
+[32m+[m[32m  </svg>[m
+[32m+[m[32m</a>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function() {[m
+[32m+[m[41m     [m
+[32m+[m[32m    const disableThemeToggle = '' == '1';[m
+[32m+[m[32m    if (disableThemeToggle) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    let button = document.getElementById("theme-toggle")[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.removeEventListener('click', toggleThemeListener)[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.addEventListener('click', toggleThemeListener)[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function () {[m
+[32m+[m[32m    let menu = document.getElementById('menu')[m
+[32m+[m[32m    if (menu) {[m
+[32m+[m[32m      menu.scrollLeft = localStorage.getItem("menu-scroll-position");[m
+[32m+[m[32m      menu.onscroll = function () {[m
+[32m+[m[32m        localStorage.setItem("menu-scroll-position", menu.scrollLeft);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const disableSmoothScroll = '' == '1';[m
+[32m+[m[32m    const enableInstantClick = '' == '1';[m
+[32m+[m[41m    [m
+[32m+[m[32m    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+[32m+[m[32m    document.querySelectorAll('a[href^="#"]').forEach(anchor => {[m
+[32m+[m[32m      anchor.addEventListener("click", function (e) {[m
+[32m+[m[32m        e.preventDefault();[m
+[32m+[m[32m        var id = this.getAttribute("href").substr(1);[m
+[32m+[m[32m        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({[m
+[32m+[m[32m          behavior: "smooth"[m
+[32m+[m[32m        });[m
+[32m+[m[32m        if (id === "top") {[m
+[32m+[m[32m          history.replaceState(null, null, " ");[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m          history.pushState(null, null, `#${id}`);[m
+[32m+[m[32m        }[m
+[32m+[m[32m      });[m
+[32m+[m[32m    });[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  var mybutton = document.getElementById("top-link");[m
+[32m+[m[32m  window.onscroll = function () {[m
+[32m+[m[32m    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {[m
+[32m+[m[32m      mybutton.style.visibility = "visible";[m
+[32m+[m[32m      mybutton.style.opacity = "1";[m
+[32m+[m[32m    } else {[m
+[32m+[m[32m      mybutton.style.visibility = "hidden";[m
+[32m+[m[32m      mybutton.style.opacity = "0";[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  document.querySelectorAll('.masked-email').forEach((el) => {[m
+[32m+[m[32m    el.innerText = atob(el.innerText);[m
+[32m+[m[32m    el.classList.remove('masked-email')[m
+[32m+[m[32m  })[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  if (window.scrollListeners) {[m
+[32m+[m[41m    [m
+[32m+[m[32m    for (const listener of scrollListeners) {[m
+[32m+[m[32m      window.removeEventListener('scroll', listener)[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m  window.scrollListeners = [][m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script src="/js/medium-zoom.min.js" data-no-instant[m
+[32m+[m[32m></script>[m
+[32m+[m[32m</body>[m
+[32m+[m
+[32m+[m[32m</html>[m
+[1mdiff --git a/public/writeups/cyber-defense/index.xml b/public/writeups/cyber-defense/index.xml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d086dfb[m
+[1m--- /dev/null[m
+[1m+++ b/public/writeups/cyber-defense/index.xml[m
+[36m@@ -0,0 +1,171 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="utf-8" standalone="yes"?>[m
+[32m+[m[32m<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">[m
+[32m+[m[32m  <channel>[m
+[32m+[m[32m    <title>Cyber Defense on Alvin Tran</title>[m
+[32m+[m[32m    <link>https://alvintran.net/writeups/cyber-defense/</link>[m
+[32m+[m[32m    <description>Recent content in Cyber Defense on Alvin Tran</description>[m
+[32m+[m[32m    <generator>Hugo -- gohugo.io</generator>[m
+[32m+[m[32m    <language>en-us</language>[m
+[32m+[m[32m    <lastBuildDate>Fri, 07 Feb 2025 14:24:26 +0000</lastBuildDate><atom:link href="https://alvintran.net/writeups/cyber-defense/index.xml" rel="self" type="application/rss+xml" />[m
+[32m+[m[32m    <item>[m
+[32m+[m[32m      <title>Payloads and MSFvenom</title>[m
+[32m+[m[32m      <link>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</link>[m
+[32m+[m[32m      <pubDate>Fri, 07 Feb 2025 14:25:46 +0000</pubDate>[m
+[32m+[m[41m      [m
+[32m+[m[32m      <guid>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</guid>[m
+[32m+[m[32m      <description>Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.</description>[m
+[32m+[m[32m      <content:encoded><![CDATA[<!---  --->[m
+[32m+[m[32m<h1 id="seashells-br--payloads-br--and-msfvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale%28%29:focal%28990x769:991x770%29/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg" alt="bg right:40%"  />[m
+[32m+[m[32mUofL Cyber Defense</p>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<!-- paginate: true -->[m
+[32m+[m[32m<h1 id="disclaimer">Disclaimer</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Don&rsquo;t try at home <br />(okay at home but not at other people while at home)</li>[m
+[32m+[m[32m<li>Regurgtating information I did a module on</li>[m
+[32m+[m[32m<li>Not super practical unless you&rsquo;re advanced (i am not)</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="table-of-contents">Table of Contents</h1>[m
+[32m+[m[32m<ol>[m
+[32m+[m[32m<li>Payloads</li>[m
+[32m+[m[32m<li>Shells</li>[m
+[32m+[m[32m<li>MSFVenom</li>[m
+[32m+[m[32m<li>File Upload Example</li>[m
+[32m+[m[32m<li>Avoiding AV&rsquo;s</li>[m
+[32m+[m[32m<li>.Exe Embedding</li>[m
+[32m+[m[32m</ol>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="whats-a-payload">What&rsquo;s a Payload?</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>A bomb you sent/upload to a server[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Triggers RCE</li>[m
+[32m+[m[32m<li>Injects</li>[m
+[32m+[m[32m<li>Creates <em>shells</em></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Resources[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Payload all the Things</li>[m
+[32m+[m[32m<li>Metasploit Framework</li>[m
+[32m+[m[32m<li></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="shells">Shells</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li><strong>S</strong>ecure <strong>SH</strong>ell</li>[m
+[32m+[m[32m<li>ba<strong>sh</strong>, power<strong>shell</strong>, z<strong>sh</strong></li>[m
+[32m+[m[32m<li>interacts with the terminal</li>[m
+[32m+[m[32m<li>Metepreter</li>[m
+[32m+[m[32m<li>Web Shells</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<h1 id="how-to-get-to-the-shell-part">How to get to the shell part</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Find an attack vector![m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>FTP</li>[m
+[32m+[m[32m<li>Webserver file uploads</li>[m
+[32m+[m[32m<li>Dropped a USB</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="types-of-connections">Types of connections</h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Bind - Target listens for connection[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>opens port</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Reverse - Host listens, Target Initiates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Circumvents firewalls and rules</li>[m
+[32m+[m[32m<li>Need a listener[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>ncat / netcat</li>[m
+[32m+[m[32m<li>MSF multi/handler</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: https://www.revshells.com/ -->[m[41m [m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="web-shells">Web Shells</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://i.redd.it/5ofaq45gfmpb1.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>File upload vulnerability[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>PHP</li>[m
+[32m+[m[32m<li>dotnet ASP</li>[m
+[32m+[m[32m<li>Javascript Server Pages (JSP)</li>[m
+[32m+[m[32m<li>Usually after you get admin access to a website</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Laudanum</li>[m
+[32m+[m[32m<li>MSFvenom</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "" -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="damn-vulnerable-web-app">Damn Vulnerable Web App</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658" alt="bg contain right:20% "  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Part of kali environment (i think)</li>[m
+[32m+[m[32m<li>whole host of vulnerabilities</li>[m
+[32m+[m[32m<li>Alternatvies:[m
+[32m+[m[32mOWASP Juicebox, Metasploitable, OWASP Mutillidae II,[m
+[32m+[m[32mDV RESTurant, DV bank</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p><a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php</a></p>[m
+[32m+[m[32m<!-- footer: "https://github.com/digininja/DVWA " -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="msfvenom-for-payload-creation">MSFvenom for payload creation</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png" alt="bg contain right:20%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Different payloads (shells, meterpreter)</li>[m
+[32m+[m[32m<li>Different platforms / arch</li>[m
+[32m+[m[32m<li>Encodings</li>[m
+[32m+[m[32m<li>File formants include ASPX, WAR, PHP, EXE, ELF</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" -->[m[41m [m
+[32m+[m[32m<!---[m
+[32m+[m[32m"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main"[m[41m [m
+[32m+[m[32m-->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="evasion">Evasion</h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.serebii.net/games/evasion.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Encoding</li>[m
+[32m+[m[32m<li>Templates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Modify existing ones</li>[m
+[32m+[m[32m<li>Use examples (injection)</li>[m
+[32m+[m[32m<li>Modify existing ones[m
+[32m+[m[32m<a href="https://www.ired.team/offensive-security/code-injection-process-injection/process-injection">https://www.ired.team/offensive-security/code-injection-process-injection/process-injection</a></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->[m
+[32m+[m[32m]]></content:encoded>[m
+[32m+[m[32m    </item>[m
+[32m+[m[41m    [m
+[32m+[m[32m  </channel>[m
+[32m+[m[32m</rss>[m
+[1mdiff --git a/public/writeups/cyber-defense/page/1/index.html b/public/writeups/cyber-defense/page/1/index.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..cc5f188[m
+[1m--- /dev/null[m
+[1m+++ b/public/writeups/cyber-defense/page/1/index.html[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en-us">[m
+[32m+[m[32m  <head>[m
+[32m+[m[32m    <title>https://alvintran.net/writeups/cyber-defense/</title>[m
+[32m+[m[32m    <link rel="canonical" href="https://alvintran.net/writeups/cyber-defense/">[m
+[32m+[m[32m    <meta name="robots" content="noindex">[m
+[32m+[m[32m    <meta charset="utf-8">[m
+[32m+[m[32m    <meta http-equiv="refresh" content="0; url=https://alvintran.net/writeups/cyber-defense/">[m
+[32m+[m[32m  </head>[m
+[32m+[m[32m</html>[m
+[1mdiff --git a/public/writeups/cyber-defense/payloads-and-msfvenom/index.html b/public/writeups/cyber-defense/payloads-and-msfvenom/index.html[m
+[1mnew file mode 100644[m
+[1mindex 0000000..be1642c[m
+[1m--- /dev/null[m
+[1m+++ b/public/writeups/cyber-defense/payloads-and-msfvenom/index.html[m
+[36m@@ -0,0 +1,597 @@[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en" dir="auto">[m
+[32m+[m
+[32m+[m[32m<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">[m
+[32m+[m[32m<meta http-equiv="X-UA-Compatible" content="IE=edge">[m
+[32m+[m[32m<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">[m
+[32m+[m[32m<meta name="robots" content="index, follow">[m
+[32m+[m[32m<title>Payloads and MSFvenom | Alvin Tran</title>[m
+[32m+[m[32m<meta name="keywords" content="">[m
+[32m+[m[32m<meta name="description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.">[m
+[32m+[m[32m<meta name="author" content="">[m
+[32m+[m[32m<link rel="canonical" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/">[m
+[32m+[m[32m<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">[m
+[32m+[m[32m<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">[m
+[32m+[m[32m<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">[m
+[32m+[m[32m<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/">[m
+[32m+[m
+[32m+[m[32m<meta name="twitter:title" content="Payloads and MSFvenom | Alvin Tran" />[m
+[32m+[m[32m<meta name="twitter:description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense." />[m
+[32m+[m[32m<meta property="og:title" content="Payloads and MSFvenom | Alvin Tran" />[m
+[32m+[m[32m<meta property="og:description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense." />[m
+[32m+[m[32m<meta property="og:type" content="article" />[m
+[32m+[m[32m<meta property="og:url" content="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/" />[m
+[32m+[m[32m<meta property="article:section" content="writeups" />[m
+[32m+[m[32m  <meta property="article:published_time" content="2025-02-07T14:25:46&#43;00:00" />[m
+[32m+[m[32m  <meta property="article:modified_time" content="2025-02-07T14:25:46&#43;00:00" />[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script type="application/ld+json">[m
+[32m+[m[32m{[m
+[32m+[m[32m  "@context": "https://schema.org",[m
+[32m+[m[32m  "@type": "BreadcrumbList",[m
+[32m+[m[32m  "itemListElement": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  1 ,[m
+[32m+[m[32m      "name": "Writeups",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/"[m
+[32m+[m[32m    },[m[41m [m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  2 ,[m
+[32m+[m[32m      "name": "Cyber Defense",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/cyber-defense/"[m
+[32m+[m[32m    },[m[41m [m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  3 ,[m
+[32m+[m[32m      "name": "Payloads and MSFvenom",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  ][m
+[32m+[m[32m}[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script type="application/ld+json">[m
+[32m+[m[32m{[m
+[32m+[m[32m  "@context": "https://schema.org",[m
+[32m+[m[32m  "@type": "BlogPosting",[m
+[32m+[m[32m  "headline": "Payloads and MSFvenom | Alvin Tran",[m
+[32m+[m[32m  "name": "Payloads and MSFvenom",[m
+[32m+[m[32m  "description": "Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.",[m
+[32m+[m[32m  "keywords": [[m
+[32m+[m[41m    [m
+[32m+[m[32m  ],[m
+[32m+[m[32m  "wordCount" : "221",[m
+[32m+[m[32m  "inLanguage": "en",[m
+[32m+[m[32m  "datePublished": "2025-02-07T14:25:46Z",[m
+[32m+[m[32m  "dateModified": "2025-02-07T14:25:46Z",[m
+[32m+[m[32m  "mainEntityOfPage": {[m
+[32m+[m[32m    "@type": "WebPage",[m
+[32m+[m[32m    "@id": "https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"[m
+[32m+[m[32m  },[m
+[32m+[m[32m  "publisher": {[m
+[32m+[m[32m    "@type": "Organization",[m
+[32m+[m[32m    "name": "Alvin Tran",[m
+[32m+[m[32m    "logo": {[m
+[32m+[m[32m      "@type": "ImageObject",[m
+[32m+[m[32m      "url": "https://alvintran.net/images/favicon-16x16.png"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<noscript>[m
+[32m+[m[32m    <style>[m
+[32m+[m[32m        #theme-toggle,[m
+[32m+[m[32m        .top-link {[m
+[32m+[m[32m            display: none;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    </style>[m
+[32m+[m[32m</noscript>[m
+[32m+[m
+[32m+[m[32m</head>[m
+[32m+[m
+[32m+[m[32m<body class=" dark type-writeups kind-page layout-" id="top"><script data-no-instant>[m
+[32m+[m[32mfunction switchTheme(theme) {[m
+[32m+[m[32m  switch (theme) {[m
+[32m+[m[32m    case 'light':[m
+[32m+[m[32m      document.body.classList.remove('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[32m    case 'dark':[m
+[32m+[m[32m      document.body.classList.add('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[41m    [m
+[32m+[m[32m    default:[m
+[32m+[m[32m      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {[m
+[32m+[m[32m        document.body.classList.add('dark');[m
+[32m+[m[32m      }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction isDarkTheme() {[m
+[32m+[m[32m  return document.body.className.includes("dark");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction getPrefTheme() {[m
+[32m+[m[32m  return localStorage.getItem("pref-theme");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction setPrefTheme(theme) {[m
+[32m+[m[32m  switchTheme(theme)[m
+[32m+[m[32m  localStorage.setItem("pref-theme", theme);[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mconst toggleThemeCallbacks = {}[m
+[32m+[m[32mtoggleThemeCallbacks['main'] = (isDark) => {[m
+[32m+[m[41m  [m
+[32m+[m[32m  if (isDark) {[m
+[32m+[m[32m    setPrefTheme('light');[m
+[32m+[m[32m  } else {[m
+[32m+[m[32m    setPrefTheme('dark');[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mwindow.addEventListener('toggle-theme', function() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  const isDark = isDarkTheme()[m
+[32m+[m[32m  for (const key in toggleThemeCallbacks) {[m
+[32m+[m[32m    toggleThemeCallbacks[key](isDark)[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
+[32m+[m
+[32m+[m
+[32m+[m[32mfunction toggleThemeListener() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  window.dispatchEvent(new CustomEvent('toggle-theme'));[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[41m  [m
+[32m+[m[32m  (function() {[m
+[32m+[m[32m    const defaultTheme = 'dark';[m
+[32m+[m[32m    const prefTheme = getPrefTheme();[m
+[32m+[m[32m    const theme = prefTheme ? prefTheme : defaultTheme;[m
+[32m+[m
+[32m+[m[32m    switchTheme(theme);[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<header class="header">[m
+[32m+[m[32m    <nav class="nav">[m
+[32m+[m[32m        <div class="logo">[m
+[32m+[m[32m            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>[m
+[32m+[m[32m            <span class="logo-switches">[m
+[32m+[m[32m                <button id="theme-toggle" accesskey="t" title="(Alt + T)">[m
+[32m+[m[32m                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <circle cx="12" cy="12" r="5"></circle>[m
+[32m+[m[32m                        <line x1="12" y1="1" x2="12" y2="3"></line>[m
+[32m+[m[32m                        <line x1="12" y1="21" x2="12" y2="23"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>[m
+[32m+[m[32m                        <line x1="1" y1="12" x2="3" y2="12"></line>[m
+[32m+[m[32m                        <line x1="21" y1="12" x2="23" y2="12"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                </button>[m
+[32m+[m[32m            </span>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m        <ul id="menu">[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/" title="Home" class="active"[m
+[32m+[m[32m                >Home[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/homelab/" title="Homelab"[m
+[32m+[m[32m                >Homelab[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"[m
+[32m+[m[32m                >Writeups[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/status/" title="Status"[m
+[32m+[m[32m                >Status[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m    </nav>[m
+[32m+[m[32m</header>[m
+[32m+[m[32m<main class="main post">[m
+[32m+[m[32m<article class="post-single">[m
+[32m+[m[32m  <header class="post-header">[m
+[32m+[m[32m    <h1 class="post-title">Payloads and MSFvenom</h1>[m
+[32m+[m[32m    <div class="post-meta"><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span>[m
+[32m+[m
+[32m+[m[41m      [m
+[32m+[m[41m      [m
+[32m+[m[32m    </div>[m
+[32m+[m[32m  </header> <div class="toc side right">[m
+[32m+[m[32m    <details  open>[m
+[32m+[m[32m        <summary accesskey="c" title="(Alt + C)">[m
+[32m+[m[32m            <span class="details">Table of Contents</span>[m
+[32m+[m[32m        </summary>[m
+[32m+[m
+[32m+[m[32m        <div class="inner"><ul>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#seashells-br--payloads-br--and-msfvenom" aria-label="(sea)Shells Payloads and MSFvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#disclaimer" aria-label="Disclaimer">Disclaimer</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#table-of-contents" aria-label="Table of Contents">Table of Contents</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#whats-a-payload" aria-label="What&rsquo;s a Payload?">What&rsquo;s a Payload?</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#shells" aria-label="Shells">Shells</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#how-to-get-to-the-shell-part" aria-label="How to get to the shell part">How to get to the shell part</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#types-of-connections" aria-label="Types of connections">Types of connections</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#web-shells" aria-label="Web Shells">Web Shells</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#damn-vulnerable-web-app" aria-label="Damn Vulnerable Web App">Damn Vulnerable Web App</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#msfvenom-for-payload-creation" aria-label="MSFvenom for payload creation">MSFvenom for payload creation</a></li>[m
+[32m+[m[32m                <li>[m
+[32m+[m[32m                    <a href="#evasion" aria-label="Evasion">Evasion</a>[m
+[32m+[m[32m                </li>[m
+[32m+[m[32m            </ul>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m    </details>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m[32m  <div class="post-content"><!---  --->[m
+[32m+[m[32m<h1 id="seashells-br--payloads-br--and-msfvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom<a hidden class="anchor" aria-hidden="true" href="#seashells-br--payloads-br--and-msfvenom">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale%28%29:focal%28990x769:991x770%29/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg" alt="bg right:40%"  />[m
+[32m+[m[32mUofL Cyber Defense</p>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<!-- paginate: true -->[m
+[32m+[m[32m<h1 id="disclaimer">Disclaimer<a hidden class="anchor" aria-hidden="true" href="#disclaimer">¶</a></h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Don&rsquo;t try at home <br />(okay at home but not at other people while at home)</li>[m
+[32m+[m[32m<li>Regurgtating information I did a module on</li>[m
+[32m+[m[32m<li>Not super practical unless you&rsquo;re advanced (i am not)</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="table-of-contents">Table of Contents<a hidden class="anchor" aria-hidden="true" href="#table-of-contents">¶</a></h1>[m
+[32m+[m[32m<ol>[m
+[32m+[m[32m<li>Payloads</li>[m
+[32m+[m[32m<li>Shells</li>[m
+[32m+[m[32m<li>MSFVenom</li>[m
+[32m+[m[32m<li>File Upload Example</li>[m
+[32m+[m[32m<li>Avoiding AV&rsquo;s</li>[m
+[32m+[m[32m<li>.Exe Embedding</li>[m
+[32m+[m[32m</ol>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="whats-a-payload">What&rsquo;s a Payload?<a hidden class="anchor" aria-hidden="true" href="#whats-a-payload">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>A bomb you sent/upload to a server[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Triggers RCE</li>[m
+[32m+[m[32m<li>Injects</li>[m
+[32m+[m[32m<li>Creates <em>shells</em></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Resources[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Payload all the Things</li>[m
+[32m+[m[32m<li>Metasploit Framework</li>[m
+[32m+[m[32m<li></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="shells">Shells<a hidden class="anchor" aria-hidden="true" href="#shells">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li><strong>S</strong>ecure <strong>SH</strong>ell</li>[m
+[32m+[m[32m<li>ba<strong>sh</strong>, power<strong>shell</strong>, z<strong>sh</strong></li>[m
+[32m+[m[32m<li>interacts with the terminal</li>[m
+[32m+[m[32m<li>Metepreter</li>[m
+[32m+[m[32m<li>Web Shells</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png" alt="bg contain  right:40%"  /></p>[m
+[32m+[m[32m<h1 id="how-to-get-to-the-shell-part">How to get to the shell part<a hidden class="anchor" aria-hidden="true" href="#how-to-get-to-the-shell-part">¶</a></h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Find an attack vector![m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>FTP</li>[m
+[32m+[m[32m<li>Webserver file uploads</li>[m
+[32m+[m[32m<li>Dropped a USB</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="types-of-connections">Types of connections<a hidden class="anchor" aria-hidden="true" href="#types-of-connections">¶</a></h1>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Bind - Target listens for connection[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>opens port</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Reverse - Host listens, Target Initiates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Circumvents firewalls and rules</li>[m
+[32m+[m[32m<li>Need a listener[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>ncat / netcat</li>[m
+[32m+[m[32m<li>MSF multi/handler</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: https://www.revshells.com/ -->[m[41m [m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="web-shells">Web Shells<a hidden class="anchor" aria-hidden="true" href="#web-shells">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://i.redd.it/5ofaq45gfmpb1.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>File upload vulnerability[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>PHP</li>[m
+[32m+[m[32m<li>dotnet ASP</li>[m
+[32m+[m[32m<li>Javascript Server Pages (JSP)</li>[m
+[32m+[m[32m<li>Usually after you get admin access to a website</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m<li>Laudanum</li>[m
+[32m+[m[32m<li>MSFvenom</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "" -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="damn-vulnerable-web-app">Damn Vulnerable Web App<a hidden class="anchor" aria-hidden="true" href="#damn-vulnerable-web-app">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658" alt="bg contain right:20% "  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Part of kali environment (i think)</li>[m
+[32m+[m[32m<li>whole host of vulnerabilities</li>[m
+[32m+[m[32m<li>Alternatvies:[m
+[32m+[m[32mOWASP Juicebox, Metasploitable, OWASP Mutillidae II,[m
+[32m+[m[32mDV RESTurant, DV bank</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p><a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php</a></p>[m
+[32m+[m[32m<!-- footer: "https://github.com/digininja/DVWA " -->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="msfvenom-for-payload-creation">MSFvenom for payload creation<a hidden class="anchor" aria-hidden="true" href="#msfvenom-for-payload-creation">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png" alt="bg contain right:20%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Different payloads (shells, meterpreter)</li>[m
+[32m+[m[32m<li>Different platforms / arch</li>[m
+[32m+[m[32m<li>Encodings</li>[m
+[32m+[m[32m<li>File formants include ASPX, WAR, PHP, EXE, ELF</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<p>[Demo Cue]</p>[m
+[32m+[m[32m<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" -->[m[41m [m
+[32m+[m[32m<!---[m
+[32m+[m[32m"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main"[m[41m [m
+[32m+[m[32m-->[m
+[32m+[m[32m<hr>[m
+[32m+[m[32m<h1 id="evasion">Evasion<a hidden class="anchor" aria-hidden="true" href="#evasion">¶</a></h1>[m
+[32m+[m[32m<p>[m
+[32m+[m[32m  <img loading="lazy" src="https://www.serebii.net/games/evasion.jpg" alt="bg contain right:40%"  /></p>[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Encoding</li>[m
+[32m+[m[32m<li>Templates[m
+[32m+[m[32m<ul>[m
+[32m+[m[32m<li>Modify existing ones</li>[m
+[32m+[m[32m<li>Use examples (injection)</li>[m
+[32m+[m[32m<li>Modify existing ones[m
+[32m+[m[32m<a href="https://www.ired.team/offensive-security/code-injection-process-injection/process-injection">https://www.ired.team/offensive-security/code-injection-process-injection/process-injection</a></li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m</li>[m
+[32m+[m[32m</ul>[m
+[32m+[m[32m<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m  </div>[m
+[32m+[m
+[32m+[m[32m  <footer class="post-footer">[m
+[32m+[m[32m  </footer>[m
+[32m+[m[32m    <div class="comments-separator"></div>[m
+[32m+[m[32m</article>[m
+[32m+[m[32m    </main>[m
+[32m+[m[41m    [m
+[32m+[m[32m<footer class="footer">[m
+[32m+[m[32m  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m  <span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    Powered by[m
+[32m+[m[32m    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &[m
+[32m+[m[32m    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">[m
+[32m+[m[32m    <path d="M12 6H0l6-6z" />[m
+[32m+[m[32m  </svg>[m
+[32m+[m[32m</a>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function() {[m
+[32m+[m[41m     [m
+[32m+[m[32m    const disableThemeToggle = '' == '1';[m
+[32m+[m[32m    if (disableThemeToggle) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    let button = document.getElementById("theme-toggle")[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.removeEventListener('click', toggleThemeListener)[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.addEventListener('click', toggleThemeListener)[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function () {[m
+[32m+[m[32m    let menu = document.getElementById('menu')[m
+[32m+[m[32m    if (menu) {[m
+[32m+[m[32m      menu.scrollLeft = localStorage.getItem("menu-scroll-position");[m
+[32m+[m[32m      menu.onscroll = function () {[m
+[32m+[m[32m        localStorage.setItem("menu-scroll-position", menu.scrollLeft);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const disableSmoothScroll = '' == '1';[m
+[32m+[m[32m    const enableInstantClick = '' == '1';[m
+[32m+[m[41m    [m
+[32m+[m[32m    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+[32m+[m[32m    document.querySelectorAll('a[href^="#"]').forEach(anchor => {[m
+[32m+[m[32m      anchor.addEventListener("click", function (e) {[m
+[32m+[m[32m        e.preventDefault();[m
+[32m+[m[32m        var id = this.getAttribute("href").substr(1);[m
+[32m+[m[32m        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({[m
+[32m+[m[32m          behavior: "smooth"[m
+[32m+[m[32m        });[m
+[32m+[m[32m        if (id === "top") {[m
+[32m+[m[32m          history.replaceState(null, null, " ");[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m          history.pushState(null, null, `#${id}`);[m
+[32m+[m[32m        }[m
+[32m+[m[32m      });[m
+[32m+[m[32m    });[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  var mybutton = document.getElementById("top-link");[m
+[32m+[m[32m  window.onscroll = function () {[m
+[32m+[m[32m    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {[m
+[32m+[m[32m      mybutton.style.visibility = "visible";[m
+[32m+[m[32m      mybutton.style.opacity = "1";[m
+[32m+[m[32m    } else {[m
+[32m+[m[32m      mybutton.style.visibility = "hidden";[m
+[32m+[m[32m      mybutton.style.opacity = "0";[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  document.querySelectorAll('.masked-email').forEach((el) => {[m
+[32m+[m[32m    el.innerText = atob(el.innerText);[m
+[32m+[m[32m    el.classList.remove('masked-email')[m
+[32m+[m[32m  })[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  if (window.scrollListeners) {[m
+[32m+[m[41m    [m
+[32m+[m[32m    for (const listener of scrollListeners) {[m
+[32m+[m[32m      window.removeEventListener('scroll', listener)[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m  window.scrollListeners = [][m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script src="/js/medium-zoom.min.js" data-no-instant[m
+[32m+[m[32m></script>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[41m  [m
+[32m+[m[41m  [m
+[32m+[m[32m  (function() {[m
+[32m+[m[32m    const enableTocScroll = '1' == '1'[m
+[32m+[m[32m    if (!enableTocScroll) {[m
+[32m+[m[32m      return[m
+[32m+[m[32m    }[m
+[32m+[m[32m    if (!document.querySelector('.toc')) {[m
+[32m+[m[32m      console.log('no toc found, ignore toc scroll')[m
+[32m+[m[32m      return[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+[32m+[m
+[32m+[m[41m    [m
+[32m+[m[32m    const scrollListeners = window.scrollListeners[m
+[32m+[m[32m    const headings = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id]');[m
+[32m+[m[32m    const activeClass = 'active';[m
+[32m+[m
+[32m+[m[41m    [m
+[32m+[m[32m    let activeHeading = headings[0];[m
+[32m+[m[32m    getLinkByHeading(activeHeading).classList.add(activeClass);[m
+[32m+[m
+[32m+[m[32m    const onScroll = () => {[m
+[32m+[m[32m      const passedHeadings = [];[m
+[32m+[m[32m      for (const h of headings) {[m
+[32m+[m[41m        [m
+[32m+[m[32m        if (getOffsetTop(h) < 5) {[m
+[32m+[m[32m          passedHeadings.push(h)[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m          break;[m
+[32m+[m[32m        }[m
+[32m+[m[32m      }[m
+[32m+[m[32m      if (passedHeadings.length > 0) {[m
+[32m+[m[32m        newActiveHeading = passedHeadings[passedHeadings.length - 1];[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        newActiveHeading = headings[0];[m
+[32m+[m[32m      }[m
+[32m+[m[32m      if (activeHeading != newActiveHeading) {[m
+[32m+[m[32m        getLinkByHeading(activeHeading).classList.remove(activeClass);[m
+[32m+[m[32m        activeHeading = newActiveHeading;[m
+[32m+[m[32m        getLinkByHeading(activeHeading).classList.add(activeClass);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    let timer = null;[m
+[32m+[m[32m    const scrollListener = () => {[m
+[32m+[m[32m      if (timer !== null) {[m
+[32m+[m[32m        clearTimeout(timer)[m
+[32m+[m[32m      }[m
+[32m+[m[32m      timer = setTimeout(onScroll, 50)[m
+[32m+[m[32m    }[m
+[32m+[m[32m    window.addEventListener('scroll', scrollListener, false);[m
+[32m+[m[32m    scrollListeners.push(scrollListener)[m
+[32m+[m
+[32m+[m[32m    function getLinkByHeading(heading) {[m
+[32m+[m[32m      const id = encodeURI(heading.getAttribute('id')).toLowerCase();[m
+[32m+[m[32m      return document.querySelector(`.toc ul li a[href="#${id}"]`);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    function getOffsetTop(heading) {[m
+[32m+[m[32m      if (!heading.getClientRects().length) {[m
+[32m+[m[32m        return 0;[m
+[32m+[m[32m      }[m
+[32m+[m[32m      let rect = heading.getBoundingClientRect();[m
+[32m+[m[32m      return rect.top[m
+[32m+[m[32m    }[m
+[32m+[m[32m  })();[m
+[32m+[m[32m  </script>[m
+[32m+[m
+[32m+[m[32m</body>[m
+[32m+[m
+[32m+[m[32m</html>[m
+[1mdiff --git "a/public/writeups/cyber\\-defense/index.html" "b/public/writeups/cyber\\-defense/index.html"[m
+[1mnew file mode 100644[m
+[1mindex 0000000..abab089[m
+[1m--- /dev/null[m
+[1m+++ "b/public/writeups/cyber\\-defense/index.html"[m
+[36m@@ -0,0 +1,325 @@[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en" dir="auto">[m
+[32m+[m
+[32m+[m[32m<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">[m
+[32m+[m[32m<meta http-equiv="X-UA-Compatible" content="IE=edge">[m
+[32m+[m[32m<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">[m
+[32m+[m[32m<meta name="robots" content="index, follow">[m
+[32m+[m[32m<title>Cyber\ Defense | Alvin Tran</title>[m
+[32m+[m[32m<meta name="keywords" content="">[m
+[32m+[m[32m<meta name="description" content="Cyber\ Defense - Alvin Tran">[m
+[32m+[m[32m<meta name="author" content="">[m
+[32m+[m[32m<link rel="canonical" href="https://alvintran.net/writeups/cyber%5C-defense/">[m
+[32m+[m[32m<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">[m
+[32m+[m[32m<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">[m
+[32m+[m[32m<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">[m
+[32m+[m[32m<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/cyber%5C-defense/index.xml">[m
+[32m+[m[32m<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/cyber%5C-defense/">[m
+[32m+[m
+[32m+[m[32m<meta name="twitter:title" content="Cyber\ Defense | Alvin Tran" />[m
+[32m+[m[32m<meta name="twitter:description" content="" />[m
+[32m+[m[32m<meta property="og:title" content="Cyber\ Defense | Alvin Tran" />[m
+[32m+[m[32m<meta property="og:description" content="" />[m
+[32m+[m[32m<meta property="og:type" content="website" />[m
+[32m+[m[32m<meta property="og:url" content="https://alvintran.net/writeups/cyber%5C-defense/" />[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script type="application/ld+json">[m
+[32m+[m[32m{[m
+[32m+[m[32m  "@context": "https://schema.org",[m
+[32m+[m[32m  "@type": "BreadcrumbList",[m
+[32m+[m[32m  "itemListElement": [[m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  1 ,[m
+[32m+[m[32m      "name": "Writeups",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/"[m
+[32m+[m[32m    },[m[41m [m
+[32m+[m[32m    {[m
+[32m+[m[32m      "@type": "ListItem",[m
+[32m+[m[32m      "position":  2 ,[m
+[32m+[m[32m      "name": "Cyber\\ Defense",[m
+[32m+[m[32m      "item": "https://alvintran.net/writeups/cyber%5C-defense/"[m
+[32m+[m[32m    }[m
+[32m+[m[32m  ][m
+[32m+[m[32m}[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<noscript>[m
+[32m+[m[32m    <style>[m
+[32m+[m[32m        #theme-toggle,[m
+[32m+[m[32m        .top-link {[m
+[32m+[m[32m            display: none;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m    </style>[m
+[32m+[m[32m</noscript>[m
+[32m+[m
+[32m+[m[32m</head>[m
+[32m+[m
+[32m+[m[32m<body class="list-page dark type-writeups kind-section layout-" id="top"><script data-no-instant>[m
+[32m+[m[32mfunction switchTheme(theme) {[m
+[32m+[m[32m  switch (theme) {[m
+[32m+[m[32m    case 'light':[m
+[32m+[m[32m      document.body.classList.remove('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[32m    case 'dark':[m
+[32m+[m[32m      document.body.classList.add('dark');[m
+[32m+[m[32m      break;[m
+[32m+[m[41m    [m
+[32m+[m[32m    default:[m
+[32m+[m[32m      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {[m
+[32m+[m[32m        document.body.classList.add('dark');[m
+[32m+[m[32m      }[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction isDarkTheme() {[m
+[32m+[m[32m  return document.body.className.includes("dark");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction getPrefTheme() {[m
+[32m+[m[32m  return localStorage.getItem("pref-theme");[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mfunction setPrefTheme(theme) {[m
+[32m+[m[32m  switchTheme(theme)[m
+[32m+[m[32m  localStorage.setItem("pref-theme", theme);[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mconst toggleThemeCallbacks = {}[m
+[32m+[m[32mtoggleThemeCallbacks['main'] = (isDark) => {[m
+[32m+[m[41m  [m
+[32m+[m[32m  if (isDark) {[m
+[32m+[m[32m    setPrefTheme('light');[m
+[32m+[m[32m  } else {[m
+[32m+[m[32m    setPrefTheme('dark');[m
+[32m+[m[32m  }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32mwindow.addEventListener('toggle-theme', function() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  const isDark = isDarkTheme()[m
+[32m+[m[32m  for (const key in toggleThemeCallbacks) {[m
+[32m+[m[32m    toggleThemeCallbacks[key](isDark)[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
+[32m+[m
+[32m+[m
+[32m+[m[32mfunction toggleThemeListener() {[m
+[32m+[m[41m  [m
+[32m+[m[32m  window.dispatchEvent(new CustomEvent('toggle-theme'));[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[41m  [m
+[32m+[m[32m  (function() {[m
+[32m+[m[32m    const defaultTheme = 'dark';[m
+[32m+[m[32m    const prefTheme = getPrefTheme();[m
+[32m+[m[32m    const theme = prefTheme ? prefTheme : defaultTheme;[m
+[32m+[m
+[32m+[m[32m    switchTheme(theme);[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<header class="header">[m
+[32m+[m[32m    <nav class="nav">[m
+[32m+[m[32m        <div class="logo">[m
+[32m+[m[32m            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>[m
+[32m+[m[32m            <span class="logo-switches">[m
+[32m+[m[32m                <button id="theme-toggle" accesskey="t" title="(Alt + T)">[m
+[32m+[m[32m                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"[m
+[32m+[m[32m                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"[m
+[32m+[m[32m                        stroke-linejoin="round">[m
+[32m+[m[32m                        <circle cx="12" cy="12" r="5"></circle>[m
+[32m+[m[32m                        <line x1="12" y1="1" x2="12" y2="3"></line>[m
+[32m+[m[32m                        <line x1="12" y1="21" x2="12" y2="23"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>[m
+[32m+[m[32m                        <line x1="1" y1="12" x2="3" y2="12"></line>[m
+[32m+[m[32m                        <line x1="21" y1="12" x2="23" y2="12"></line>[m
+[32m+[m[32m                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>[m
+[32m+[m[32m                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>[m
+[32m+[m[32m                    </svg>[m
+[32m+[m[32m                </button>[m
+[32m+[m[32m            </span>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m        <ul id="menu">[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/" title="Home" class="active"[m
+[32m+[m[32m                >Home[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/homelab/" title="Homelab"[m
+[32m+[m[32m                >Homelab[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"[m
+[32m+[m[32m                >Writeups[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m            <li>[m
+[32m+[m[32m                <a href="https://alvintran.net/status/" title="Status"[m
+[32m+[m[32m                >Status[m
+[32m+[m[32m                </a>[m
+[32m+[m[32m            </li>[m
+[32m+[m[32m        </ul>[m
+[32m+[m[32m    </nav>[m
+[32m+[m[32m</header>[m
+[32m+[m[32m<main class="main">[m[41m [m
+[32m+[m[32m<header class="page-header">[m
+[32m+[m[32m  <h1>[m
+[32m+[m[32m    Cyber\ Defense</h1><div class="inline-links">[m
+[32m+[m[41m  [m
+[32m+[m[41m  [m
+[32m+[m[41m  [m
+[32m+[m[32m</div>[m
+[32m+[m[32m</header>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><div class="social-icons">[m
+[32m+[m[32m    <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>[m
+[32m+[m[32m    <rect x="2" y="9" width="4" height="12"></rect>[m
+[32m+[m[32m    <circle cx="4" cy="4" r="2"></circle>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m    <a href="https://github.com/ArcaneBow7258" target="_blank" rel="noopener noreferrer me" title="Github">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path[m
+[32m+[m[32m        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">[m
+[32m+[m[32m    </path>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m    <a href="mailto:mail@alvintran.net" title="Email">[m
+[32m+[m[32m        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21" fill="none" stroke="currentColor" stroke-width="2"[m
+[32m+[m[32m    stroke-linecap="round" stroke-linejoin="round">[m
+[32m+[m[32m    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>[m
+[32m+[m[32m    <polyline points="22,6 12,13 2,6"></polyline>[m
+[32m+[m[32m</svg>[m
+[32m+[m
+[32m+[m[32m    </a>[m
+[32m+[m[32m</div>[m
+[32m+[m
+[32m+[m[32m    </main>[m
+[32m+[m[41m    [m
+[32m+[m[32m<footer class="footer">[m
+[32m+[m[32m  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m  <span style="display: inline-block; margin-left: 1em;">[m
+[32m+[m[32m    Powered by[m
+[32m+[m[32m    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &[m
+[32m+[m[32m    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>[m
+[32m+[m[32m  </span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">[m
+[32m+[m[32m    <path d="M12 6H0l6-6z" />[m
+[32m+[m[32m  </svg>[m
+[32m+[m[32m</a>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function() {[m
+[32m+[m[41m     [m
+[32m+[m[32m    const disableThemeToggle = '' == '1';[m
+[32m+[m[32m    if (disableThemeToggle) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    let button = document.getElementById("theme-toggle")[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.removeEventListener('click', toggleThemeListener)[m
+[32m+[m[41m    [m
+[32m+[m[32m    button.addEventListener('click', toggleThemeListener)[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  (function () {[m
+[32m+[m[32m    let menu = document.getElementById('menu')[m
+[32m+[m[32m    if (menu) {[m
+[32m+[m[32m      menu.scrollLeft = localStorage.getItem("menu-scroll-position");[m
+[32m+[m[32m      menu.onscroll = function () {[m
+[32m+[m[32m        localStorage.setItem("menu-scroll-position", menu.scrollLeft);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    const disableSmoothScroll = '' == '1';[m
+[32m+[m[32m    const enableInstantClick = '' == '1';[m
+[32m+[m[41m    [m
+[32m+[m[32m    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {[m
+[32m+[m[32m      return;[m
+[32m+[m[32m    }[m
+[32m+[m[41m    [m
+[32m+[m[32m    document.querySelectorAll('a[href^="#"]').forEach(anchor => {[m
+[32m+[m[32m      anchor.addEventListener("click", function (e) {[m
+[32m+[m[32m        e.preventDefault();[m
+[32m+[m[32m        var id = this.getAttribute("href").substr(1);[m
+[32m+[m[32m        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({[m
+[32m+[m[32m          behavior: "smooth"[m
+[32m+[m[32m        });[m
+[32m+[m[32m        if (id === "top") {[m
+[32m+[m[32m          history.replaceState(null, null, " ");[m
+[32m+[m[32m        } else {[m
+[32m+[m[32m          history.pushState(null, null, `#${id}`);[m
+[32m+[m[32m        }[m
+[32m+[m[32m      });[m
+[32m+[m[32m    });[m
+[32m+[m[32m  })();[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  var mybutton = document.getElementById("top-link");[m
+[32m+[m[32m  window.onscroll = function () {[m
+[32m+[m[32m    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {[m
+[32m+[m[32m      mybutton.style.visibility = "visible";[m
+[32m+[m[32m      mybutton.style.opacity = "1";[m
+[32m+[m[32m    } else {[m
+[32m+[m[32m      mybutton.style.visibility = "hidden";[m
+[32m+[m[32m      mybutton.style.opacity = "0";[m
+[32m+[m[32m    }[m
+[32m+[m[32m  };[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  document.querySelectorAll('.masked-email').forEach((el) => {[m
+[32m+[m[32m    el.innerText = atob(el.innerText);[m
+[32m+[m[32m    el.classList.remove('masked-email')[m
+[32m+[m[32m  })[m
+[32m+[m[32m</script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m  if (window.scrollListeners) {[m
+[32m+[m[41m    [m
+[32m+[m[32m    for (const listener of scrollListeners) {[m
+[32m+[m[32m      window.removeEventListener('scroll', listener)[m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m[32m  window.scrollListeners = [][m
+[32m+[m[32m</script>[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m<script src="/js/medium-zoom.min.js" data-no-instant[m
+[32m+[m[32m></script>[m
+[32m+[m[32m</body>[m
+[32m+[m
+[32m+[m[32m</html>[m
+[1mdiff --git "a/public/writeups/cyber\\-defense/index.xml" "b/public/writeups/cyber\\-defense/index.xml"[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c955c41[m
+[1m--- /dev/null[m
+[1m+++ "b/public/writeups/cyber\\-defense/index.xml"[m
+[36m@@ -0,0 +1,11 @@[m
+[32m+[m[32m<?xml version="1.0" encoding="utf-8" standalone="yes"?>[m
+[32m+[m[32m<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">[m
+[32m+[m[32m  <channel>[m
+[32m+[m[32m    <title>Cyber\ Defense on Alvin Tran</title>[m
+[32m+[m[32m    <link>https://alvintran.net/writeups/cyber%5C-defense/</link>[m
+[32m+[m[32m    <description>Recent content in Cyber\ Defense on Alvin Tran</description>[m
+[32m+[m[32m    <generator>Hugo -- gohugo.io</generator>[m
+[32m+[m[32m    <language>en-us</language>[m
+[32m+[m[32m    <lastBuildDate>Fri, 07 Feb 2025 14:24:21 +0000</lastBuildDate><atom:link href="https://alvintran.net/writeups/cyber%5C-defense/index.xml" rel="self" type="application/rss+xml" />[m
+[32m+[m[32m  </channel>[m
+[32m+[m[32m</rss>[m
+[1mdiff --git "a/public/writeups/cyber\\-defense/page/1/index.html" "b/public/writeups/cyber\\-defense/page/1/index.html"[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4b28a0e[m
+[1m--- /dev/null[m
+[1m+++ "b/public/writeups/cyber\\-defense/page/1/index.html"[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="en-us">[m
+[32m+[m[32m  <head>[m
+[32m+[m[32m    <title>https://alvintran.net/writeups/cyber%5C-defense/</title>[m
+[32m+[m[32m    <link rel="canonical" href="https://alvintran.net/writeups/cyber%5C-defense/">[m
+[32m+[m[32m    <meta name="robots" content="noindex">[m
+[32m+[m[32m    <meta charset="utf-8">[m
+[32m+[m[32m    <meta http-equiv="refresh" content="0; url=https://alvintran.net/writeups/cyber%5C-defense/">[m
+[32m+[m[32m  </head>[m
+[32m+[m[32m</html>[m
+[1mdiff --git a/public/writeups/index.html b/public/writeups/index.html[m
+[1mindex 3985cd7..a618851 100644[m
+[1m--- a/public/writeups/index.html[m
+[1m+++ b/public/writeups/index.html[m
+[36m@@ -216,6 +216,25 @@[m [mfunction toggleThemeListener() {[m
+ </div>[m
+ [m
+ [m
+[32m+[m[32m<article class="post-entry">[m[41m [m
+[32m+[m[32m  <header class="entry-header">[m
+[32m+[m[32m    <h2>Cyber Defense[m
+[32m+[m[32m    </h2>[m
+[32m+[m[32m  </header>[m
+[32m+[m[32m  <section class="entry-content">[m
+[32m+[m[41m    [m
+[32m+[m[32m      <p></p>[m
+[32m+[m[41m    [m
+[32m+[m[32m  </section>[m
+[32m+[m[32m  <footer class="entry-footer"><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span><span class="meta-item">[m
+[32m+[m[32m  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>[m
+[32m+[m[32m  <span>February 7, 2025</span></span>[m
+[32m+[m[32m</footer>[m
+[32m+[m[32m  <a class="entry-link" aria-label="post link to Cyber Defense" href="https://alvintran.net/writeups/cyber-defense/"></a>[m
+[32m+[m[32m</article>[m
+[32m+[m
+ <article class="post-entry"> [m
+   <header class="entry-header">[m
+     <h2>NCL[m
+[1mdiff --git a/public/writeups/index.xml b/public/writeups/index.xml[m
+[1mindex 0fae390..c0ce999 100644[m
+[1m--- a/public/writeups/index.xml[m
+[1m+++ b/public/writeups/index.xml[m
+[36m@@ -7,6 +7,16 @@[m
+     <generator>Hugo -- gohugo.io</generator>[m
+     <language>en-us</language>[m
+     <lastBuildDate>Tue, 12 Nov 2024 11:46:50 -0500</lastBuildDate><atom:link href="https://alvintran.net/writeups/index.xml" rel="self" type="application/rss+xml" />[m
+[32m+[m[32m    <item>[m
+[32m+[m[32m      <title>Cyber Defense</title>[m
+[32m+[m[32m      <link>https://alvintran.net/writeups/cyber-defense/</link>[m
+[32m+[m[32m      <pubDate>Fri, 07 Feb 2025 14:24:26 +0000</pubDate>[m
+[32m+[m[41m      [m
+[32m+[m[32m      <guid>https://alvintran.net/writeups/cyber-defense/</guid>[m
+[32m+[m[32m      <description></description>[m
+[32m+[m[32m      <content:encoded><![CDATA[]]></content:encoded>[m
+[32m+[m[32m    </item>[m
+[32m+[m[41m    [m
+     <item>[m
+       <title>NCL</title>[m
+       <link>https://alvintran.net/writeups/ncl/</link>[m
