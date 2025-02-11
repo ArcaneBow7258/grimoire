@@ -2,6 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/</loc>
+    <lastmod>2025-02-10T03:19:41+00:00</lastmod>
+  </url><url>
+    <loc>https://alvintran.net/writeups/cyber-defense/</loc>
+    <lastmod>2025-02-10T03:19:41+00:00</lastmod>
+  </url><url>
     <loc>https://alvintran.net/status/</loc>
     <lastmod>2024-11-13T23:07:56-05:00</lastmod>
   </url><url>
@@ -15,7 +21,7 @@
     <lastmod>2024-11-13T23:07:56-05:00</lastmod>
   </url><url>
     <loc>https://alvintran.net/homelab/</loc>
-    <lastmod>2025-02-07T06:01:21+00:00</lastmod>
+    <lastmod>2025-02-10T03:19:41+00:00</lastmod>
   </url><url>
     <loc>https://alvintran.net/</loc>
     <lastmod>2024-11-11T21:13:19-05:00</lastmod>
