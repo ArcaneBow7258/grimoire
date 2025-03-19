@@ -1,7 +1,7 @@
 +++
 date = '2024-11-12T12:28:45-05:00'
 draft = false
-title = 'Writeups / NCL / PC_complexity'
+title = 'NCL / PC_complexity'
 summary = 'Walkthrough of Fall 2024 NCL Password Cracking (Hard)! Going through basic `hashcat` to adding rules to match with complexity requirements'
 ShowToc = true
 TocOpen = true

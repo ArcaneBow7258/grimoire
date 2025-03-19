@@ -7,5 +7,88 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 11 Feb 2025 00:43:39 +0000</lastBuildDate><atom:link href="https://alvintran.net/writeups/homelab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homelab / Active Directory</title>
+      <link>https://alvintran.net/writeups/homelab/active-directory/</link>
+      <pubDate>Tue, 11 Feb 2025 00:43:45 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/homelab/active-directory/</guid>
+      <description>Basically what I did to test out active directory on my homelab</description>
+      <content:encoded><![CDATA[<h1 id="introduction">Introduction</h1>
+<p>Hi! I&rsquo;m not an expert on active directory and a lot of information I&rsquo;m about to tell you is already available online, but writing it myself and disseminating helps me learn (i think). Plus might as well add more information to my website.</p>
+<h1 id="basic-explaination">Basic Explaination</h1>
+<p>Active Directory (AD) is a centralized authentication and authorization architecture that interfaces with Windows devices.</p>
+<p>AD comes in a few parts:</p>
+<ol>
+<li>Domain - a workspace designated by an actualy domain. This is the highest level and sets the policies company wide. Ran by a <em>domain controller</em> (DC).</li>
+<li>Organization Units (OU) - Logical grouping of users, devices, and groups that helps organize your permissions. For example, you can have a OU for <em>accounting</em>, and within a group named <em>tax people</em> and give permissions accordingly.</li>
+<li>Group - a group of users.</li>
+<li>User - you!</li>
+<li>Resourecs - like printers.</li>
+</ol>
+<p>Many types of policies can be set including: security, password, access, account management (different levels of IT) and even computer power management. I&rsquo;d like to think for every windows setting, we can roll out a setting to specific subset of users and devices.</p>
+<p>Furthermore, authorization to different services/resources like FTP, share drives, and printers.</p>
+<p>The shape of a Domain is a forest: a bunch of trees. You can create subomains for specific parts of a company or maybe even regions. These can have their own domain controller.</p>
+<h2 id="protocol">Protocol</h2>
+<p>dunno, use LDAPS tho<br>
+Kreberos or something like that</p>
+<h2 id="why-ad">Why AD?</h2>
+<ul>
+<li>Centralized management (and replication through more DC)</li>
+<li>Compartmentalization of groups of users.
+<ul>
+<li>Organization! The tree/directory like nature allows for easy cascading and look-ups.</li>
+</ul>
+</li>
+<li>Extensive Windows management</li>
+<li>Allows for single account across many services.</li>
+</ul>
+<h1 id="what-i-did">What I did</h1>
+<p>As I do not own an enterprise license of Windows, I decided to use Azure. Also helps me offload some processing.
+Windows Enterprise or</p>
+<h2 id="homelab">Homelab</h2>
+<ol>
+<li>I set up Windows Server 2022 on my Computer
+<ul>
+<li>Make sure you don&rsquo;t only do Server Core (to get GUI)</li>
+<li>Add feature/role: Active Directory</li>
+</ul>
+</li>
+<li>Create a user
+<ul>
+<li>tools -&gt; Group and User management -&gt; add user</li>
+<li>This user should be the user you&rsquo;ll be joining your other VM as.</li>
+</ul>
+</li>
+<li>Need to generate a certicate (<a href="https://learn.microsoft.com/en-us/azure/vpn-gateway/point-to-site-certificate-gateway">self-signed</a>)
+<ul>
+<li>After creating, switch to Azure side</li>
+</ul>
+</li>
+<li>Connect your AD to Azure Gateway</li>
+<li>Check if you can ping, you might have to do somet firewall to allow ICMPv4</li>
+</ol>
+<h2 id="azure">Azure</h2>
+<ol>
+<li>Create a VM
+<ul>
+<li>To save some costs, make sure your OS Disk is on HDD</li>
+</ul>
+</li>
+<li>Use Azure Virtual Network Gateway
+<ul>
+<li>Important setting: VPN types. Should allow OpenVPN and IKEv2 for Windows.</li>
+<li>Acts as a point-to-site VPN.</li>
+<li>Get public-key of certificate and provide it to Azure.</li>
+<li>You can download a package for set-up the VPN&rsquo;s with click of button.</li>
+</ul>
+</li>
+<li>Ping DC IP</li>
+<li>Add Domain Controller to DNS (first stop)</li>
+<li>System / Computer Name settings -&gt; Domain -&gt; Change Domain</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
   </channel>
 </rss>

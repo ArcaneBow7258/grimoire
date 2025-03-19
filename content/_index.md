@@ -32,13 +32,16 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
     - Fall 2024 Team [68/413]
 - [MetaCTF](https://metactf.com/)
     - Jan. 2025 Flash CTF [37/1044, top 3.5%]
+- [PicoCTF](https://picoctf.org/)
+    - Spring 2025 [494/10460, top 0.5%]
 - [UofL IEEE Outstanding CSE Student Award](https://engineering.louisville.edu/about/ourstudents/honorsawards/)
 - CompTIA Security+ Certification
 - CSA CCSK 
-- Working on: HTB Certified Junior Penetration Tester
+- Working on: HTB Certified Penetration Testing Specilist
 
  ## Papers {{<image_icon "images/pkm/dragapult.png" >}}
-
+- 3rd Author: NSF IUSE: Handling Imbalanced Engineering Persistence Data in Machine Learning with Undersampling & SMOTE in ASEE 2025
+- Primary Developer for Preprocessing: Bego, C. R., Dourado, A., Segura-Sangucho, L. J., Zuniga-Navarrete, C., & Tran, A. (2024, November 4). Preprocessing Files. Retrieved from osf.io/ygqb3 
 - 1st Author: Categorical Variable Coding for Machine Learning in Engineering Education in 2024 IEEE FIE
 - 2nd Author: C. R. Bego, A. Tran, P. A. S. Ralston, C. Crockett, R. J. Chastain and K. B. Lyle, "Spaced Retrieval Practice Improves Engineering Student Performance in Physics," 2023 IEEE Frontiers in Education Conference (FIE) [link](https://ieeexplore.ieee.org/abstract/document/10343025)
 - GRA: Bego, C. R., & Withorn, T., & Danovitch, J., & Thompson, A., & Thomas, E., & Gatsos, G. E., & Tran, A. (2024, June), Working Towards GenAI Literacy: Assessing First-Year Engineering Students’ Attitudes towards, Trust in, and Ethical Opinions of ChatGPT [link](https://peer.asee.org/working-towards-genai-literacy-assessing-first-year-engineering-students-attitudes-towards-trust-in-and-ethical-opinions-of-chatgpt)
@@ -47,13 +50,16 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
 ## Related Experience  {{<image_icon "images/pkm/palossand.png">}}
 {{< collapse Software>}}  
 ##### Cybersecurity  {{<image_icon "images/pkm/rotom.png">}}
-- Tools: NMAP, Wiresehark, Burpsuite, **hashcat**, ghidra, Autopsy, Wireguard
+- Tools: NMAP, Wiresehark, Burpsuite, **hashcat**, ghidra, Autopsy, Wireguard, Firewalling, Active Directory
 - Experiences: CTF's, Endpoint hardening, Blue team course final, Documnetation of codes and procedures
 - OS: Windows, Ubuntu, **Raspbian**, Archlinux, EdgeOS/Vyos
 ##### Data  {{<image_icon "images/pkm/fluttermane.png">}}
 - Python Libraries: **Pytorch, Sci-kit learn, matplotlib, pandas**
+- Visualization Tools: PowerBI
+- Pipeline: SSIS, Microsoft SQL Agent / SQL Server
 - Applications: Predictive modeling, NLP for text search, OCR for PDF's
 ##### Other  {{<image_icon "images/pkm/skeledirge.png">}}
+- Cloud Platforms: Azure \[VM's, Gateway, VPN, Active Direcotry\], AWS \[EC2, Firewalls\]
 - Game development: Godot, Unity, Unity Netcode + Relay for multiplayer
 - Web development: Django, **Hugo (this), Flask**
 - Other languages: C, C++, C#, Javascript, Micrpython, SQL (Postgres, T-SQL, MySQL)
@@ -61,6 +67,7 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
 {{< collapse Projects>}}
 - [Homelab](homelab) consisting of wireguard tunnel for access, Edgerouter subnet (DNS + DHCP), routing, and firewall management, with Proxmox VM's + LXC/Containers for software.
 - Personal website/blog to host writeups and resume (where you are now).
+- Working on [Godot mutliplayer game](https://github.com/ArcaneBow7258/godot_discord_test), hopefully integrated with discord activities (long-term)
 - Mobile ESP32 webserver with captive portal.
 - Raspberry Pi camera webserver and garage door opener behind nginx reverse proxy.
 - Voice recognition on RPi to control LED's.
@@ -78,7 +85,7 @@ I'm apart of the CyberCorps: Scholarship for Service program at my unversity, an
 {{< column >}}
 
 - Optimization and Moden Heuristics
-- Web Mining / Data Analytics / NLP
+- Web Mining / Data Analytics / Natural Language Processing
 - Capstone: Identifying Tobacco stores for Louisville Metro Health and Wellness Department
 {{< endcolumns >}}
 {{</ collapse >}}
