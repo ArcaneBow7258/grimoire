@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Under the Wire on Alvin Tran</title>
+    <link>https://alvintran.net/writeups/under-the-wire/</link>
+    <description>Recent content in Under the Wire on Alvin Tran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 01 Apr 2025 02:27:10 +0000</lastBuildDate><atom:link href="https://alvintran.net/writeups/under-the-wire/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>UTW / Century</title>
+      <link>https://alvintran.net/writeups/under-the-wire/century/</link>
+      <pubDate>Tue, 01 Apr 2025 02:28:08 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/under-the-wire/century/</guid>
+      <description>Commands and basically solutions to the Century wargame</description>
+      <content:encoded><![CDATA[<h1 id="century">Century</h1>
+<ol>
+<li>Doing the Slack: century1:century1</li>
+<li>$psversiontable : century2:10.0.14393.7604
+<ol>
+<li>$PSVersion doesn&rsquo;t work in version 1, also GetHost is not reliable (only host PS)</li>
+<li>Get-Host is useful but not here</li>
+</ol>
+</li>
+<li>Invoke-WebRequest and dir gives u everything
+<ol>
+<li>use lowercase</li>
+<li>century3:invoke-webrequest443</li>
+</ol>
+</li>
+<li>dir is alias for Get-ChildItem
+<ol>
+<li>a simple (dir).count gets vtotal</li>
+<li>century4:123</li>
+</ol>
+</li>
+<li>century5:6265
+<ol>
+<li>to go into folders with spaces, encapsulate path in single quotes</li>
+</ol>
+</li>
+<li>century6: underthewire3347
+<ol>
+<li>(Get-CimInstance Win32_NTDomain | ?{$_.Status -eq &ldquo;OK&rdquo;}).DomainName</li>
+<li><code>[System.DirectoryServices.ActiveDirectory.Domain]::GetComputerDomain()</code></li>
+<li>$env:USERDNSDOMAIN
+<ol>
+<li>also :COMPUTERNAME and :USERNAME</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>century7:197
+<ol>
+<li>same as for #4</li>
+<li>use -Directory flag</li>
+<li>for files, gci -File</li>
+</ol>
+</li>
+<li>century8:7points
+<ol>
+<li>gci - Recurse</li>
+</ol>
+</li>
+<li>century9:696
+<ol>
+<li>Get-Content .\unique.txt | Sort-Object -unique | Measure-Object -line
+<ol>
+<li>or type and sort as cmd&rsquo;s</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>century10:pierid
+<ol>
+<li>$file = gc Word_file.txt</li>
+<li>$file.split(&rsquo; )</li>
+<li>Select-Object -Index 160 or you could do [160] for 161st if u have a variable</li>
+</ol>
+</li>
+<li>century11:windowsupdates110
+<ol>
+<li>Get-Service -&gt; lists all services</li>
+<li>findstr / Select-String -&gt; findstr works better
+<ol>
+<li>findstr &ldquo;Update&rdquo;</li>
+<li>service name is wuauserv</li>
+</ol>
+</li>
+<li>Get-WmiObject win32_service is more verbsose than Get-Service
+<ol>
+<li>pipe into | Select Name, Description</li>
+</ol>
+</li>
+<li>Select SPecific:
+<ol>
+<li>Get-WmiObject win32_service | ?{$_.NAME -like &ldquo;wuauserv&rdquo;} | Select Description | $_.Description</li>
+<li>($desc).Description.split(&quot; &ldquo;) | Select-Object -Index 9,8</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>century12:secret_sauce
+<ol>
+<li>-Force with dir</li>
+<li>Get-ChildItem | Get-ChildItem -Recurse -File -Hidden | Where-Object {$_.Name -ne &lsquo;desktop.ini&rsquo;}</li>
+</ol>
+</li>
+<li>century13:i_authenticate_things
+<ol>
+<li>Manner of waves:</li>
+<li>Get-ADComputer gets information about computer
+<ol>
+<li>needs -Properties Description to get desc</li>
+<li>also initial run needs -Filter &ldquo;*&rdquo; to get all</li>
+</ol>
+</li>
+<li>Alternatively:
+<ol>
+<li>Get-ADDomainController to get name first</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>cenutry14:755
+<ol>
+<li>How i did it:  $file = gc file -&gt; gc.split(&rdquo; &ldquo;) | Measure-Object -line</li>
+<li>Measure-Object -Word exists</li>
+</ol>
+</li>
+<li>century15:158
+<ol>
+<li>(Select-String -Path .\countpolos -Pattern &ldquo;polo&rdquo; -AllMatches).Matches.count)</li>
+</ol>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

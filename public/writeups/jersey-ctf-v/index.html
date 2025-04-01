@@ -5,23 +5,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Homelab | Alvin Tran</title>
+<title>Jersey CTF V | Alvin Tran</title>
 <meta name="keywords" content="">
-<meta name="description" content="Some tutorials and notes for the things I do in my homelab.">
+<meta name="description" content="Some writeups for Jersey CTF V hosted by the NJIT. Competed with my good SFS pals :]">
 <meta name="author" content="">
-<link rel="canonical" href="https://alvintran.net/writeups/homelab/">
+<link rel="canonical" href="https://alvintran.net/writeups/jersey-ctf-v/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
 <link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
-<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/homelab/index.xml">
-<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/homelab/">
+<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/jersey-ctf-v/index.xml">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/jersey-ctf-v/">
 
-<meta name="twitter:title" content="Homelab | Alvin Tran" />
-<meta name="twitter:description" content="Some tutorials and notes for the things I do in my homelab." />
-<meta property="og:title" content="Homelab | Alvin Tran" />
-<meta property="og:description" content="Some tutorials and notes for the things I do in my homelab." />
+<meta name="twitter:title" content="Jersey CTF V | Alvin Tran" />
+<meta name="twitter:description" content="Some writeups for Jersey CTF V hosted by the NJIT. Competed with my good SFS pals :]" />
+<meta property="og:title" content="Jersey CTF V | Alvin Tran" />
+<meta property="og:description" content="Some writeups for Jersey CTF V hosted by the NJIT. Competed with my good SFS pals :]" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://alvintran.net/writeups/homelab/" />
+<meta property="og:url" content="https://alvintran.net/writeups/jersey-ctf-v/" />
 
 
 
@@ -39,8 +39,8 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Homelab",
-      "item": "https://alvintran.net/writeups/homelab/"
+      "name": "Jersey CTF V",
+      "item": "https://alvintran.net/writeups/jersey-ctf-v/"
     }
   ]
 }
@@ -180,9 +180,9 @@ function toggleThemeListener() {
 <main class="main"> 
 <header class="page-header">
   <h1>
-    Homelab</h1>
+    Jersey CTF V</h1>
   <div class="post-description">
-    Some tutorials and notes for the things I do in my homelab.
+    Some writeups for Jersey CTF V hosted by the NJIT. Competed with my good SFS pals :]
   </div><div class="inline-links">
   
   
@@ -190,12 +190,166 @@ function toggleThemeListener() {
 </div>
 </header>
 
+<div class="post-content"><h1 id="webapps">WebApps<a hidden class="anchor" aria-hidden="true" href="#webapps">¶</a></h1>
+<h2 id="encoded-deception">Encoded Deception<a hidden class="anchor" aria-hidden="true" href="#encoded-deception">¶</a></h2>
+<ul>
+<li>We see in console.log some values</li>
+<li>We look at sscript and see a &ldquo;secret message&rdquo; value
+<ul>
+<li>base64 decode shows <code>Part 1: jctfv{myst3ry</code></li>
+</ul>
+</li>
+<li>Looking around, only other  ineteresting part is the request to <code>info.php</code>
+<ul>
+<li>Look at the network request in your browser&hellip;</li>
+<li>There is an <code>Important: UGFydCAyOiBfMHAzcjR0MTBufQ==</code> header&hellip;</li>
+<li>decodes to be <code>Part 2: _0p3r4t10n}</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="time-of-date">Time of Date<a hidden class="anchor" aria-hidden="true" href="#time-of-date">¶</a></h2>
+<ul>
+<li>Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+<ul>
+<li>lets try adding <code>; ls</code> to run a seperate command</li>
+<li>wow that works</li>
+<li><code>| cat flag.txt</code> to end of url</li>
+</ul>
+</li>
+</ul>
+<h2 id="layers-of-lies">Layers of Lies<a hidden class="anchor" aria-hidden="true" href="#layers-of-lies">¶</a></h2>
+<ul>
+<li>inside the pae we see a <script></script> tag that fetches some urls
+<ul>
+<li>Notice, the first letters are XORMIGHTHELP</li>
+<li>One of pages is `The Key is 0x14</li>
+<li>Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;</li>
+</ul>
+</li>
+<li>We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+<ul>
+<li>view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd</li>
+</ul>
+</li>
+<li><a href="https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script">https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script</a></li>
+<li>In fact, you need to do a bigger filter one.
+<ul>
+<li>you can use the one above but its easier when u get RCE</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy">Something&rsquo;s Fishy<a hidden class="anchor" aria-hidden="true" href="#somethings-fishy">¶</a></h2>
+<ul>
+<li>Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+<ul>
+<li>Has mention to &ldquo;swagger API doc&rdquo; on server</li>
+<li>&ldquo;Swap out original url to API Documentation&rdquo;</li>
+</ul>
+</li>
+<li>The extension points to an api endpoint named  of the same url except <code>a</code> swapped with <code>b</code>, just swap to port 80
+<ul>
+<li>We find some login pannel</li>
+<li>/api/communication still works&hellip;</li>
+</ul>
+</li>
+<li>-&gt; gobuster swagger api wordlist
+<ul>
+<li>found /apidocs</li>
+<li>theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy-2">Something&rsquo;s Fishy 2<a hidden class="anchor" aria-hidden="true" href="#somethings-fishy-2">¶</a></h2>
+<ul>
+<li>Apparently we&rsquo;re to know that the <code>botnet</code> table endpoint performs a query on the database</li>
+</ul>
+<h2 id="leaky-endpoints">Leaky-Endpoints<a hidden class="anchor" aria-hidden="true" href="#leaky-endpoints">¶</a></h2>
+<ul>
+<li>Looking around, there registration, order/cart, and menu</li>
+<li>Make an account, seems necessary.</li>
+<li>Looking at files, we see a <code>src/</code> folder which gives us some information about the routes used
+<ul>
+<li><code>@dMiN</code> is unauthorized for our simple user account</li>
+<li>-&gt; reaches <code>/api/admin/(dev)/users</code>
+<ul>
+<li>We&rsquo;ll see later we need the (dev) version</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>From there, try creating some orders
+<ul>
+<li>Refers us to <code>Orders/userid/orderid</code></li>
+<li>Create an API call to <code>/api/orders/userid/orderid</code>
+<ul>
+<li>userid seems not not mean anything</li>
+<li>BUT we can traverse <code>orderid</code></li>
+</ul>
+</li>
+<li>We look at order id 1 and see information about <code>admin@admin.gmail.com</code>
+<ul>
+<li>Personal Information Hint -&gt; Phone Number</li>
+<li>Gives us a login</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Moving back to <code>/api/admin(dev)/users</code>, we can try for SQLi
+<ul>
+<li>We get a bite!</li>
+<li><code>' UNION SELECT name FROM sqlite_master WHERE type = 'table' -- </code></li>
+<li><code>SELECT * FROM flog3</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="bearer-of-bad-news">Bearer of Bad News<a hidden class="anchor" aria-hidden="true" href="#bearer-of-bad-news">¶</a></h1>
+<ul>
+<li>Bearer&hellip; like cookies</li>
+<li>if you decode the jwt token, we see <code>&quot;admin&quot;: false</code>
+<ul>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>but where is the key?</li>
+<li>On planet 9!</li>
+<li>therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79</li>
+</ul>
+</li>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+<ul>
+<li>replace and hit Get Your Secert!</li>
+</ul>
+</li>
+</ul>
+<h1 id="whats-your-number">Whats-your-number<a hidden class="anchor" aria-hidden="true" href="#whats-your-number">¶</a></h1>
+<p>1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;</p>
+<h1 id="forensics">Forensics<a hidden class="anchor" aria-hidden="true" href="#forensics">¶</a></h1>
+<h2 id="evtx">evtx<a hidden class="anchor" aria-hidden="true" href="#evtx">¶</a></h2>
+<h1 id="binary-exploitation">Binary Exploitation<a hidden class="anchor" aria-hidden="true" href="#binary-exploitation">¶</a></h1>
+<h2 id="play-fair">Play Fair<a hidden class="anchor" aria-hidden="true" href="#play-fair">¶</a></h2>
+<pre><code>for i in range(10):
+    a=reverseMe(a)
+    print(a)
+</code></pre>
+<h1 id="misc">Misc<a hidden class="anchor" aria-hidden="true" href="#misc">¶</a></h1>
+<ul>
+<li><a href="https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/">https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/</a></li>
+</ul>
+<h2 id="golden-cricle">Golden-Cricle<a hidden class="anchor" aria-hidden="true" href="#golden-cricle">¶</a></h2>
+<ul>
+<li>uses steghide</li>
+</ul>
+
+
+</div>
+
 
 
 
 
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span><div class="social-icons">
+  <span>April 1, 2025</span></span><div class="social-icons">
     <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
     stroke-linecap="round" stroke-linejoin="round">
@@ -224,25 +378,6 @@ function toggleThemeListener() {
     </a>
 </div>
 
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2>Homelab / Active Directory
-    </h2>
-  </header>
-  <section class="entry-content">
-    
-      <p>Basically what I did to test out active directory on my homelab</p>
-    
-  </section>
-  <footer class="entry-footer"><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span>
-</footer>
-  <a class="entry-link" aria-label="post link to Homelab / Active Directory" href="https://alvintran.net/writeups/homelab/active-directory/"></a>
-</article>
     </main>
     
 <footer class="footer">

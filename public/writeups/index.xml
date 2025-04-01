@@ -8,12 +8,193 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 12 Nov 2024 11:46:50 -0500</lastBuildDate><atom:link href="https://alvintran.net/writeups/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Under the Wire</title>
+      <link>https://alvintran.net/writeups/under-the-wire/</link>
+      <pubDate>Tue, 01 Apr 2025 02:27:10 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/under-the-wire/</guid>
+      <description>Did some Under the Wire for PowerShell practice (it was cooler than I thought)</description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>picoCTF</title>
+      <link>https://alvintran.net/writeups/picoctf/</link>
+      <pubDate>Tue, 01 Apr 2025 02:23:00 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/picoctf/</guid>
+      <description>&lt;p&gt;Currently for 2025&amp;hellip; will reorganize if I do it again.&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>Currently for 2025&hellip; will reorganize if I do it again.</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Jersey CTF V</title>
+      <link>https://alvintran.net/writeups/jersey-ctf-v/</link>
+      <pubDate>Tue, 01 Apr 2025 02:13:34 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/jersey-ctf-v/</guid>
+      <description>Some writeups for Jersey CTF V hosted by the NJIT. Competed with my good SFS pals :]</description>
+      <content:encoded><![CDATA[<h1 id="webapps">WebApps</h1>
+<h2 id="encoded-deception">Encoded Deception</h2>
+<ul>
+<li>We see in console.log some values</li>
+<li>We look at sscript and see a &ldquo;secret message&rdquo; value
+<ul>
+<li>base64 decode shows <code>Part 1: jctfv{myst3ry</code></li>
+</ul>
+</li>
+<li>Looking around, only other  ineteresting part is the request to <code>info.php</code>
+<ul>
+<li>Look at the network request in your browser&hellip;</li>
+<li>There is an <code>Important: UGFydCAyOiBfMHAzcjR0MTBufQ==</code> header&hellip;</li>
+<li>decodes to be <code>Part 2: _0p3r4t10n}</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="time-of-date">Time of Date</h2>
+<ul>
+<li>Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+<ul>
+<li>lets try adding <code>; ls</code> to run a seperate command</li>
+<li>wow that works</li>
+<li><code>| cat flag.txt</code> to end of url</li>
+</ul>
+</li>
+</ul>
+<h2 id="layers-of-lies">Layers of Lies</h2>
+<ul>
+<li>inside the pae we see a <script></script> tag that fetches some urls
+<ul>
+<li>Notice, the first letters are XORMIGHTHELP</li>
+<li>One of pages is `The Key is 0x14</li>
+<li>Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;</li>
+</ul>
+</li>
+<li>We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+<ul>
+<li>view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd</li>
+</ul>
+</li>
+<li><a href="https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script">https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script</a></li>
+<li>In fact, you need to do a bigger filter one.
+<ul>
+<li>you can use the one above but its easier when u get RCE</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy">Something&rsquo;s Fishy</h2>
+<ul>
+<li>Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+<ul>
+<li>Has mention to &ldquo;swagger API doc&rdquo; on server</li>
+<li>&ldquo;Swap out original url to API Documentation&rdquo;</li>
+</ul>
+</li>
+<li>The extension points to an api endpoint named  of the same url except <code>a</code> swapped with <code>b</code>, just swap to port 80
+<ul>
+<li>We find some login pannel</li>
+<li>/api/communication still works&hellip;</li>
+</ul>
+</li>
+<li>-&gt; gobuster swagger api wordlist
+<ul>
+<li>found /apidocs</li>
+<li>theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy-2">Something&rsquo;s Fishy 2</h2>
+<ul>
+<li>Apparently we&rsquo;re to know that the <code>botnet</code> table endpoint performs a query on the database</li>
+</ul>
+<h2 id="leaky-endpoints">Leaky-Endpoints</h2>
+<ul>
+<li>Looking around, there registration, order/cart, and menu</li>
+<li>Make an account, seems necessary.</li>
+<li>Looking at files, we see a <code>src/</code> folder which gives us some information about the routes used
+<ul>
+<li><code>@dMiN</code> is unauthorized for our simple user account</li>
+<li>-&gt; reaches <code>/api/admin/(dev)/users</code>
+<ul>
+<li>We&rsquo;ll see later we need the (dev) version</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>From there, try creating some orders
+<ul>
+<li>Refers us to <code>Orders/userid/orderid</code></li>
+<li>Create an API call to <code>/api/orders/userid/orderid</code>
+<ul>
+<li>userid seems not not mean anything</li>
+<li>BUT we can traverse <code>orderid</code></li>
+</ul>
+</li>
+<li>We look at order id 1 and see information about <code>admin@admin.gmail.com</code>
+<ul>
+<li>Personal Information Hint -&gt; Phone Number</li>
+<li>Gives us a login</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Moving back to <code>/api/admin(dev)/users</code>, we can try for SQLi
+<ul>
+<li>We get a bite!</li>
+<li><code>' UNION SELECT name FROM sqlite_master WHERE type = 'table' -- </code></li>
+<li><code>SELECT * FROM flog3</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="bearer-of-bad-news">Bearer of Bad News</h1>
+<ul>
+<li>Bearer&hellip; like cookies</li>
+<li>if you decode the jwt token, we see <code>&quot;admin&quot;: false</code>
+<ul>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>but where is the key?</li>
+<li>On planet 9!</li>
+<li>therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79</li>
+</ul>
+</li>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+<ul>
+<li>replace and hit Get Your Secert!</li>
+</ul>
+</li>
+</ul>
+<h1 id="whats-your-number">Whats-your-number</h1>
+<p>1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;</p>
+<h1 id="forensics">Forensics</h1>
+<h2 id="evtx">evtx</h2>
+<h1 id="binary-exploitation">Binary Exploitation</h1>
+<h2 id="play-fair">Play Fair</h2>
+<pre><code>for i in range(10):
+    a=reverseMe(a)
+    print(a)
+</code></pre>
+<h1 id="misc">Misc</h1>
+<ul>
+<li><a href="https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/">https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/</a></li>
+</ul>
+<h2 id="golden-cricle">Golden-Cricle</h2>
+<ul>
+<li>uses steghide</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Homelab</title>
       <link>https://alvintran.net/writeups/homelab/</link>
       <pubDate>Tue, 11 Feb 2025 00:43:39 +0000</pubDate>
       
       <guid>https://alvintran.net/writeups/homelab/</guid>
-      <description></description>
+      <description>Some tutorials and notes for the things I do in my homelab.</description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
@@ -23,7 +204,7 @@
       <pubDate>Fri, 07 Feb 2025 14:24:26 +0000</pubDate>
       
       <guid>https://alvintran.net/writeups/cyber-defense/</guid>
-      <description></description>
+      <description>Presentations I&amp;#39;ll eventually give in Cyber Defense haha...</description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
@@ -33,7 +214,7 @@
       <pubDate>Tue, 12 Nov 2024 11:46:59 -0500</pubDate>
       
       <guid>https://alvintran.net/writeups/ncl/</guid>
-      <description></description>
+      <description>For as much as I do NCL, I do not make enough write-ups for this.</description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     

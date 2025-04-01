@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Jersey CTF V | Alvin Tran</title>
+<meta name="keywords" content="">
+<meta name="description" content="WebApps
+Encoded Deception
+
+We see in console.log some values
+We look at sscript and see a &ldquo;secret message&rdquo; value
+
+base64 decode shows Part 1: jctfv{myst3ry
+
+
+Looking around, only other  ineteresting part is the request to info.php
+
+Look at the network request in your browser&hellip;
+There is an Important: UGFydCAyOiBfMHAzcjR0MTBufQ== header&hellip;
+decodes to be Part 2: _0p3r4t10n}
+
+
+
+Time of Date
+
+Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+
+lets try adding ; ls to run a seperate command
+wow that works
+| cat flag.txt to end of url
+
+
+
+Layers of Lies
+
+inside the pae we see a  tag that fetches some urls
+
+Notice, the first letters are XORMIGHTHELP
+One of pages is `The Key is 0x14
+Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;
+
+
+We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+
+view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd
+
+
+https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script
+In fact, you need to do a bigger filter one.
+
+you can use the one above but its easier when u get RCE
+
+
+
+Something&rsquo;s Fishy
+
+Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+
+Has mention to &ldquo;swagger API doc&rdquo; on server
+&ldquo;Swap out original url to API Documentation&rdquo;
+
+
+The extension points to an api endpoint named  of the same url except a swapped with b, just swap to port 80
+
+We find some login pannel
+/api/communication still works&hellip;
+
+
+-&gt; gobuster swagger api wordlist
+
+found /apidocs
+theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!
+
+
+
+Something&rsquo;s Fishy 2
+
+Apparently we&rsquo;re to know that the botnet table endpoint performs a query on the database
+
+Leaky-Endpoints
+
+Looking around, there registration, order/cart, and menu
+Make an account, seems necessary.
+Looking at files, we see a src/ folder which gives us some information about the routes used
+
+@dMiN is unauthorized for our simple user account
+-&gt; reaches /api/admin/(dev)/users
+
+We&rsquo;ll see later we need the (dev) version
+
+
+
+
+From there, try creating some orders
+
+Refers us to Orders/userid/orderid
+Create an API call to /api/orders/userid/orderid
+
+userid seems not not mean anything
+BUT we can traverse orderid
+
+
+We look at order id 1 and see information about admin@admin.gmail.com
+
+Personal Information Hint -&gt; Phone Number
+Gives us a login
+
+
+
+
+Moving back to /api/admin(dev)/users, we can try for SQLi
+
+We get a bite!
+&#39; UNION SELECT name FROM sqlite_master WHERE type = &#39;table&#39; -- 
+SELECT * FROM flog3
+
+
+
+Bearer of Bad News
+
+Bearer&hellip; like cookies
+if you decode the jwt token, we see &quot;admin&quot;: false
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+but where is the key?
+On planet 9!
+therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+
+replace and hit Get Your Secert!
+
+
+
+Whats-your-number
+1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;">
+<meta name="author" content="">
+<link rel="canonical" href="https://alvintran.net/writeups/jersey-ctf-v/jersey-ctf-v/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/jersey-ctf-v/jersey-ctf-v/">
+
+<meta name="twitter:title" content="Jersey CTF V | Alvin Tran" />
+<meta name="twitter:description" content="WebApps
+Encoded Deception
+
+We see in console.log some values
+We look at sscript and see a &ldquo;secret message&rdquo; value
+
+base64 decode shows Part 1: jctfv{myst3ry
+
+
+Looking around, only other  ineteresting part is the request to info.php
+
+Look at the network request in your browser&hellip;
+There is an Important: UGFydCAyOiBfMHAzcjR0MTBufQ== header&hellip;
+decodes to be Part 2: _0p3r4t10n}
+
+
+
+Time of Date
+
+Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+
+lets try adding ; ls to run a seperate command
+wow that works
+| cat flag.txt to end of url
+
+
+
+Layers of Lies
+
+inside the pae we see a  tag that fetches some urls
+
+Notice, the first letters are XORMIGHTHELP
+One of pages is `The Key is 0x14
+Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;
+
+
+We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+
+view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd
+
+
+https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script
+In fact, you need to do a bigger filter one.
+
+you can use the one above but its easier when u get RCE
+
+
+
+Something&rsquo;s Fishy
+
+Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+
+Has mention to &ldquo;swagger API doc&rdquo; on server
+&ldquo;Swap out original url to API Documentation&rdquo;
+
+
+The extension points to an api endpoint named  of the same url except a swapped with b, just swap to port 80
+
+We find some login pannel
+/api/communication still works&hellip;
+
+
+-&gt; gobuster swagger api wordlist
+
+found /apidocs
+theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!
+
+
+
+Something&rsquo;s Fishy 2
+
+Apparently we&rsquo;re to know that the botnet table endpoint performs a query on the database
+
+Leaky-Endpoints
+
+Looking around, there registration, order/cart, and menu
+Make an account, seems necessary.
+Looking at files, we see a src/ folder which gives us some information about the routes used
+
+@dMiN is unauthorized for our simple user account
+-&gt; reaches /api/admin/(dev)/users
+
+We&rsquo;ll see later we need the (dev) version
+
+
+
+
+From there, try creating some orders
+
+Refers us to Orders/userid/orderid
+Create an API call to /api/orders/userid/orderid
+
+userid seems not not mean anything
+BUT we can traverse orderid
+
+
+We look at order id 1 and see information about admin@admin.gmail.com
+
+Personal Information Hint -&gt; Phone Number
+Gives us a login
+
+
+
+
+Moving back to /api/admin(dev)/users, we can try for SQLi
+
+We get a bite!
+&#39; UNION SELECT name FROM sqlite_master WHERE type = &#39;table&#39; -- 
+SELECT * FROM flog3
+
+
+
+Bearer of Bad News
+
+Bearer&hellip; like cookies
+if you decode the jwt token, we see &quot;admin&quot;: false
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+but where is the key?
+On planet 9!
+therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+
+replace and hit Get Your Secert!
+
+
+
+Whats-your-number
+1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;" />
+<meta property="og:title" content="Jersey CTF V | Alvin Tran" />
+<meta property="og:description" content="WebApps
+Encoded Deception
+
+We see in console.log some values
+We look at sscript and see a &ldquo;secret message&rdquo; value
+
+base64 decode shows Part 1: jctfv{myst3ry
+
+
+Looking around, only other  ineteresting part is the request to info.php
+
+Look at the network request in your browser&hellip;
+There is an Important: UGFydCAyOiBfMHAzcjR0MTBufQ== header&hellip;
+decodes to be Part 2: _0p3r4t10n}
+
+
+
+Time of Date
+
+Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+
+lets try adding ; ls to run a seperate command
+wow that works
+| cat flag.txt to end of url
+
+
+
+Layers of Lies
+
+inside the pae we see a  tag that fetches some urls
+
+Notice, the first letters are XORMIGHTHELP
+One of pages is `The Key is 0x14
+Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;
+
+
+We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+
+view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd
+
+
+https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script
+In fact, you need to do a bigger filter one.
+
+you can use the one above but its easier when u get RCE
+
+
+
+Something&rsquo;s Fishy
+
+Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+
+Has mention to &ldquo;swagger API doc&rdquo; on server
+&ldquo;Swap out original url to API Documentation&rdquo;
+
+
+The extension points to an api endpoint named  of the same url except a swapped with b, just swap to port 80
+
+We find some login pannel
+/api/communication still works&hellip;
+
+
+-&gt; gobuster swagger api wordlist
+
+found /apidocs
+theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!
+
+
+
+Something&rsquo;s Fishy 2
+
+Apparently we&rsquo;re to know that the botnet table endpoint performs a query on the database
+
+Leaky-Endpoints
+
+Looking around, there registration, order/cart, and menu
+Make an account, seems necessary.
+Looking at files, we see a src/ folder which gives us some information about the routes used
+
+@dMiN is unauthorized for our simple user account
+-&gt; reaches /api/admin/(dev)/users
+
+We&rsquo;ll see later we need the (dev) version
+
+
+
+
+From there, try creating some orders
+
+Refers us to Orders/userid/orderid
+Create an API call to /api/orders/userid/orderid
+
+userid seems not not mean anything
+BUT we can traverse orderid
+
+
+We look at order id 1 and see information about admin@admin.gmail.com
+
+Personal Information Hint -&gt; Phone Number
+Gives us a login
+
+
+
+
+Moving back to /api/admin(dev)/users, we can try for SQLi
+
+We get a bite!
+&#39; UNION SELECT name FROM sqlite_master WHERE type = &#39;table&#39; -- 
+SELECT * FROM flog3
+
+
+
+Bearer of Bad News
+
+Bearer&hellip; like cookies
+if you decode the jwt token, we see &quot;admin&quot;: false
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0
+but where is the key?
+On planet 9!
+therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+
+replace and hit Get Your Secert!
+
+
+
+Whats-your-number
+1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alvintran.net/writeups/jersey-ctf-v/jersey-ctf-v/" />
+<meta property="article:section" content="writeups" />
+  <meta property="article:published_time" content="2025-04-01T02:13:34&#43;00:00" />
+  <meta property="article:modified_time" content="2025-04-01T02:13:34&#43;00:00" />
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "https://alvintran.net/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Jersey CTF V",
+      "item": "https://alvintran.net/writeups/jersey-ctf-v/jersey-ctf-v/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Jersey CTF V | Alvin Tran",
+  "name": "Jersey CTF V",
+  "description": "WebApps Encoded Deception We see in console.log some values We look at sscript and see a \u0026ldquo;secret message\u0026rdquo; value base64 decode shows Part 1: jctfv{myst3ry Looking around, only other ineteresting part is the request to info.php Look at the network request in your browser\u0026hellip; There is an Important: UGFydCAyOiBfMHAzcjR0MTBufQ== header\u0026hellip; decodes to be Part 2: _0p3r4t10n} Time of Date Changing the url parameters, we\u0026rsquo;re getting a command error similar to bash\u0026hellip; lets try adding ; ls to run a seperate command wow that works | cat flag.txt to end of url Layers of Lies inside the pae we see a tag that fetches some urls Notice, the first letters are XORMIGHTHELP One of pages is `The Key is 0x14 Lot of junk in the pages\u0026hellip; except on says \u0026ldquo;The lock is found in the home of Loab\u0026rdquo; We can use php wrapper to bypass the filter seen (.. replacement and no / start) view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script In fact, you need to do a bigger filter one. you can use the one above but its easier when u get RCE Something\u0026rsquo;s Fishy Webpage has \u0026ldquo;no robots allowed!\u0026rdquo; Wow that couldn\u0026rsquo;tbe robots.txt Has mention to \u0026ldquo;swagger API doc\u0026rdquo; on server \u0026ldquo;Swap out original url to API Documentation\u0026rdquo; The extension points to an api endpoint named of the same url except a swapped with b, just swap to port 80 We find some login pannel /api/communication still works\u0026hellip; -\u0026gt; gobuster swagger api wordlist found /apidocs theres /api/admin/getUsername and getPassword CipherBot67587 z8vj2Rtn@68CxP! Something\u0026rsquo;s Fishy 2 Apparently we\u0026rsquo;re to know that the botnet table endpoint performs a query on the database Leaky-Endpoints Looking around, there registration, order/cart, and menu Make an account, seems necessary. Looking at files, we see a src/ folder which gives us some information about the routes used @dMiN is unauthorized for our simple user account -\u0026gt; reaches /api/admin/(dev)/users We\u0026rsquo;ll see later we need the (dev) version From there, try creating some orders Refers us to Orders/userid/orderid Create an API call to /api/orders/userid/orderid userid seems not not mean anything BUT we can traverse orderid We look at order id 1 and see information about admin@admin.gmail.com Personal Information Hint -\u0026gt; Phone Number Gives us a login Moving back to /api/admin(dev)/users, we can try for SQLi We get a bite! ' UNION SELECT name FROM sqlite_master WHERE type = 'table' -- SELECT * FROM flog3 Bearer of Bad News Bearer\u0026hellip; like cookies if you decode the jwt token, we see \u0026quot;admin\u0026quot;: false eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0 54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0 but where is the key? On planet 9! therss a message the srcolls srcosss the srceen -\u0026gt; 1F0Und4seCREtOnp1En79 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs replace and hit Get Your Secert! Whats-your-number 1.\u0026rsquo; UNION SELECT 1, \u0026ldquo;admin\u0026rdquo;, \u0026ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2\u0026rdquo; \u0026ndash;\n",
+  "keywords": [
+    
+  ],
+  "wordCount" : "459",
+  "inLanguage": "en",
+  "datePublished": "2025-04-01T02:13:34Z",
+  "dateModified": "2025-04-01T02:13:34Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://alvintran.net/writeups/jersey-ctf-v/jersey-ctf-v/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Alvin Tran",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://alvintran.net/images/favicon-16x16.png"
+    }
+  }
+}
+</script>
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+
+</head>
+
+<body class=" dark type-writeups kind-page layout-" id="top"><script data-no-instant>
+function switchTheme(theme) {
+  switch (theme) {
+    case 'light':
+      document.body.classList.remove('dark');
+      break;
+    case 'dark':
+      document.body.classList.add('dark');
+      break;
+    
+    default:
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+      }
+  }
+}
+
+function isDarkTheme() {
+  return document.body.className.includes("dark");
+}
+
+function getPrefTheme() {
+  return localStorage.getItem("pref-theme");
+}
+
+function setPrefTheme(theme) {
+  switchTheme(theme)
+  localStorage.setItem("pref-theme", theme);
+}
+
+const toggleThemeCallbacks = {}
+toggleThemeCallbacks['main'] = (isDark) => {
+  
+  if (isDark) {
+    setPrefTheme('light');
+  } else {
+    setPrefTheme('dark');
+  }
+}
+
+
+
+
+window.addEventListener('toggle-theme', function() {
+  
+  const isDark = isDarkTheme()
+  for (const key in toggleThemeCallbacks) {
+    toggleThemeCallbacks[key](isDark)
+  }
+});
+
+
+function toggleThemeListener() {
+  
+  window.dispatchEvent(new CustomEvent('toggle-theme'));
+}
+
+</script>
+<script>
+  
+  (function() {
+    const defaultTheme = 'dark';
+    const prefTheme = getPrefTheme();
+    const theme = prefTheme ? prefTheme : defaultTheme;
+
+    switchTheme(theme);
+  })();
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://alvintran.net/" title="Home" class="active"
+                >Home
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/homelab/" title="Homelab"
+                >Homelab
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"
+                >Writeups
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/status/" title="Status"
+                >Status
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main post">
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">Jersey CTF V</h1>
+    <div class="post-meta"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span>
+
+      
+      
+    </div>
+  </header> 
+  <div class="post-content"><h1 id="webapps">WebApps<a hidden class="anchor" aria-hidden="true" href="#webapps">¶</a></h1>
+<h2 id="encoded-deception">Encoded Deception<a hidden class="anchor" aria-hidden="true" href="#encoded-deception">¶</a></h2>
+<ul>
+<li>We see in console.log some values</li>
+<li>We look at sscript and see a &ldquo;secret message&rdquo; value
+<ul>
+<li>base64 decode shows <code>Part 1: jctfv{myst3ry</code></li>
+</ul>
+</li>
+<li>Looking around, only other  ineteresting part is the request to <code>info.php</code>
+<ul>
+<li>Look at the network request in your browser&hellip;</li>
+<li>There is an <code>Important: UGFydCAyOiBfMHAzcjR0MTBufQ==</code> header&hellip;</li>
+<li>decodes to be <code>Part 2: _0p3r4t10n}</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="time-of-date">Time of Date<a hidden class="anchor" aria-hidden="true" href="#time-of-date">¶</a></h2>
+<ul>
+<li>Changing the url parameters, we&rsquo;re getting a command error similar to bash&hellip;
+<ul>
+<li>lets try adding <code>; ls</code> to run a seperate command</li>
+<li>wow that works</li>
+<li><code>| cat flag.txt</code> to end of url</li>
+</ul>
+</li>
+</ul>
+<h2 id="layers-of-lies">Layers of Lies<a hidden class="anchor" aria-hidden="true" href="#layers-of-lies">¶</a></h2>
+<ul>
+<li>inside the pae we see a <script></script> tag that fetches some urls
+<ul>
+<li>Notice, the first letters are XORMIGHTHELP</li>
+<li>One of pages is `The Key is 0x14</li>
+<li>Lot of junk in the pages&hellip; except on says &ldquo;The lock is found in the home of Loab&rdquo;</li>
+</ul>
+</li>
+<li>We can use php wrapper to bypass the filter seen (.. replacement and no / start)
+<ul>
+<li>view.php?file=php://filter/convert.base64-encode/resource=/etc/passwd</li>
+</ul>
+</li>
+<li><a href="https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script">https://book.hacktricks.wiki/en/pentesting-web/file-inclusion/lfi2rce-via-php-filters.html#full-script</a></li>
+<li>In fact, you need to do a bigger filter one.
+<ul>
+<li>you can use the one above but its easier when u get RCE</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy">Something&rsquo;s Fishy<a hidden class="anchor" aria-hidden="true" href="#somethings-fishy">¶</a></h2>
+<ul>
+<li>Webpage has &ldquo;no robots allowed!&rdquo; Wow that couldn&rsquo;tbe robots.txt
+<ul>
+<li>Has mention to &ldquo;swagger API doc&rdquo; on server</li>
+<li>&ldquo;Swap out original url to API Documentation&rdquo;</li>
+</ul>
+</li>
+<li>The extension points to an api endpoint named  of the same url except <code>a</code> swapped with <code>b</code>, just swap to port 80
+<ul>
+<li>We find some login pannel</li>
+<li>/api/communication still works&hellip;</li>
+</ul>
+</li>
+<li>-&gt; gobuster swagger api wordlist
+<ul>
+<li>found /apidocs</li>
+<li>theres  /api/admin/getUsername and getPassword
+CipherBot67587
+z8vj2Rtn@68CxP!</li>
+</ul>
+</li>
+</ul>
+<h2 id="somethings-fishy-2">Something&rsquo;s Fishy 2<a hidden class="anchor" aria-hidden="true" href="#somethings-fishy-2">¶</a></h2>
+<ul>
+<li>Apparently we&rsquo;re to know that the <code>botnet</code> table endpoint performs a query on the database</li>
+</ul>
+<h2 id="leaky-endpoints">Leaky-Endpoints<a hidden class="anchor" aria-hidden="true" href="#leaky-endpoints">¶</a></h2>
+<ul>
+<li>Looking around, there registration, order/cart, and menu</li>
+<li>Make an account, seems necessary.</li>
+<li>Looking at files, we see a <code>src/</code> folder which gives us some information about the routes used
+<ul>
+<li><code>@dMiN</code> is unauthorized for our simple user account</li>
+<li>-&gt; reaches <code>/api/admin/(dev)/users</code>
+<ul>
+<li>We&rsquo;ll see later we need the (dev) version</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>From there, try creating some orders
+<ul>
+<li>Refers us to <code>Orders/userid/orderid</code></li>
+<li>Create an API call to <code>/api/orders/userid/orderid</code>
+<ul>
+<li>userid seems not not mean anything</li>
+<li>BUT we can traverse <code>orderid</code></li>
+</ul>
+</li>
+<li>We look at order id 1 and see information about <code>admin@admin.gmail.com</code>
+<ul>
+<li>Personal Information Hint -&gt; Phone Number</li>
+<li>Gives us a login</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Moving back to <code>/api/admin(dev)/users</code>, we can try for SQLi
+<ul>
+<li>We get a bite!</li>
+<li><code>' UNION SELECT name FROM sqlite_master WHERE type = 'table' -- </code></li>
+<li><code>SELECT * FROM flog3</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="bearer-of-bad-news">Bearer of Bad News<a hidden class="anchor" aria-hidden="true" href="#bearer-of-bad-news">¶</a></h1>
+<ul>
+<li>Bearer&hellip; like cookies</li>
+<li>if you decode the jwt token, we see <code>&quot;admin&quot;: false</code>
+<ul>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjpmYWxzZSwiaWF0IjoxNzQzMjgyNjYwLCJleHAiOjE3NDMzNjkwNjB9.54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>54BwJYn00t4wcDYW87-3ttTafplBtNfpG4LitxyjaK0</li>
+<li>but where is the key?</li>
+<li>On planet 9!</li>
+<li>therss a message the srcolls srcosss the srceen -&gt; 1F0Und4seCREtOnp1En79</li>
+</ul>
+</li>
+<li>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidXNlciIsImFkbWluIjp0cnVlLCJpYXQiOjE3NDMyODI2NjAsImV4cCI6MTc0MzM2OTA2MH0.29LwU51UX9ZCwMW4ZaruXbrdfgCBV-YrMqBGHxpzWWs
+<ul>
+<li>replace and hit Get Your Secert!</li>
+</ul>
+</li>
+</ul>
+<h1 id="whats-your-number">Whats-your-number<a hidden class="anchor" aria-hidden="true" href="#whats-your-number">¶</a></h1>
+<p>1.&rsquo; UNION SELECT 1, &ldquo;admin&rdquo;, &ldquo;$2a$10$FRKbtimzbhLAViWBaHeA0u4bfVmw.mPLH2pSLhp63RL/eghWcZ8e2&rdquo; &ndash;</p>
+<h1 id="forensics">Forensics<a hidden class="anchor" aria-hidden="true" href="#forensics">¶</a></h1>
+<h2 id="evtx">evtx<a hidden class="anchor" aria-hidden="true" href="#evtx">¶</a></h2>
+<h1 id="binary-exploitation">Binary Exploitation<a hidden class="anchor" aria-hidden="true" href="#binary-exploitation">¶</a></h1>
+<h2 id="play-fair">Play Fair<a hidden class="anchor" aria-hidden="true" href="#play-fair">¶</a></h2>
+<pre><code>for i in range(10):
+    a=reverseMe(a)
+    print(a)
+</code></pre>
+<h1 id="misc">Misc<a hidden class="anchor" aria-hidden="true" href="#misc">¶</a></h1>
+<ul>
+<li><a href="https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/">https://lemire.me/blog/2018/07/02/predicting-the-truncated-xorshift32-random-number-generator/</a></li>
+</ul>
+<h2 id="golden-cricle">Golden-Cricle<a hidden class="anchor" aria-hidden="true" href="#golden-cricle">¶</a></h2>
+<ul>
+<li>uses steghide</li>
+</ul>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+  </footer>
+    <div class="comments-separator"></div>
+</article>
+    </main>
+    
+<footer class="footer">
+  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>
+  </span>
+  <span style="display: inline-block; margin-left: 1em;">
+    Powered by
+    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>
+  </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+    <path d="M12 6H0l6-6z" />
+  </svg>
+</a>
+
+<script>
+  (function() {
+     
+    const disableThemeToggle = '' == '1';
+    if (disableThemeToggle) {
+      return;
+    }
+
+    let button = document.getElementById("theme-toggle")
+    
+    button.removeEventListener('click', toggleThemeListener)
+    
+    button.addEventListener('click', toggleThemeListener)
+  })();
+</script>
+
+<script>
+  (function () {
+    let menu = document.getElementById('menu')
+    if (menu) {
+      menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+      menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+      }
+    }
+
+    const disableSmoothScroll = '' == '1';
+    const enableInstantClick = '' == '1';
+    
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {
+      return;
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        var id = this.getAttribute("href").substr(1);
+        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+          behavior: "smooth"
+        });
+        if (id === "top") {
+          history.replaceState(null, null, " ");
+        } else {
+          history.pushState(null, null, `#${id}`);
+        }
+      });
+    });
+  })();
+</script>
+<script>
+  var mybutton = document.getElementById("top-link");
+  window.onscroll = function () {
+    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+      mybutton.style.visibility = "visible";
+      mybutton.style.opacity = "1";
+    } else {
+      mybutton.style.visibility = "hidden";
+      mybutton.style.opacity = "0";
+    }
+  };
+</script>
+<script>
+  document.querySelectorAll('.masked-email').forEach((el) => {
+    el.innerText = atob(el.innerText);
+    el.classList.remove('masked-email')
+  })
+</script>
+<script>
+  if (window.scrollListeners) {
+    
+    for (const listener of scrollListeners) {
+      window.removeEventListener('scroll', listener)
+    }
+  }
+  window.scrollListeners = []
+</script>
+
+
+
+<script src="/js/medium-zoom.min.js" data-no-instant
+></script>
+
+
+
+
+<script>
+  
+  
+  (function() {
+    const enableTocScroll = '' == '1'
+    if (!enableTocScroll) {
+      return
+    }
+    if (!document.querySelector('.toc')) {
+      console.log('no toc found, ignore toc scroll')
+      return
+    }
+    
+
+    
+    const scrollListeners = window.scrollListeners
+    const headings = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id]');
+    const activeClass = 'active';
+
+    
+    let activeHeading = headings[0];
+    getLinkByHeading(activeHeading).classList.add(activeClass);
+
+    const onScroll = () => {
+      const passedHeadings = [];
+      for (const h of headings) {
+        
+        if (getOffsetTop(h) < 5) {
+          passedHeadings.push(h)
+        } else {
+          break;
+        }
+      }
+      if (passedHeadings.length > 0) {
+        newActiveHeading = passedHeadings[passedHeadings.length - 1];
+      } else {
+        newActiveHeading = headings[0];
+      }
+      if (activeHeading != newActiveHeading) {
+        getLinkByHeading(activeHeading).classList.remove(activeClass);
+        activeHeading = newActiveHeading;
+        getLinkByHeading(activeHeading).classList.add(activeClass);
+      }
+    }
+
+    let timer = null;
+    const scrollListener = () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(onScroll, 50)
+    }
+    window.addEventListener('scroll', scrollListener, false);
+    scrollListeners.push(scrollListener)
+
+    function getLinkByHeading(heading) {
+      const id = encodeURI(heading.getAttribute('id')).toLowerCase();
+      return document.querySelector(`.toc ul li a[href="#${id}"]`);
+    }
+
+    function getOffsetTop(heading) {
+      if (!heading.getClientRects().length) {
+        return 0;
+      }
+      let rect = heading.getBoundingClientRect();
+      return rect.top
+    }
+  })();
+  </script>
+
+</body>
+
+</html>

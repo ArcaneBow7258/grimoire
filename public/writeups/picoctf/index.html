@@ -5,23 +5,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Homelab | Alvin Tran</title>
+<title>picoCTF | Alvin Tran</title>
 <meta name="keywords" content="">
-<meta name="description" content="Some tutorials and notes for the things I do in my homelab.">
+<meta name="description" content="Currently for 2025&hellip; will reorganize if I do it again.">
 <meta name="author" content="">
-<link rel="canonical" href="https://alvintran.net/writeups/homelab/">
+<link rel="canonical" href="https://alvintran.net/writeups/picoctf/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
 <link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
-<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/homelab/index.xml">
-<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/homelab/">
+<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/picoctf/index.xml">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/picoctf/">
 
-<meta name="twitter:title" content="Homelab | Alvin Tran" />
-<meta name="twitter:description" content="Some tutorials and notes for the things I do in my homelab." />
-<meta property="og:title" content="Homelab | Alvin Tran" />
-<meta property="og:description" content="Some tutorials and notes for the things I do in my homelab." />
+<meta name="twitter:title" content="picoCTF | Alvin Tran" />
+<meta name="twitter:description" content="" />
+<meta property="og:title" content="picoCTF | Alvin Tran" />
+<meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://alvintran.net/writeups/homelab/" />
+<meta property="og:url" content="https://alvintran.net/writeups/picoctf/" />
 
 
 
@@ -39,8 +39,8 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Homelab",
-      "item": "https://alvintran.net/writeups/homelab/"
+      "name": "picoCTF",
+      "item": "https://alvintran.net/writeups/picoctf/"
     }
   ]
 }
@@ -180,22 +180,24 @@ function toggleThemeListener() {
 <main class="main"> 
 <header class="page-header">
   <h1>
-    Homelab</h1>
-  <div class="post-description">
-    Some tutorials and notes for the things I do in my homelab.
-  </div><div class="inline-links">
+    picoCTF</h1><div class="inline-links">
   
   
   
 </div>
 </header>
 
+<div class="post-content"><p>Currently for 2025&hellip; will reorganize if I do it again.</p>
+
+
+</div>
+
 
 
 
 
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span><div class="social-icons">
+  <span>April 1, 2025</span></span><div class="social-icons">
     <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
     stroke-linecap="round" stroke-linejoin="round">
@@ -227,21 +229,62 @@ function toggleThemeListener() {
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>Homelab / Active Directory
+    <h2>picoCTF / Web
     </h2>
   </header>
   <section class="entry-content">
     
-      <p>Basically what I did to test out active directory on my homelab</p>
+      <p>Cookie Monster Secret Recipe http://verbal-sleep.picoctf.net:56241/
+Logging on give hit “Check cookies” value secrent_recipe: cGljb0NURntjMDBrMWVfbTBuc3Rlcl9sMHZlc19jMDBraWVzXzZDMkZCN0YzfQ%3D%3D As evident from the %3d%3d, most likely base64 encoded. Flag: picoCTF{c00k1e_m0nster_l0ves_c00kies_6C2FB7F3} head-dump Need to find enpoint with flag Documentation about API “browser_webshell_solvable” So we have a home page with 4 blog posts of cyber nodejs/swagger ui / API documentation Logging and hacking None of the #links work, except for #API Docuemntation get a Swagger docuemtnation page heapdump gets memory You can open it in text file CTRL&#43;F “picoCTF{” picoCTF{Pat!3nt_15_Th3_K3y_ad7ea5ae n0s4n1ty 1 profile picture upload need to locate file upload area, and inside /root directory. uploading file change image “Update profile” button gives “File x.jpg has be uploaded Path: uplaods.jpg” uploaded webshell.php, find we are in /var/www/html/uploads ls /root gives us Permission Denied Check sudo? We have sudo! sudo ls /root finds /root/flag,txt sudo cat /root/flag.txt picoCTF{wh47_c4n_u_d0_wPHP_d698d800} SSTI1 announcer Whatever submitted in input box is then redirected to a page with jsut that text ca use &lt;script&gt; alert(5)&lt;/script&gt; what can we do then… post / with content redirects to /announce Try PHP innject &lt;?php echo &#34;test&#34; ?&gt; It gets automatically commented out -&gt; &lt;?php tunrs into &lt;!---?php In the HTML, we can see a POST request get sent to / Lets open burpsuite Be stupid and lookup what SSTI means Server Side Template injection Using {{}} we can evaluate the command {{7*7}} gives up 49 instead of the output! https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection We find it is a Jinja2 injection {{ request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;ls&#39;).read() }} {{request.application.__globals__.__builtins__.__import__(&#39;os&#39;).popen(&#39;cat flag&#39;).read()}} WebSockFish stockfish chessbot!
+...</p>
     
   </section>
   <footer class="entry-footer"><span class="meta-item">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span><span class="meta-item">
+  <span>April 1, 2025</span></span><span class="meta-item">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span>
+  <span>April 1, 2025</span></span>
 </footer>
-  <a class="entry-link" aria-label="post link to Homelab / Active Directory" href="https://alvintran.net/writeups/homelab/active-directory/"></a>
+  <a class="entry-link" aria-label="post link to picoCTF / Web" href="https://alvintran.net/writeups/picoctf/web/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>General
+    </h2>
+  </header>
+  <section class="entry-content">
+    
+      <p>chalkboard grep -v “I WILL NOT BE SNEAKY” Inbvert matching, finds lines that do not have this full content We can assemble the flag from that picoCTF{chalkboard_bert_7c69b78b} Cryptography RSA For n, n is made up of p*q where p and q are supposedly large primes notice the even number for n… only even prime is 2 (any other prime is odd, and odd*odd = odd). that manes p*q = N, one of pq must be 2 you can get decryption key this way Code decryption in python GUess my Chesse part 1 affine cihper each iteration of NC gives different a b values for afffine cipher encrypt 2 cheeses, check for which a b value with auto bruteforcer on dcode decrypt message with a b </p>
+    
+  </section>
+  <footer class="entry-footer"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span>
+</footer>
+  <a class="entry-link" aria-label="post link to General" href="https://alvintran.net/writeups/picoctf/general/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>picoCTF / Forensics
+    </h2>
+  </header>
+  <section class="entry-content">
+    
+      <p>Ph4nt0m 1ntrud3r pcpap capture first, sort by time (obviously out of order) ones of len 12 on bottom are base64 encoded -&gt; get flag after copying and conveerting all TCP payloads
+Red supposedly normal red.png do strings files Get a poem Notice the first letters spell “CHECK LSB” Go to https://georgeom.net/StegOnline/upload Hit the “Extract Files/Data” Per lsb, grab bit 0 (least significant bit) of all 4 channels YOu’ll find repeated base64 values to decode Flags are Stepic Hint says to find non-matching flag We have a University listed as one of the countries you can grab the json data from source if u want and compare names Note: the flag abreviations are actually accurate You find university at the bottom You can’t download it directorly BUT you can go into Inspect -&gt; Application -&gt; Frames -&gt; Image and download it there https://github.com/1049451037/stepic get flag Bitlocker-1 Given a .dd file (disk duplicate or whatever) bitlocker2john filename.dd Will provide 4 passwords, one is user password one is recovery key, and copies of both. Extract one of them (userpassword is first one and is necessary enough) use john or hashcat to crack with rockyou.txt password is jacqueline on linux, install dislocker sudo dislocker -v -V .dd –user-password=pass /media/bitlocker -&gt; will create a dislocker-file inside to mount, mount -o loop,ro /media/bitlcoker/disclocker-file /mnt/wherever Flag is in first directory. Event Viewing ctrl&#43;f Bitlocker-2 We have a RAM .mem dump -&gt; volatility We look for bitlocker related volatility tools https://github.com/breppo/Volatility-BitLocker -&gt; allows for dislocker integration need volatility 2 not 3 volatility needs to have a profile (ie OS), imageinfo plugin python2 vol.py -f .mem bitlocker –profile={profleAbove} –dislocker You’ll get .fvek files to use with dislocker, which you can refer to Bitlocker-1 for how to decode and mount file insteadd of –user-password, use –kvek= Flag is stored in first level of mount 5b6ff64e4a0ee8f89050b7ba532f6256 60be5ce2a190dfb760bea1ece40e4223c8982aecfd03221a5a43d8fdd302eaee 1ed2a4b8dd0290f646ded074fbcff8bd bccaf1d4ea09e91f976bf94569761654 </p>
+    
+  </section>
+  <footer class="entry-footer"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 1, 2025</span></span>
+</footer>
+  <a class="entry-link" aria-label="post link to picoCTF / Forensics" href="https://alvintran.net/writeups/picoctf/forensics/"></a>
 </article>
     </main>
     
