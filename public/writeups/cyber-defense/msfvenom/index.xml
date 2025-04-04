@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>MSFvenom on Alvin Tran</title>
+    <link>https://alvintran.net/writeups/cyber-defense/msfvenom/</link>
+    <description>Recent content in MSFvenom on Alvin Tran</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 07 Feb 2025 14:25:46 +0000</lastBuildDate><atom:link href="https://alvintran.net/writeups/cyber-defense/msfvenom/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

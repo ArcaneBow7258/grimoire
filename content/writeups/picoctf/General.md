@@ -1,7 +1,7 @@
 +++
 date = '2025-04-01T02:16:46Z'
 draft = false
-title = 'General'
+title = 'picoCTF / General'
 
 +++
 # chalkboard

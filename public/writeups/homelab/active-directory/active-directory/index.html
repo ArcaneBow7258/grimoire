@@ -5,25 +5,25 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Payloads and MSFvenom | Alvin Tran</title>
+<title>Homelab / Active Directory | Alvin Tran</title>
 <meta name="keywords" content="">
-<meta name="description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.">
+<meta name="description" content="Basically what I did to test out active directory on my homelab">
 <meta name="author" content="">
-<link rel="canonical" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/">
+<link rel="canonical" href="https://alvintran.net/writeups/homelab/active-directory/active-directory/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
 <link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
-<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/homelab/active-directory/active-directory/">
 
-<meta name="twitter:title" content="Payloads and MSFvenom | Alvin Tran" />
-<meta name="twitter:description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense." />
-<meta property="og:title" content="Payloads and MSFvenom | Alvin Tran" />
-<meta property="og:description" content="Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense." />
+<meta name="twitter:title" content="Homelab / Active Directory | Alvin Tran" />
+<meta name="twitter:description" content="Basically what I did to test out active directory on my homelab" />
+<meta property="og:title" content="Homelab / Active Directory | Alvin Tran" />
+<meta property="og:description" content="Basically what I did to test out active directory on my homelab" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/" />
+<meta property="og:url" content="https://alvintran.net/writeups/homelab/active-directory/active-directory/" />
 <meta property="article:section" content="writeups" />
-  <meta property="article:published_time" content="2025-02-07T14:25:46&#43;00:00" />
-  <meta property="article:modified_time" content="2025-02-07T14:25:46&#43;00:00" />
+  <meta property="article:published_time" content="2025-02-11T00:43:45&#43;00:00" />
+  <meta property="article:modified_time" content="2025-02-11T00:43:45&#43;00:00" />
 
 
 <script type="application/ld+json">
@@ -40,14 +40,14 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Cyber Defense",
-      "item": "https://alvintran.net/writeups/cyber-defense/"
+      "name": "Homelab",
+      "item": "https://alvintran.net/writeups/homelab/"
     }, 
     {
       "@type": "ListItem",
       "position":  3 ,
-      "name": "Payloads and MSFvenom",
-      "item": "https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"
+      "name": "Homelab / Active Directory",
+      "item": "https://alvintran.net/writeups/homelab/active-directory/active-directory/"
     }
   ]
 }
@@ -56,19 +56,19 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Payloads and MSFvenom | Alvin Tran",
-  "name": "Payloads and MSFvenom",
-  "description": "Quick presentation over bind shells, reverse shells, MSFvenom, and things to look out for in defense.",
+  "headline": "Homelab / Active Directory | Alvin Tran",
+  "name": "Homelab \/ Active Directory",
+  "description": "Basically what I did to test out active directory on my homelab",
   "keywords": [
     
   ],
-  "wordCount" : "221",
+  "wordCount" : "463",
   "inLanguage": "en",
-  "datePublished": "2025-02-07T14:25:46Z",
-  "dateModified": "2025-02-07T14:25:46Z",
+  "datePublished": "2025-02-11T00:43:45Z",
+  "dateModified": "2025-02-11T00:43:45Z",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://alvintran.net/writeups/cyber-defense/payloads-and-msfvenom/"
+    "@id": "https://alvintran.net/writeups/homelab/active-directory/active-directory/"
   },
   "publisher": {
     "@type": "Organization",
@@ -215,12 +215,12 @@ function toggleThemeListener() {
 <main class="main post">
 <article class="post-single">
   <header class="post-header">
-    <h1 class="post-title">Payloads and MSFvenom</h1>
+    <h1 class="post-title">Homelab / Active Directory</h1>
     <div class="post-meta"><span class="meta-item">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 7, 2025</span></span><span class="meta-item">
+  <span>February 11, 2025</span></span><span class="meta-item">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 7, 2025</span></span>
+  <span>February 11, 2025</span></span>
 
       
       
@@ -233,183 +233,103 @@ function toggleThemeListener() {
 
         <div class="inner"><ul>
                 <li>
-                    <a href="#seashells-br--payloads-br--and-msfvenom" aria-label="(sea)Shells Payloads and MSFvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom</a></li>
+                    <a href="#introduction" aria-label="Introduction">Introduction</a></li>
                 <li>
-                    <a href="#disclaimer" aria-label="Disclaimer">Disclaimer</a></li>
+                    <a href="#basic-explaination" aria-label="Basic Explaination">Basic Explaination</a><ul>
+                        
                 <li>
-                    <a href="#table-of-contents" aria-label="Table of Contents">Table of Contents</a></li>
+                    <a href="#protocol" aria-label="Protocol">Protocol</a></li>
                 <li>
-                    <a href="#whats-a-payload" aria-label="What&rsquo;s a Payload?">What&rsquo;s a Payload?</a></li>
-                <li>
-                    <a href="#shells" aria-label="Shells">Shells</a></li>
-                <li>
-                    <a href="#how-to-get-to-the-shell-part" aria-label="How to get to the shell part">How to get to the shell part</a></li>
-                <li>
-                    <a href="#types-of-connections" aria-label="Types of connections">Types of connections</a></li>
-                <li>
-                    <a href="#web-shells" aria-label="Web Shells">Web Shells</a></li>
-                <li>
-                    <a href="#damn-vulnerable-web-app" aria-label="Damn Vulnerable Web App">Damn Vulnerable Web App</a></li>
-                <li>
-                    <a href="#msfvenom-for-payload-creation" aria-label="MSFvenom for payload creation">MSFvenom for payload creation</a></li>
-                <li>
-                    <a href="#evasion" aria-label="Evasion">Evasion</a>
+                    <a href="#why-ad" aria-label="Why AD?">Why AD?</a></li></ul>
                 </li>
+                <li>
+                    <a href="#what-i-did" aria-label="What I did">What I did</a><ul>
+                        
+                <li>
+                    <a href="#homelab" aria-label="Homelab">Homelab</a></li>
+                <li>
+                    <a href="#azure" aria-label="Azure">Azure</a>
+                </li>
+            </ul>
+            </li>
             </ul>
         </div>
     </details>
 </div>
 
-  <div class="post-content"><!---  --->
-<h1 id="seashells-br--payloads-br--and-msfvenom">(sea)Shells <br /> Payloads <br /> and MSFvenom<a hidden class="anchor" aria-hidden="true" href="#seashells-br--payloads-br--and-msfvenom">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://th-thumbnailer.cdn-si-edu.com/QsYOcBjhQbIjXBQdrw2QH_hcpuc=/1000x750/filters:no_upscale%28%29:focal%28990x769:991x770%29/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer/54/45/5445b3e4-8c1e-45b6-9d07-ce4286b5b4d3/image-1_web.jpg" alt="bg right:40%"  />
-UofL Cyber Defense</p>
-<hr>
-<!-- paginate: true -->
-<h1 id="disclaimer">Disclaimer<a hidden class="anchor" aria-hidden="true" href="#disclaimer">¶</a></h1>
-<ul>
-<li>Don&rsquo;t try at home <br />(okay at home but not at other people while at home)</li>
-<li>Regurgtating information I did a module on</li>
-<li>Not super practical unless you&rsquo;re advanced (i am not)</li>
-</ul>
-<hr>
-<h1 id="table-of-contents">Table of Contents<a hidden class="anchor" aria-hidden="true" href="#table-of-contents">¶</a></h1>
+  <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">¶</a></h1>
+<p>Hi! I&rsquo;m not an expert on active directory and a lot of information I&rsquo;m about to tell you is already available online, but writing it myself and disseminating helps me learn (i think). Plus might as well add more information to my website.</p>
+<h1 id="basic-explaination">Basic Explaination<a hidden class="anchor" aria-hidden="true" href="#basic-explaination">¶</a></h1>
+<p>Active Directory (AD) is a centralized authentication and authorization architecture that interfaces with Windows devices.</p>
+<p>AD comes in a few parts:</p>
 <ol>
-<li>Payloads</li>
-<li>Shells</li>
-<li>MSFVenom</li>
-<li>File Upload Example</li>
-<li>Avoiding AV&rsquo;s</li>
-<li>.Exe Embedding</li>
+<li>Domain - a workspace designated by an actualy domain. This is the highest level and sets the policies company wide. Ran by a <em>domain controller</em> (DC).</li>
+<li>Organization Units (OU) - Logical grouping of users, devices, and groups that helps organize your permissions. For example, you can have a OU for <em>accounting</em>, and within a group named <em>tax people</em> and give permissions accordingly.</li>
+<li>Group - a group of users.</li>
+<li>User - you!</li>
+<li>Resourecs - like printers.</li>
 </ol>
-<hr>
-<h1 id="whats-a-payload">What&rsquo;s a Payload?<a hidden class="anchor" aria-hidden="true" href="#whats-a-payload">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://static.wikia.nocookie.net/overwatch/images/9/95/Dorado_screenshot_3.png/revision/latest/scale-to-width-down/1200?cb=20160630044824" alt="bg contain right:40%"  /></p>
+<p>Many types of policies can be set including: security, password, access, account management (different levels of IT) and even computer power management. I&rsquo;d like to think for every windows setting, we can roll out a setting to specific subset of users and devices.</p>
+<p>Furthermore, authorization to different services/resources like FTP, share drives, and printers.</p>
+<p>The shape of a Domain is a forest: a bunch of trees. You can create subomains for specific parts of a company or maybe even regions. These can have their own domain controller.</p>
+<h2 id="protocol">Protocol<a hidden class="anchor" aria-hidden="true" href="#protocol">¶</a></h2>
+<p>dunno, use LDAPS tho<br>
+Kreberos or something like that</p>
+<h2 id="why-ad">Why AD?<a hidden class="anchor" aria-hidden="true" href="#why-ad">¶</a></h2>
 <ul>
-<li>A bomb you sent/upload to a server
+<li>Centralized management (and replication through more DC)</li>
+<li>Compartmentalization of groups of users.
 <ul>
-<li>Triggers RCE</li>
-<li>Injects</li>
-<li>Creates <em>shells</em></li>
+<li>Organization! The tree/directory like nature allows for easy cascading and look-ups.</li>
 </ul>
 </li>
-<li>Resources
+<li>Extensive Windows management</li>
+<li>Allows for single account across many services.</li>
+</ul>
+<h1 id="what-i-did">What I did<a hidden class="anchor" aria-hidden="true" href="#what-i-did">¶</a></h1>
+<p>As I do not own an enterprise license of Windows, I decided to use Azure. Also helps me offload some processing.
+Windows Enterprise or</p>
+<h2 id="homelab">Homelab<a hidden class="anchor" aria-hidden="true" href="#homelab">¶</a></h2>
+<ol>
+<li>I set up Windows Server 2022 on my Computer
 <ul>
-<li>Payload all the Things</li>
-<li>Metasploit Framework</li>
-<li></li>
+<li>Make sure you don&rsquo;t only do Server Core (to get GUI)</li>
+<li>Add feature/role: Active Directory</li>
 </ul>
 </li>
-</ul>
-<hr>
-<h1 id="shells">Shells<a hidden class="anchor" aria-hidden="true" href="#shells">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Mario_Kart_Blue_Shell.png/220px-Mario_Kart_Blue_Shell.png" alt="bg contain  right:40%"  /></p>
+<li>Create a user
 <ul>
-<li><strong>S</strong>ecure <strong>SH</strong>ell</li>
-<li>ba<strong>sh</strong>, power<strong>shell</strong>, z<strong>sh</strong></li>
-<li>interacts with the terminal</li>
-<li>Metepreter</li>
-<li>Web Shells</li>
-</ul>
-<hr>
-<p>
-  <img loading="lazy" src="https://www.lockheedmartin.com/content/dam/lockheed-martin/rms/photo/cyber/THE-CYBER-KILL-CHAIN-body.png.pc-adaptive.1280.medium.png" alt="bg contain  right:40%"  /></p>
-<h1 id="how-to-get-to-the-shell-part">How to get to the shell part<a hidden class="anchor" aria-hidden="true" href="#how-to-get-to-the-shell-part">¶</a></h1>
-<ul>
-<li>Find an attack vector!
-<ul>
-<li>FTP</li>
-<li>Webserver file uploads</li>
-<li>Dropped a USB</li>
+<li>tools -&gt; Group and User management -&gt; add user</li>
+<li>This user should be the user you&rsquo;ll be joining your other VM as.</li>
 </ul>
 </li>
-</ul>
-<hr>
-<h1 id="types-of-connections">Types of connections<a hidden class="anchor" aria-hidden="true" href="#types-of-connections">¶</a></h1>
+<li>Need to generate a certicate (<a href="https://learn.microsoft.com/en-us/azure/vpn-gateway/point-to-site-certificate-gateway">self-signed</a>)
 <ul>
-<li>Bind - Target listens for connection
-<ul>
-<li>opens port</li>
+<li>After creating, switch to Azure side</li>
 </ul>
 </li>
-<li>Reverse - Host listens, Target Initiates
+<li>Connect your AD to Azure Gateway</li>
+<li>Check if you can ping, you might have to do somet firewall to allow ICMPv4</li>
+</ol>
+<h2 id="azure">Azure<a hidden class="anchor" aria-hidden="true" href="#azure">¶</a></h2>
+<ol>
+<li>Create a VM
 <ul>
-<li>Circumvents firewalls and rules</li>
-<li>Need a listener
-<ul>
-<li>ncat / netcat</li>
-<li>MSF multi/handler</li>
+<li>To save some costs, make sure your OS Disk is on HDD</li>
 </ul>
 </li>
+<li>Use Azure Virtual Network Gateway
+<ul>
+<li>Important setting: VPN types. Should allow OpenVPN and IKEv2 for Windows.</li>
+<li>Acts as a point-to-site VPN.</li>
+<li>Get public-key of certificate and provide it to Azure.</li>
+<li>You can download a package for set-up the VPN&rsquo;s with click of button.</li>
 </ul>
 </li>
-</ul>
-<p>[Demo Cue]</p>
-<!-- footer: https://www.revshells.com/ --> 
-<hr>
-<h1 id="web-shells">Web Shells<a hidden class="anchor" aria-hidden="true" href="#web-shells">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://i.redd.it/5ofaq45gfmpb1.jpg" alt="bg contain right:40%"  /></p>
-<ul>
-<li>File upload vulnerability
-<ul>
-<li>PHP</li>
-<li>dotnet ASP</li>
-<li>Javascript Server Pages (JSP)</li>
-<li>Usually after you get admin access to a website</li>
-</ul>
-</li>
-<li>Laudanum</li>
-<li>MSFvenom</li>
-</ul>
-<!-- footer: "" -->
-<hr>
-<h1 id="damn-vulnerable-web-app">Damn Vulnerable Web App<a hidden class="anchor" aria-hidden="true" href="#damn-vulnerable-web-app">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://static.wikia.nocookie.net/slay-the-spire/images/a/ae/Icon_Vulnerable.png/revision/latest?cb=20200202234658" alt="bg contain right:20% "  /></p>
-<ul>
-<li>Part of kali environment (i think)</li>
-<li>whole host of vulnerabilities</li>
-<li>Alternatvies:
-OWASP Juicebox, Metasploitable, OWASP Mutillidae II,
-DV RESTurant, DV bank</li>
-</ul>
-<p><a href="https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php">https://github.com/WhiteWinterWolf/wwwolf-php-webshell/blob/master/webshell.php</a></p>
-<!-- footer: "https://github.com/digininja/DVWA " -->
-<hr>
-<h1 id="msfvenom-for-payload-creation">MSFvenom for payload creation<a hidden class="anchor" aria-hidden="true" href="#msfvenom-for-payload-creation">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://marriland.com/wp-content/plugins/marriland-core/images/pokemon/sprites/home/full/ekans.png" alt="bg contain right:20%"  /></p>
-<ul>
-<li>Different payloads (shells, meterpreter)</li>
-<li>Different platforms / arch</li>
-<li>Encodings</li>
-<li>File formants include ASPX, WAR, PHP, EXE, ELF</li>
-</ul>
-<p>[Demo Cue]</p>
-<!-- footer: "E:\\Visual Studio 2022\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\ml64\" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib\" /entry:main" --> 
-<!---
-"E:\Visual Studio 2022\VC\Tools\MSVC\14.41.34120\bin\Hostx64\x64\ml64" template_x64_windows.asm /link /subsystem:windows /defaultlib:\"C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.20348.0\\um\\x64\\kernel32.lib" /entry:main" 
--->
-<hr>
-<h1 id="evasion">Evasion<a hidden class="anchor" aria-hidden="true" href="#evasion">¶</a></h1>
-<p>
-  <img loading="lazy" src="https://www.serebii.net/games/evasion.jpg" alt="bg contain right:40%"  /></p>
-<ul>
-<li>Encoding</li>
-<li>Templates
-<ul>
-<li>Modify existing ones</li>
-<li>Use examples (injection)</li>
-<li>Modify existing ones
-<a href="https://www.ired.team/offensive-security/code-injection-process-injection/process-injection">https://www.ired.team/offensive-security/code-injection-process-injection/process-injection</a></li>
-</ul>
-</li>
-</ul>
-<!-- footer: "https://www.blackhillsinfosec.com/modifying-metasploit-x64-template-for-av-evasion/" -->
+<li>Ping DC IP</li>
+<li>Add Domain Controller to DNS (first stop)</li>
+<li>System / Computer Name settings -&gt; Domain -&gt; Change Domain</li>
+</ol>
 
 
 

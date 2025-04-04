@@ -75,4 +75,7 @@ lastmod = ["lastmod", ":git", "date", "publishDate"]
     [markup.goldmark.parser.attribute]
         block = true
         [markup.goldmark]
- 
+[outputFormats.Reveal]
+    baseName = "index"
+    mediaType = "text/html"
+    isHTML = true

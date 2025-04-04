@@ -13,17 +13,16 @@
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
 <link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" href="https://alvintran.net/writeups/homelab/active-directory/index.xml">
 <link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/homelab/active-directory/">
 
 <meta name="twitter:title" content="Homelab / Active Directory | Alvin Tran" />
-<meta name="twitter:description" content="Basically what I did to test out active directory on my homelab" />
+<meta name="twitter:description" content="" />
 <meta property="og:title" content="Homelab / Active Directory | Alvin Tran" />
-<meta property="og:description" content="Basically what I did to test out active directory on my homelab" />
-<meta property="og:type" content="article" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
 <meta property="og:url" content="https://alvintran.net/writeups/homelab/active-directory/" />
-<meta property="article:section" content="writeups" />
-  <meta property="article:published_time" content="2025-02-11T00:43:45&#43;00:00" />
-  <meta property="article:modified_time" content="2025-02-11T00:43:45&#43;00:00" />
+
 
 
 <script type="application/ld+json">
@@ -52,34 +51,6 @@
   ]
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Homelab / Active Directory | Alvin Tran",
-  "name": "Homelab \/ Active Directory",
-  "description": "Basically what I did to test out active directory on my homelab",
-  "keywords": [
-    
-  ],
-  "wordCount" : "463",
-  "inLanguage": "en",
-  "datePublished": "2025-02-11T00:43:45Z",
-  "dateModified": "2025-02-11T00:43:45Z",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://alvintran.net/writeups/homelab/active-directory/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Alvin Tran",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://alvintran.net/images/favicon-16x16.png"
-    }
-  }
-}
-</script>
 <noscript>
     <style>
         #theme-toggle,
@@ -92,7 +63,7 @@
 
 </head>
 
-<body class=" dark type-writeups kind-page layout-" id="top"><script data-no-instant>
+<body class="list-page dark type-writeups kind-section layout-" id="top"><script data-no-instant>
 function switchTheme(theme) {
   switch (theme) {
     case 'light':
@@ -212,20 +183,15 @@ function toggleThemeListener() {
         </ul>
     </nav>
 </header>
-<main class="main post">
-<article class="post-single">
-  <header class="post-header">
-    <h1 class="post-title">Homelab / Active Directory</h1>
-    <div class="post-meta"><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span><span class="meta-item">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
-  <span>February 11, 2025</span></span>
-
-      
-      
-    </div>
-  </header> <div class="toc side right">
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    Homelab / Active Directory</h1><div class="inline-links">
+  
+  
+  
+</div>
+</header><div class="toc side right">
     <details  open>
         <summary accesskey="c" title="(Alt + C)">
             <span class="details">Table of Contents</span>
@@ -257,7 +223,8 @@ function toggleThemeListener() {
     </details>
 </div>
 
-  <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">¶</a></h1>
+
+<div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">¶</a></h1>
 <p>Hi! I&rsquo;m not an expert on active directory and a lot of information I&rsquo;m about to tell you is already available online, but writing it myself and disseminating helps me learn (i think). Plus might as well add more information to my website.</p>
 <h1 id="basic-explaination">Basic Explaination<a hidden class="anchor" aria-hidden="true" href="#basic-explaination">¶</a></h1>
 <p>Active Directory (AD) is a centralized authentication and authorization architecture that interfaces with Windows devices.</p>
@@ -332,13 +299,42 @@ Windows Enterprise or</p>
 </ol>
 
 
+</div>
 
-  </div>
 
-  <footer class="post-footer">
-  </footer>
-    <div class="comments-separator"></div>
-</article>
+
+
+
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>February 11, 2025</span></span><div class="social-icons">
+    <a href="https://www.linkedin.com/in/alvin-tran-arcane" target="_blank" rel="noopener noreferrer me" title="LinkedIn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+    <rect x="2" y="9" width="4" height="12"></rect>
+    <circle cx="4" cy="4" r="2"></circle>
+</svg>
+
+    </a>
+    <a href="https://github.com/ArcaneBow7258" target="_blank" rel="noopener noreferrer me" title="Github">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+    </path>
+</svg>
+
+    </a>
+    <a href="mailto:mail@alvintran.net" title="Email">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21" fill="none" stroke="currentColor" stroke-width="2"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+    <polyline points="22,6 12,13 2,6"></polyline>
+</svg>
+
+    </a>
+</div>
+
     </main>
     
 <footer class="footer">
@@ -438,80 +434,6 @@ Windows Enterprise or</p>
 
 <script src="/js/medium-zoom.min.js" data-no-instant
 ></script>
-
-
-
-
-<script>
-  
-  
-  (function() {
-    const enableTocScroll = '1' == '1'
-    if (!enableTocScroll) {
-      return
-    }
-    if (!document.querySelector('.toc')) {
-      console.log('no toc found, ignore toc scroll')
-      return
-    }
-    
-
-    
-    const scrollListeners = window.scrollListeners
-    const headings = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id]');
-    const activeClass = 'active';
-
-    
-    let activeHeading = headings[0];
-    getLinkByHeading(activeHeading).classList.add(activeClass);
-
-    const onScroll = () => {
-      const passedHeadings = [];
-      for (const h of headings) {
-        
-        if (getOffsetTop(h) < 5) {
-          passedHeadings.push(h)
-        } else {
-          break;
-        }
-      }
-      if (passedHeadings.length > 0) {
-        newActiveHeading = passedHeadings[passedHeadings.length - 1];
-      } else {
-        newActiveHeading = headings[0];
-      }
-      if (activeHeading != newActiveHeading) {
-        getLinkByHeading(activeHeading).classList.remove(activeClass);
-        activeHeading = newActiveHeading;
-        getLinkByHeading(activeHeading).classList.add(activeClass);
-      }
-    }
-
-    let timer = null;
-    const scrollListener = () => {
-      if (timer !== null) {
-        clearTimeout(timer)
-      }
-      timer = setTimeout(onScroll, 50)
-    }
-    window.addEventListener('scroll', scrollListener, false);
-    scrollListeners.push(scrollListener)
-
-    function getLinkByHeading(heading) {
-      const id = encodeURI(heading.getAttribute('id')).toLowerCase();
-      return document.querySelector(`.toc ul li a[href="#${id}"]`);
-    }
-
-    function getOffsetTop(heading) {
-      if (!heading.getClientRects().length) {
-        return 0;
-      }
-      let rect = heading.getBoundingClientRect();
-      return rect.top
-    }
-  })();
-  </script>
-
 </body>
 
 </html>
