@@ -8,6 +8,251 @@
     <language>en-us</language>
     <lastBuildDate>Mon, 11 Nov 2024 21:13:19 -0500</lastBuildDate><atom:link href="https://alvintran.net/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>2025 Spring</title>
+      <link>https://alvintran.net/writeups/ncl/2025spring/</link>
+      <pubDate>Fri, 18 Apr 2025 01:09:56 +0000</pubDate>
+      
+      <guid>https://alvintran.net/writeups/ncl/2025spring/</guid>
+      <description>I told myself I wouldn&amp;#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin</description>
+      <content:encoded><![CDATA[<h1 id="osint">OSINT</h1>
+<h2 id="hard-cats">(Hard) Cats?</h2>
+<ul>
+<li>The payload is actually just some iPhone 3 jailbreak. Completely irrelevant
+<ul>
+<li>The other two files, look at hex and see its a jpeg.</li>
+</ul>
+</li>
+<li>I reversed image search the logo to find <code>dramcorp</code> or you can use the poster to find <code>omega mart</code> directly.</li>
+<li>The cat named LV is shown in a TikTok / YouTube video.</li>
+</ul>
+<h1 id="crypto">Crypto</h1>
+<h2 id="medium-messages">(Medium) Messages</h2>
+<pre tabindex="0"><code>for n in {1..50}; do echo $n;  cat &#34;message_$n.txt&#34; | openssl dgst -sha256 -hmac &#34;ciCloud-API-20240315-4f7b9c&#34; | sed -e &#34;s/SHA2-256(stdin)= //&#34; | sed -z &#39;$ s/\n$//&#39; | diff - &#34;message_$n.hmac&#34;; done | grep &#34;&lt;&#34; -B 2
+</code></pre><ul>
+<li>For each message, get the content, get the sha256 hmac digest with given key</li>
+<li>Then trim it</li>
+<li>Compare it to the hmac&rsquo;s given, and see what hashes were different
+<code>for n in {1..50}; do cat &quot;message_$n.hmac&quot;; printf &quot;\n&quot;; done | grep &quot;3349ac94b3bcfccda44df33da49cc5f6bdfe6fbae8d1107621bb92f399d6acd8&quot;</code></li>
+<li>Lets you finding the mismatched hmac. (Repeat for each of the above)</li>
+</ul>
+<h2 id="medium-zugzwang">(Medium) Zugzwang</h2>
+<ul>
+<li>need a really specific library
+<a href="https://github.com/WintrCat/chessencryption">https://github.com/WintrCat/chessencryption</a></li>
+<li>Importantly, you should run through the text examples.
+<ul>
+<li>The encoding output is data of ALL <code>.pgn</code> files combined</li>
+</ul>
+</li>
+<li>Thus, to decode we need to read all the data from each file and put them all together
+<ul>
+<li>Importantly, each file is split by a <code>\n\n</code> so you need to join individual files with that.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>parts <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>p <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;../parts&#34;</span>
+</span></span><span style="display:flex;"><span>o <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;out/&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">433</span>):
+</span></span><span style="display:flex;"><span>    print(p <span style="color:#f92672">+</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;/game_</span><span style="color:#e6db74">{</span>str(i)<span style="color:#e6db74">}</span><span style="color:#e6db74">.pgn&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(p <span style="color:#f92672">+</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;/game_</span><span style="color:#e6db74">{</span>str(i)<span style="color:#e6db74">}</span><span style="color:#e6db74">.pgn&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        l <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>        parts<span style="color:#f92672">.</span>append(l)
+</span></span><span style="display:flex;"><span>decode<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>join(parts), <span style="color:#e6db74">&#39;out.jpeg&#39;</span>)
+</span></span></code></pre></div><h2 id="hard-qr-codestl">(Hard) QR Code/STL</h2>
+<ul>
+<li>File is a .gcode file (if you&rsquo;re familiar with 3d printing it helps a lot)</li>
+<li><a href="https://ncviewer.com/">https://ncviewer.com/</a></li>
+<li>I went into a pixelart thing and reconstructed it by hand&hellip;
+![[Pasted image 20250412153315.png]]</li>
+</ul>
+<h1 id="passwords">Passwords</h1>
+<h2 id="hard-dice">(Hard) DIce</h2>
+<ul>
+<li>I got my wordlist from here: <a href="https://www.eff.org/dice">https://www.eff.org/dice</a></li>
+<li>The challenge named was  &ldquo;Dice&rdquo; so I instinctively looked for a short wordlist.</li>
+<li>Then a lot of hashcat. Most my commands I have to run 3 variations to get <code>word-word-liber8</code>, <code>word-liber8-word</code>, and <code>liber8-word-word</code> combinations.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># liber8.txt is just &#34;liber8&#34;</span>
+</span></span><span style="display:flex;"><span>hashcat --stdout -a <span style="color:#ae81ff">1</span> dice.txt liber8.txt -j <span style="color:#e6db74">&#34;</span>$-<span style="color:#e6db74">&#34;</span> -k <span style="color:#e6db74">&#34;</span>$-<span style="color:#e6db74">&#34;</span> &gt; mid.txt <span style="color:#75715e"># creates all &#34;word-liber8-&#34; combinations</span>
+</span></span><span style="display:flex;"><span>hashcat -a <span style="color:#ae81ff">3</span> hashes.txt mid.txt dice.txt <span style="color:#75715e"># Crack by concatting combinations of &#34;word-liber8-&#34; and &#34;word&#34; making &#34;word-liber8-word&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Repeat above for combinations of &#34;liber8-word-&#34; and &#34;-word-liber8&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Later for special cahracters...</span>
+</span></span><span style="display:flex;"><span>hashcat --stdout -a <span style="color:#ae81ff">6</span> dice.txt ?s &gt; specialdice.txt <span style="color:#75715e"># creates word[?s] where ?s is any special character</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># repeat above with liber8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># then with sepcialdice/specialliber8 combinations you repeat the cracking</span>
+</span></span></code></pre></div><h1 id="log-analysis">Log Analysis</h1>
+<h2 id="medium">(Medium)</h2>
+<ul>
+<li>I used <code>awk</code> to get the answer to questions as well as grep
+<code>cat social_data.sql  | grep -e &quot;'[0-9]\{3\}-&quot; -o  | sort | uniq -c | sort -n</code></li>
+</ul>
+<h2 id="hard">(Hard)</h2>
+<ul>
+<li>They gave you a format, up to you to parse it and look through it.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span>raw <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">&#34;logins.bin&#34;</span>, <span style="color:#e6db74">&#39;rb&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>    raw <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
+</span></span><span style="display:flex;"><span>point <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> point <span style="color:#f92672">&lt;</span>  len(raw):
+</span></span><span style="display:flex;"><span>    username_length <span style="color:#f92672">=</span> int(raw[point:<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point]<span style="color:#f92672">.</span>hex(),<span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span>    username <span style="color:#f92672">=</span> raw[<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point:<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span>point]<span style="color:#f92672">.</span>decode()
+</span></span><span style="display:flex;"><span>    ip <span style="color:#f92672">=</span> raw[<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span>point:<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point]<span style="color:#f92672">.</span>hex()
+</span></span><span style="display:flex;"><span>    ip <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;.&#39;</span><span style="color:#f92672">.</span>join([str(int(ip[i:i<span style="color:#f92672">+</span><span style="color:#ae81ff">2</span>], <span style="color:#ae81ff">16</span>)) <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, len(ip), <span style="color:#ae81ff">2</span>)])
+</span></span><span style="display:flex;"><span>    timestamp <span style="color:#f92672">=</span> int(raw[<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point:<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point]<span style="color:#f92672">.</span>hex(),<span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span>    success <span style="color:#f92672">=</span> int(raw[<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>point:<span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">+</span>point]<span style="color:#f92672">.</span>hex())
+</span></span><span style="display:flex;"><span>    data<span style="color:#f92672">.</span>append([username_length, username, ip, timestamp, success])
+</span></span><span style="display:flex;"><span>    point <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span><span style="color:#f92672">+</span>username_length<span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">4</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">+</span>point 
+</span></span><span style="display:flex;"><span>df <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame(data, columns <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;username_length&#34;</span>, <span style="color:#e6db74">&#34;username&#34;</span>, <span style="color:#e6db74">&#39;ip&#39;</span>,<span style="color:#e6db74">&#39;timestamp&#39;</span>,<span style="color:#e6db74">&#39;success&#39;</span>])
+</span></span><span style="display:flex;"><span>df[<span style="color:#e6db74">&#39;failure&#39;</span>] <span style="color:#f92672">=</span> (df<span style="color:#f92672">.</span>success <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Final answer i got through this:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># It was someone who got denied 2x and success. People say its a really short login time (like milliseconds apart)</span>
+</span></span><span style="display:flex;"><span>df[[<span style="color:#e6db74">&#39;ip&#39;</span>,<span style="color:#e6db74">&#39;failure&#39;</span>]]<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#34;ip&#34;</span>)<span style="color:#f92672">.</span>mean()<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;failure&#39;</span>)
+</span></span></code></pre></div><h1 id="network-traffic">Network Traffic</h1>
+<h2 id="medium-wifi">(Medium) Wifi</h2>
+<ul>
+<li>some simple reading of the pcap file then using <code>aircrack-ng</code> with <code>rockyou.txt</code> to crack.
+<a href="https://github.com/aircrack-ng/aircrack-ng">https://github.com/aircrack-ng/aircrack-ng</a></li>
+</ul>
+<h2 id="hard-exfil">(Hard) Exfil</h2>
+<ul>
+<li>Investigating the file, we can see a DNS query for <code>asset.xxxxx.ci</code></li>
+<li>On the first one, we can see that the <code>xxxxx</code> is a file header that matches a <code>xz</code> archive.
+<code>strings exfil.pcapng | grep -e &quot;-.*\.ci&quot; -o | sed  &quot;s/-//&quot; | sed &quot;s/.ci//&quot; | tr -d &quot;\n&quot; | xxd -r -p &gt; asset.bmp.xz</code></li>
+</ul>
+<h1 id="forensics">Forensics</h1>
+<h2 id="easy-dog">(Easy) Dog</h2>
+<ul>
+<li>inside the .png data, we see a reference to <code>exiftool</code></li>
+<li>this allows us to grab exif metadata from the .png
+<ul>
+<li>The flag is encoded in base64 from exfil tool</li>
+</ul>
+</li>
+</ul>
+<h2 id="medium-foryou">(Medium) ForYou</h2>
+<ul>
+<li>If you load the file into a hex-editor, we can see its oddly large&hellip; and that theres multiple file headers inside!</li>
+<li><code>binwalk -dd=.* -e ForYou.jpg</code>
+<ul>
+<li>you need <code>-dd=.*</code>  to get all filetypes, otherwise it&rsquo;ll only grab the zip file.</li>
+</ul>
+</li>
+<li>I hear <code>foremost</code> is also very effective and a simple 1 liner.</li>
+</ul>
+<h2 id="hard-whatever-the-img-file-was">(Hard) whatever the .img file was</h2>
+<ul>
+<li><code>strings</code> gets you the file name</li>
+<li>you can use <code>autopsy</code> to reconstruct the data or probably <code>binwalk</code></li>
+</ul>
+<h1 id="scanning">Scanning</h1>
+<h2 id="hard-school">(Hard) School</h2>
+<ul>
+<li>Start with an <code>nmap -sC</code> scan
+<ul>
+<li>need <code>-sC</code> or <code>ldap</code> scripts to get the domains we need to enumerate</li>
+<li>find <code>dc=cloud0</code>, but drop the 0.</li>
+</ul>
+</li>
+<li>Simply use <code>ldapsearch</code> to find what is needed
+<code>ldapsearch host -b &quot;dc=cloud&quot;</code> for example.</li>
+</ul>
+<h1 id="web-apps">Web Apps</h1>
+<h2 id="easy-dog-gallery">(Easy) Dog Gallery</h2>
+<ul>
+<li>notice if you have over the file you can see that the source is <code>http://url/image?photo=path/to/.png</code></li>
+<li>We can do directory traversal to find a <code>flag.txt</code></li>
+</ul>
+<h2 id="medium-1">(Medium)</h2>
+<ul>
+<li>inspect the source code for the user/password bypass.</li>
+</ul>
+<h2 id="hard-dogstagram">(Hard) Dogstagram</h2>
+<ul>
+<li>Inside the source code (<code>__buildmanifest</code>), we can see the <code>static/chunk/secret_dogo_stash_xxxxx.js</code> and <code>static/chunk/main_xxxxx.js</code>.
+<ul>
+<li>These are not accessible through just the baseurl</li>
+<li>Notice the sources come from <code>_next/static</code> -&gt; use these</li>
+</ul>
+</li>
+<li>That gets you 2 of the flags</li>
+<li>To find the version, we can simply do <code>next</code> in the console. This is probably imbedded in some <code>.js</code> file loaded
+<ul>
+<li>(You can use any function/variable from any included js in the debugger/source code)</li>
+</ul>
+</li>
+</ul>
+<h1 id="ee">E&amp;E</h1>
+<h2 id="medium-crackme">(medium) crackme</h2>
+<ul>
+<li>Ghidra shows a &ldquo;decodeimage&rdquo; function.
+<ul>
+<li>Inside, we can see an <code>encoded_image</code> in memory and we add our input <code>key</code> to all values (iterating through each character in our key, aka index 0 + 0)</li>
+<li>Key is 8 characters long</li>
+</ul>
+</li>
+<li>The file result must match some hex <code>0x...F8FF</code> or whatever the <code>.png</code> file header is
+<ul>
+<li>Simple reverse from <code>.png hex = encoded hex + key hex</code>, and solve for the key.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdlib.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> t;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">long</span> ver, enc;
+</span></span><span style="display:flex;"><span>    FILE <span style="color:#f92672">*</span>fp;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> buffer[<span style="color:#ae81ff">9</span>];
+</span></span><span style="display:flex;"><span>    fp <span style="color:#f92672">=</span> <span style="color:#a6e22e">fopen</span>(<span style="color:#e6db74">&#34;smart.png&#34;</span>, <span style="color:#e6db74">&#34;rb&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ( fp <span style="color:#f92672">!=</span> NULL ) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> read <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    read <span style="color:#f92672">=</span> <span style="color:#a6e22e">fread</span>(buffer, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">8</span>, fp);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%s&#34;</span>, buffer);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ver <span style="color:#f92672">=</span>  <span style="color:#ae81ff">0xa1a0a0d474e5089</span>; <span style="color:#75715e">// File header to match (png)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//printf(&#34;ver %s\n&#34;, (&amp;ver));
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">//enc = 0x41efd616dad7e3e9;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    enc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0xe9e3d7da16d6ef41</span>; <span style="color:#75715e">// first 8 bytes of encoded file.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">8</span>; i<span style="color:#f92672">++</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;%X&#34;</span>, ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>ver))[i] <span style="color:#f92672">-</span> ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>enc))[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;mod %X</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, ((<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)(<span style="color:#f92672">&amp;</span>enc))[<span style="color:#ae81ff">5</span>]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    t <span style="color:#f92672">=</span><span style="color:#a6e22e">memcmp</span>(buffer, <span style="color:#f92672">&amp;</span>enc, <span style="color:#ae81ff">8</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;cmp %i</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, t);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="hard-pwcheck">(hard) pwcheck</h2>
+<p><a href="https://youtu.be/1hScemFvnzw?si=mt2Y1qvokAvQVW2C">https://youtu.be/1hScemFvnzw?si=mt2Y1qvokAvQVW2C</a></p>
+<ul>
+<li>race condition</li>
+<li>The file has a <code>sticky-bit</code> which makes the file run as root to read <code>/etc/shadow</code></li>
+<li>Using a decompiler, you can see that the file eventually does <code>getuid</code> and <code>setguid</code> to prevent exploits (i.e, the <code>execlp</code> function at the end calling <code>upload</code> binary.</li>
+<li>BUT, before it does so, it does <code>open(file)</code>
+<ul>
+<li>why does this matter? lets go into linux file systems</li>
+</ul>
+</li>
+<li>What occurs with <code>open()</code> with the sticky-bit is that linux <em>copies the file into /proc/process_id</em>
+<ul>
+<li>which allows you to read it without root privilege</li>
+</ul>
+</li>
+<li>chaining commands lets you read the <code>/proc/[pid]</code> dir as fast as possible  and then grab <code>/etc/shadow</code> contents.</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>UTW / Century</title>
       <link>https://alvintran.net/writeups/under-the-wire/century/</link>
       <pubDate>Tue, 01 Apr 2025 02:28:08 +0000</pubDate>

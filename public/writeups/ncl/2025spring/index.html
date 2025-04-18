@@ -1,21 +1,319 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title>NCL on Alvin Tran</title>
-    <link>https://alvintran.net/writeups/ncl/</link>
-    <description>Recent content in NCL on Alvin Tran</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 12 Nov 2024 11:46:59 -0500</lastBuildDate><atom:link href="https://alvintran.net/writeups/ncl/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>2025 Spring</title>
-      <link>https://alvintran.net/writeups/ncl/2025spring/</link>
-      <pubDate>Fri, 18 Apr 2025 01:09:56 +0000</pubDate>
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>2025 Spring | Alvin Tran</title>
+<meta name="keywords" content="">
+<meta name="description" content="I told myself I wouldn&#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin">
+<meta name="author" content="">
+<link rel="canonical" href="https://alvintran.net/writeups/ncl/2025spring/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.d58a2cd75704c66c78a0fc5243a03bbe60ba774fe024c6bd4771f411afc45cce.css" integrity="sha256-1Yos11cExmx4oPxSQ6A7vmC6d0/gJMa9R3H0Ea/EXM4=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://alvintran.net/images/favicon-16x16.png">
+<link rel="apple-touch-icon" href="https://alvintran.net/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://alvintran.net/writeups/ncl/2025spring/">
+
+<meta name="twitter:title" content="2025 Spring | Alvin Tran" />
+<meta name="twitter:description" content="I told myself I wouldn&#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin" />
+<meta property="og:title" content="2025 Spring | Alvin Tran" />
+<meta property="og:description" content="I told myself I wouldn&#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://alvintran.net/writeups/ncl/2025spring/" />
+<meta property="article:section" content="writeups" />
+  <meta property="article:published_time" content="2025-04-18T01:09:56&#43;00:00" />
+  <meta property="article:modified_time" content="2025-04-18T01:09:56&#43;00:00" />
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Writeups",
+      "item": "https://alvintran.net/writeups/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "NCL",
+      "item": "https://alvintran.net/writeups/ncl/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "2025 Spring",
+      "item": "https://alvintran.net/writeups/ncl/2025spring/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2025 Spring | Alvin Tran",
+  "name": "2025 Spring",
+  "description": "I told myself I wouldn't go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin",
+  "keywords": [
+    
+  ],
+  "wordCount" : "1162",
+  "inLanguage": "en",
+  "datePublished": "2025-04-18T01:09:56Z",
+  "dateModified": "2025-04-18T01:09:56Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://alvintran.net/writeups/ncl/2025spring/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Alvin Tran",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://alvintran.net/images/favicon-16x16.png"
+    }
+  }
+}
+</script>
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript>
+
+</head>
+
+<body class=" dark type-writeups kind-page layout-" id="top"><script data-no-instant>
+function switchTheme(theme) {
+  switch (theme) {
+    case 'light':
+      document.body.classList.remove('dark');
+      break;
+    case 'dark':
+      document.body.classList.add('dark');
+      break;
+    
+    default:
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+      }
+  }
+}
+
+function isDarkTheme() {
+  return document.body.className.includes("dark");
+}
+
+function getPrefTheme() {
+  return localStorage.getItem("pref-theme");
+}
+
+function setPrefTheme(theme) {
+  switchTheme(theme)
+  localStorage.setItem("pref-theme", theme);
+}
+
+const toggleThemeCallbacks = {}
+toggleThemeCallbacks['main'] = (isDark) => {
+  
+  if (isDark) {
+    setPrefTheme('light');
+  } else {
+    setPrefTheme('dark');
+  }
+}
+
+
+
+
+window.addEventListener('toggle-theme', function() {
+  
+  const isDark = isDarkTheme()
+  for (const key in toggleThemeCallbacks) {
+    toggleThemeCallbacks[key](isDark)
+  }
+});
+
+
+function toggleThemeListener() {
+  
+  window.dispatchEvent(new CustomEvent('toggle-theme'));
+}
+
+</script>
+<script>
+  
+  (function() {
+    const defaultTheme = 'dark';
+    const prefTheme = getPrefTheme();
+    const theme = prefTheme ? prefTheme : defaultTheme;
+
+    switchTheme(theme);
+  })();
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://alvintran.net/" accesskey="h" title="Alvin Tran (Alt + H)">Alvin Tran</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://alvintran.net/" title="Home" class="active"
+                >Home
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/homelab/" title="Homelab"
+                >Homelab
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/writeups/" title="Writeups" class="active"
+                >Writeups
+                </a>
+            </li>
+            <li>
+                <a href="https://alvintran.net/status/" title="Status"
+                >Status
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main post">
+<article class="post-single">
+  <header class="post-header">
+    <h1 class="post-title">2025 Spring</h1>
+    <div class="post-description">I told myself I wouldn&#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin</div>
+    <div class="post-meta"><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 18, 2025</span></span><span class="meta-item">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="user-select: text;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" style="user-select: text;"></rect><line x1="16" y1="2" x2="16" y2="6" style="user-select: text;"></line><line x1="8" y1="2" x2="8" y2="6" style="user-select: text;"></line><line x1="3" y1="10" x2="21" y2="10" style="user-select: text;"></line></svg>
+  <span>April 18, 2025</span></span>
+
       
-      <guid>https://alvintran.net/writeups/ncl/2025spring/</guid>
-      <description>I told myself I wouldn&amp;#39;t go that hard... I went pretty hard. And then I forgot to do any writeups as I went so most of this is me doing forensics on myself. I blame collin</description>
-      <content:encoded><![CDATA[<h1 id="osint">OSINT</h1>
-<h2 id="hard-cats">(Hard) Cats?</h2>
+      
+    </div>
+  </header> <div class="toc side right">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#osint" aria-label="OSINT">OSINT</a><ul>
+                        
+                <li>
+                    <a href="#hard-cats" aria-label="(Hard) Cats?">(Hard) Cats?</a></li></ul>
+                </li>
+                <li>
+                    <a href="#crypto" aria-label="Crypto">Crypto</a><ul>
+                        
+                <li>
+                    <a href="#medium-messages" aria-label="(Medium) Messages">(Medium) Messages</a></li>
+                <li>
+                    <a href="#medium-zugzwang" aria-label="(Medium) Zugzwang">(Medium) Zugzwang</a></li>
+                <li>
+                    <a href="#hard-qr-codestl" aria-label="(Hard) QR Code/STL">(Hard) QR Code/STL</a></li></ul>
+                </li>
+                <li>
+                    <a href="#passwords" aria-label="Passwords">Passwords</a><ul>
+                        
+                <li>
+                    <a href="#hard-dice" aria-label="(Hard) DIce">(Hard) DIce</a></li></ul>
+                </li>
+                <li>
+                    <a href="#log-analysis" aria-label="Log Analysis">Log Analysis</a><ul>
+                        
+                <li>
+                    <a href="#medium" aria-label="(Medium)">(Medium)</a></li>
+                <li>
+                    <a href="#hard" aria-label="(Hard)">(Hard)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#network-traffic" aria-label="Network Traffic">Network Traffic</a><ul>
+                        
+                <li>
+                    <a href="#medium-wifi" aria-label="(Medium) Wifi">(Medium) Wifi</a></li>
+                <li>
+                    <a href="#hard-exfil" aria-label="(Hard) Exfil">(Hard) Exfil</a></li></ul>
+                </li>
+                <li>
+                    <a href="#forensics" aria-label="Forensics">Forensics</a><ul>
+                        
+                <li>
+                    <a href="#easy-dog" aria-label="(Easy) Dog">(Easy) Dog</a></li>
+                <li>
+                    <a href="#medium-foryou" aria-label="(Medium) ForYou">(Medium) ForYou</a></li>
+                <li>
+                    <a href="#hard-whatever-the-img-file-was" aria-label="(Hard) whatever the .img file was">(Hard) whatever the .img file was</a></li></ul>
+                </li>
+                <li>
+                    <a href="#scanning" aria-label="Scanning">Scanning</a><ul>
+                        
+                <li>
+                    <a href="#hard-school" aria-label="(Hard) School">(Hard) School</a></li></ul>
+                </li>
+                <li>
+                    <a href="#web-apps" aria-label="Web Apps">Web Apps</a><ul>
+                        
+                <li>
+                    <a href="#easy-dog-gallery" aria-label="(Easy) Dog Gallery">(Easy) Dog Gallery</a></li>
+                <li>
+                    <a href="#medium-1" aria-label="(Medium)">(Medium)</a></li>
+                <li>
+                    <a href="#hard-dogstagram" aria-label="(Hard) Dogstagram">(Hard) Dogstagram</a></li></ul>
+                </li>
+                <li>
+                    <a href="#ee" aria-label="E&amp;E">E&amp;E</a><ul>
+                        
+                <li>
+                    <a href="#medium-crackme" aria-label="(medium) crackme">(medium) crackme</a></li>
+                <li>
+                    <a href="#hard-pwcheck" aria-label="(hard) pwcheck">(hard) pwcheck</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="osint">OSINT<a hidden class="anchor" aria-hidden="true" href="#osint">¶</a></h1>
+<h2 id="hard-cats">(Hard) Cats?<a hidden class="anchor" aria-hidden="true" href="#hard-cats">¶</a></h2>
 <ul>
 <li>The payload is actually just some iPhone 3 jailbreak. Completely irrelevant
 <ul>
@@ -25,8 +323,8 @@
 <li>I reversed image search the logo to find <code>dramcorp</code> or you can use the poster to find <code>omega mart</code> directly.</li>
 <li>The cat named LV is shown in a TikTok / YouTube video.</li>
 </ul>
-<h1 id="crypto">Crypto</h1>
-<h2 id="medium-messages">(Medium) Messages</h2>
+<h1 id="crypto">Crypto<a hidden class="anchor" aria-hidden="true" href="#crypto">¶</a></h1>
+<h2 id="medium-messages">(Medium) Messages<a hidden class="anchor" aria-hidden="true" href="#medium-messages">¶</a></h2>
 <pre tabindex="0"><code>for n in {1..50}; do echo $n;  cat &#34;message_$n.txt&#34; | openssl dgst -sha256 -hmac &#34;ciCloud-API-20240315-4f7b9c&#34; | sed -e &#34;s/SHA2-256(stdin)= //&#34; | sed -z &#39;$ s/\n$//&#39; | diff - &#34;message_$n.hmac&#34;; done | grep &#34;&lt;&#34; -B 2
 </code></pre><ul>
 <li>For each message, get the content, get the sha256 hmac digest with given key</li>
@@ -35,7 +333,7 @@
 <code>for n in {1..50}; do cat &quot;message_$n.hmac&quot;; printf &quot;\n&quot;; done | grep &quot;3349ac94b3bcfccda44df33da49cc5f6bdfe6fbae8d1107621bb92f399d6acd8&quot;</code></li>
 <li>Lets you finding the mismatched hmac. (Repeat for each of the above)</li>
 </ul>
-<h2 id="medium-zugzwang">(Medium) Zugzwang</h2>
+<h2 id="medium-zugzwang">(Medium) Zugzwang<a hidden class="anchor" aria-hidden="true" href="#medium-zugzwang">¶</a></h2>
 <ul>
 <li>need a really specific library
 <a href="https://github.com/WintrCat/chessencryption">https://github.com/WintrCat/chessencryption</a></li>
@@ -59,15 +357,15 @@
 </span></span><span style="display:flex;"><span>        l <span style="color:#f92672">=</span> f<span style="color:#f92672">.</span>read()
 </span></span><span style="display:flex;"><span>        parts<span style="color:#f92672">.</span>append(l)
 </span></span><span style="display:flex;"><span>decode<span style="color:#f92672">.</span>decode(<span style="color:#e6db74">&#39;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>join(parts), <span style="color:#e6db74">&#39;out.jpeg&#39;</span>)
-</span></span></code></pre></div><h2 id="hard-qr-codestl">(Hard) QR Code/STL</h2>
+</span></span></code></pre></div><h2 id="hard-qr-codestl">(Hard) QR Code/STL<a hidden class="anchor" aria-hidden="true" href="#hard-qr-codestl">¶</a></h2>
 <ul>
 <li>File is a .gcode file (if you&rsquo;re familiar with 3d printing it helps a lot)</li>
 <li><a href="https://ncviewer.com/">https://ncviewer.com/</a></li>
 <li>I went into a pixelart thing and reconstructed it by hand&hellip;
 ![[Pasted image 20250412153315.png]]</li>
 </ul>
-<h1 id="passwords">Passwords</h1>
-<h2 id="hard-dice">(Hard) DIce</h2>
+<h1 id="passwords">Passwords<a hidden class="anchor" aria-hidden="true" href="#passwords">¶</a></h1>
+<h2 id="hard-dice">(Hard) DIce<a hidden class="anchor" aria-hidden="true" href="#hard-dice">¶</a></h2>
 <ul>
 <li>I got my wordlist from here: <a href="https://www.eff.org/dice">https://www.eff.org/dice</a></li>
 <li>The challenge named was  &ldquo;Dice&rdquo; so I instinctively looked for a short wordlist.</li>
@@ -82,13 +380,13 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># repeat above with liber8</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># then with sepcialdice/specialliber8 combinations you repeat the cracking</span>
-</span></span></code></pre></div><h1 id="log-analysis">Log Analysis</h1>
-<h2 id="medium">(Medium)</h2>
+</span></span></code></pre></div><h1 id="log-analysis">Log Analysis<a hidden class="anchor" aria-hidden="true" href="#log-analysis">¶</a></h1>
+<h2 id="medium">(Medium)<a hidden class="anchor" aria-hidden="true" href="#medium">¶</a></h2>
 <ul>
 <li>I used <code>awk</code> to get the answer to questions as well as grep
 <code>cat social_data.sql  | grep -e &quot;'[0-9]\{3\}-&quot; -o  | sort | uniq -c | sort -n</code></li>
 </ul>
-<h2 id="hard">(Hard)</h2>
+<h2 id="hard">(Hard)<a hidden class="anchor" aria-hidden="true" href="#hard">¶</a></h2>
 <ul>
 <li>They gave you a format, up to you to parse it and look through it.</li>
 </ul>
@@ -113,20 +411,20 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Final answer i got through this:</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># It was someone who got denied 2x and success. People say its a really short login time (like milliseconds apart)</span>
 </span></span><span style="display:flex;"><span>df[[<span style="color:#e6db74">&#39;ip&#39;</span>,<span style="color:#e6db74">&#39;failure&#39;</span>]]<span style="color:#f92672">.</span>groupby(<span style="color:#e6db74">&#34;ip&#34;</span>)<span style="color:#f92672">.</span>mean()<span style="color:#f92672">.</span>sort_values(<span style="color:#e6db74">&#39;failure&#39;</span>)
-</span></span></code></pre></div><h1 id="network-traffic">Network Traffic</h1>
-<h2 id="medium-wifi">(Medium) Wifi</h2>
+</span></span></code></pre></div><h1 id="network-traffic">Network Traffic<a hidden class="anchor" aria-hidden="true" href="#network-traffic">¶</a></h1>
+<h2 id="medium-wifi">(Medium) Wifi<a hidden class="anchor" aria-hidden="true" href="#medium-wifi">¶</a></h2>
 <ul>
 <li>some simple reading of the pcap file then using <code>aircrack-ng</code> with <code>rockyou.txt</code> to crack.
 <a href="https://github.com/aircrack-ng/aircrack-ng">https://github.com/aircrack-ng/aircrack-ng</a></li>
 </ul>
-<h2 id="hard-exfil">(Hard) Exfil</h2>
+<h2 id="hard-exfil">(Hard) Exfil<a hidden class="anchor" aria-hidden="true" href="#hard-exfil">¶</a></h2>
 <ul>
 <li>Investigating the file, we can see a DNS query for <code>asset.xxxxx.ci</code></li>
 <li>On the first one, we can see that the <code>xxxxx</code> is a file header that matches a <code>xz</code> archive.
 <code>strings exfil.pcapng | grep -e &quot;-.*\.ci&quot; -o | sed  &quot;s/-//&quot; | sed &quot;s/.ci//&quot; | tr -d &quot;\n&quot; | xxd -r -p &gt; asset.bmp.xz</code></li>
 </ul>
-<h1 id="forensics">Forensics</h1>
-<h2 id="easy-dog">(Easy) Dog</h2>
+<h1 id="forensics">Forensics<a hidden class="anchor" aria-hidden="true" href="#forensics">¶</a></h1>
+<h2 id="easy-dog">(Easy) Dog<a hidden class="anchor" aria-hidden="true" href="#easy-dog">¶</a></h2>
 <ul>
 <li>inside the .png data, we see a reference to <code>exiftool</code></li>
 <li>this allows us to grab exif metadata from the .png
@@ -135,7 +433,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="medium-foryou">(Medium) ForYou</h2>
+<h2 id="medium-foryou">(Medium) ForYou<a hidden class="anchor" aria-hidden="true" href="#medium-foryou">¶</a></h2>
 <ul>
 <li>If you load the file into a hex-editor, we can see its oddly large&hellip; and that theres multiple file headers inside!</li>
 <li><code>binwalk -dd=.* -e ForYou.jpg</code>
@@ -145,13 +443,13 @@
 </li>
 <li>I hear <code>foremost</code> is also very effective and a simple 1 liner.</li>
 </ul>
-<h2 id="hard-whatever-the-img-file-was">(Hard) whatever the .img file was</h2>
+<h2 id="hard-whatever-the-img-file-was">(Hard) whatever the .img file was<a hidden class="anchor" aria-hidden="true" href="#hard-whatever-the-img-file-was">¶</a></h2>
 <ul>
 <li><code>strings</code> gets you the file name</li>
 <li>you can use <code>autopsy</code> to reconstruct the data or probably <code>binwalk</code></li>
 </ul>
-<h1 id="scanning">Scanning</h1>
-<h2 id="hard-school">(Hard) School</h2>
+<h1 id="scanning">Scanning<a hidden class="anchor" aria-hidden="true" href="#scanning">¶</a></h1>
+<h2 id="hard-school">(Hard) School<a hidden class="anchor" aria-hidden="true" href="#hard-school">¶</a></h2>
 <ul>
 <li>Start with an <code>nmap -sC</code> scan
 <ul>
@@ -162,17 +460,17 @@
 <li>Simply use <code>ldapsearch</code> to find what is needed
 <code>ldapsearch host -b &quot;dc=cloud&quot;</code> for example.</li>
 </ul>
-<h1 id="web-apps">Web Apps</h1>
-<h2 id="easy-dog-gallery">(Easy) Dog Gallery</h2>
+<h1 id="web-apps">Web Apps<a hidden class="anchor" aria-hidden="true" href="#web-apps">¶</a></h1>
+<h2 id="easy-dog-gallery">(Easy) Dog Gallery<a hidden class="anchor" aria-hidden="true" href="#easy-dog-gallery">¶</a></h2>
 <ul>
 <li>notice if you have over the file you can see that the source is <code>http://url/image?photo=path/to/.png</code></li>
 <li>We can do directory traversal to find a <code>flag.txt</code></li>
 </ul>
-<h2 id="medium-1">(Medium)</h2>
+<h2 id="medium-1">(Medium)<a hidden class="anchor" aria-hidden="true" href="#medium-1">¶</a></h2>
 <ul>
 <li>inspect the source code for the user/password bypass.</li>
 </ul>
-<h2 id="hard-dogstagram">(Hard) Dogstagram</h2>
+<h2 id="hard-dogstagram">(Hard) Dogstagram<a hidden class="anchor" aria-hidden="true" href="#hard-dogstagram">¶</a></h2>
 <ul>
 <li>Inside the source code (<code>__buildmanifest</code>), we can see the <code>static/chunk/secret_dogo_stash_xxxxx.js</code> and <code>static/chunk/main_xxxxx.js</code>.
 <ul>
@@ -187,8 +485,8 @@
 </ul>
 </li>
 </ul>
-<h1 id="ee">E&amp;E</h1>
-<h2 id="medium-crackme">(medium) crackme</h2>
+<h1 id="ee">E&amp;E<a hidden class="anchor" aria-hidden="true" href="#ee">¶</a></h1>
+<h2 id="medium-crackme">(medium) crackme<a hidden class="anchor" aria-hidden="true" href="#medium-crackme">¶</a></h2>
 <ul>
 <li>Ghidra shows a &ldquo;decodeimage&rdquo; function.
 <ul>
@@ -231,7 +529,7 @@
 </span></span><span style="display:flex;"><span>    t <span style="color:#f92672">=</span><span style="color:#a6e22e">memcmp</span>(buffer, <span style="color:#f92672">&amp;</span>enc, <span style="color:#ae81ff">8</span>);
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;cmp %i</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, t);
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="hard-pwcheck">(hard) pwcheck</h2>
+</span></span></code></pre></div><h2 id="hard-pwcheck">(hard) pwcheck<a hidden class="anchor" aria-hidden="true" href="#hard-pwcheck">¶</a></h2>
 <p><a href="https://youtu.be/1hScemFvnzw?si=mt2Y1qvokAvQVW2C">https://youtu.be/1hScemFvnzw?si=mt2Y1qvokAvQVW2C</a></p>
 <ul>
 <li>race condition</li>
@@ -249,135 +547,188 @@
 </li>
 <li>chaining commands lets you read the <code>/proc/[pid]</code> dir as fast as possible  and then grab <code>/etc/shadow</code> contents.</li>
 </ul>
-]]></content:encoded>
-    </item>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+  </footer>
+    <div class="comments-separator"></div>
+</article>
+    </main>
     
-    <item>
-      <title>NCL / Password Cracking [complexity]</title>
-      <link>https://alvintran.net/writeups/ncl/pc_complexity/</link>
-      <pubDate>Tue, 12 Nov 2024 12:28:45 -0500</pubDate>
-      
-      <guid>https://alvintran.net/writeups/ncl/pc_complexity/</guid>
-      <description>Walkthrough of Fall 2024 NCL Password Cracking (Hard)! Going through basic &lt;code&gt;hashcat&lt;/code&gt; to adding rules to match with complexity requirements</description>
-      <content:encoded><![CDATA[<h1 id="prerequisites">Prerequisites</h1>
-<ul>
-<li>Probably have <a href="https://github.com/hashcat/hashcat">hashcat</a> installed. I have it on some local directory on my Windows PC</li>
-<li>Figure out your hash type <a href="https://nth.skerritt.blog/">NameThatHash</a>. Usually for these its md5 (-m 500, is also default on hashcat but having it on makes it faster.)</li>
-</ul>
-<h1 id="loading-passwords">Loading passwords</h1>
-<p>Load the first two hashes (Easy) into a txt file like. Say the file is easy.txt, should just look like:</p>
-<pre tabindex="0"><code>$1$abcd$cM9oWl3gP.t.Cz2dWWm7L1
-$1$efgh$Fmv8YRcVm3phgfR0MwVYw0
-$1$lmno$mDFxTnfk0Ad3di11sVbNj.
-</code></pre><p>For taxonomoy:</p>
-<pre tabindex="0"><code>$1$ -&gt; Transaction ID ( i think )
-$abcd$ -&gt; Salt (prepended/appended to a password before feeding. Make it longer to password crack.
-  Example: &#34;password&#34; is actually used for all 3 above, but salt makes them all different. &lt;br&gt;
-  Thus if you wanted to crack &#34;password&#34;, you&#39;d have to try 3x as many combinatons.
-$restofthestuff -&gt; actual password hash
-</code></pre><p>Command to generate: <code>openssl passwd -aixmd5 -salt abcd password</code>. Added <code>$1$</code> to front later.
-I keep the real passwords out per NCL guidelines.</p>
-<h1 id="easy-passwords-1-2">Easy (passwords 1-2)</h1>
-<p><code>hashcat.exe -m 500 easy.txt -a 0 path/to/rockyou.txt</code><br>
--m 500 -&gt; Mode for md5. Usually what they use for these problems, check NameThatHash.<br>
--a 0 -&gt; attack mode 0, dictonary attack. This is default I think as well. Goes through wordlist(s).<br>
-Format is generally &ldquo;hashcat.exe [hashfile] [options] [dict1] [dict2] [dict&hellip;]</p>
-<p>If you read the problem, the password-maker is <em>really</em> lazy and keeps the same pattern for all his passwords!(ex. password12 and 44password)<br>
-They also use the <em>bare minimum</em> number of characters required. Useful to limit your search.<br>
-Now we have the keyword, we can start using more complex rules</p>
-<h1 id="medium-categories-mask-passwords-3-4">Medium Categories (Mask) (passwords 3-4)</h1>
-<p>Assuming hash file is in &lsquo;medium.txt&rsquo;.<br>
-This time they&rsquo;ve updated their game and require 2 of:</p>
-<ul>
-<li>Uppercase</li>
-<li>Lowercase</li>
-<li>Number
-Luckily there two functions of hashcat that can help: mask attack and rules.
-I would refer to official hashcat documentation on details but I&rsquo;m here to just run you down to do the problem.</li>
-</ul>
-<h2 id="mask-attacks">Mask Attacks</h2>
-<p>With attack mode <code>-a 6</code> or <code>a -7</code>, you can try characters at end or beginning of a password.</p>
-<table>
-  <thead>
-      <tr>
-          <th>option</th>
-          <th>characters</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>?d</td>
-          <td>0123&hellip;9</td>
-      </tr>
-      <tr>
-          <td>?l</td>
-          <td>abcd&hellip;z</td>
-      </tr>
-      <tr>
-          <td>?u</td>
-          <td>ABCD&hellip;Z</td>
-      </tr>
-      <tr>
-          <td>?a</td>
-          <td>01..9..AB..Z..ab..z..?!&lt;&gt;*$&hellip;~</td>
-      </tr>
-  </tbody>
-</table>
-<p>So for example, say we have a file named <code>password.txt</code> that only contains:</p>
-<pre tabindex="0"><code>password
-PASSWORD
-</code></pre><p>We can run <code>hashcat.exe -m 500 medium.txt -a 6 password.txt ?d?d</code> which will do <code>password11 -&gt; password99</code> and <code>PASSWORD11 -&gt; PASSWORD99</code>.<br>
-We can reverse this with  <code>hashcat.exe -m 500 medium.txt -a 7 ?d?d password.txt</code>, which <em>prepends</em> to beginning of word i.e <code>12password</code> and so on.<br>
-If you&rsquo;d like to combine categories, i.e. both digits and uppercase, we can assign custom codes with <code>-1 ?d?u</code> then instead we insert <code>password.txt ?1?1</code>.<br>
-Everything behind <code>-1</code> gets added to a charcter list, so if you wanted only a certain set you could define it as <code>-1 ABCD1234</code> which will only try those 8 characters in any <code>?1</code> space.</p>
-<h2 id="rules">Rules</h2>
-<p>Can only be used with dictionary attacks (according to my machine, the wiki says something different). Does a lot of fancy things, like substitutions, duplications, case-toggles, etc, really over my head.<br>
-Good ones to know:
-<a href="https://github.com/NotSoSecure/password_cracking_rules/blob/master/OneRuleToRuleThemAll.rule">OneRuleToRuleThemAll</a> and its <a href="https://github.com/stealthsploit/OneRuleToRuleThemStill">brother</a>
-Base hashcat rules: <code>rules/toggles1.rule</code> - <code>rules/toggles5.rule</code>,   <code>rules/leetspeak.rule</code></p>
-<p>ORtRTA (?) takes long time but is mostly thourough, don&rsquo;t do unless you have lotta time.<br>
-Toggle rules are easy and work really good for our next case (Medium+).<br>
-Leetspeak will work with when NCL adds specifciation &ldquo;Passwords must not contain any word from english dictionary&rdquo;.</p>
-<h2 id="solving-the-problem">Solving the problem</h2>
-<p>I think I got it trying the ones below and masking sure <code>password.txt</code> had an uppercase KEYWORD and lowercase keyword:</p>
-<pre tabindex="0"><code>hashcat.exe -m 500 medium.txt -a 6 -1 ?d?u?l password.txt ?1?1  
-hashcat.exe -m 500 medium.txt -a 7 -1 ?d?u?l ?1?1 password.txt
-</code></pre><p>Note_1: The amount of <code>?a</code> I add is depndent on minimum length and keyword length. They keyword itself was 6 characters so if the minimum was 10, I would add 4 <code>?d</code> to end like above.<br>
-Note_2: Using custom <code>?d?u?l</code> since <code>?1</code> includes special characters which we won&rsquo;t use (problem states bare minimum safe to assume usually).
-I was missing one from this category :(</p>
-<h3 id="addendum-mask-on-front-and-back">Addendum: Mask on front and back</h3>
-<p>Unforunately, you can&rsquo;t put both at front and end at same time, so we have to do it one at a time. hashcat allows for outputting your combinations to a file, so the sequence below would do it:</p>
-<pre tabindex="0"><code>hashcat.exe  --stdout -a 6 password.txt ?a  &gt; back.txt
-hashcat.exe -m 500 medium.txt -a 7 ?a back.txt
-</code></pre><p>This will try <code>1password1</code> all the way to <code>ZpasswordZ</code>. This could get the last one I&rsquo;m missing. Also note for brevity I use <code>?a</code> here instead of the custom.
-You can chain and combine different attack modes as well, like if I wanted to combine two wordlists <code>-a 1 first.name last.name &gt; full.name</code> then do my append <code>-a 6 full.name ?d?d</code>. Not necessary here, but good to know.</p>
-<h1 id="medium-categories-rules-passwords-5-6">Medium+ Categories+ (Rules) (passwords 5-6)</h1>
-<p>NCL now wants the passwords to have ALL of the categories, and a minimum length of 10.<br>
-To get all the categories, I did something similar above and used hashcat rules to ALL capitalizations of my kEyWOrd:<br>
-<code>hashcat.exe  --stdout -a 0 password.txt -r rules/toggles5.rule  &gt; all.txt</code> (or type it by hand)<br>
-Then I just ran what I basically did before but at a larger minimum:</p>
-<pre tabindex="0"><code>hashcat.exe -m 500 medium.txt -a 6 all.txt ?d?d?d?d  
-hashcat.exe -m 500 medium.txt -a 7 ?d?d?d?d all.txt
-</code></pre><p>I try digits first since the <code>all.txt</code> fulfills upper and lowercase already AND its faster to check. This alone got 2 passwords so safe bet. Otherwise you can use <code>-1 ?d?u?l</code> or whatever.</p>
-<p>Got the one easy enough.</p>
-<h1 id="hard-no-english-password-7">Hard No English (password 7)</h1>
-<p>I just took everything from above and threw a rule on it since we can&rsquo;t have &ldquo;english&rdquo; but we can certainly have &ldquo;3ng1!sh&rdquo;</p>
-<pre tabindex="0"><code>hashcat.exe --stdout -a 6 all.txt ?d?d?d?d &gt; back.txt
-hashcat.exe --stdout -a 7 ?d?d?d?d all.txt &gt; front.txt
-hashcat.exe -m 500 hard.txt -a 6 back.txt -r rules/leetspeak.rule
-hashcat.exe -m 500 hard.txt -a 6 front.txt -r rules/leetspeak.rule
-OR
-hashcat.exe -m 500 hard.txt -a 6 front.txt back.txt -r rules/leetspeak.rule
-</code></pre><p>I got my one and out. Happened to be in format <code>?d?d?d?dK3yW0rD</code></p>
-<h1 id="hardest-passwords-7">Hardest (passwords 7+)</h1>
-<p>I did not get to these but I think its combination of above plus:</p>
-<ul>
-<li>including special characters (leetspeek and ?a or ?s will w ork)</li>
-<li>higher minimum number (12)
-I hear this is where it gets computationally prohibitive, so will take a while to try different orders and combinations.</li>
-</ul>
-]]></content:encoded>
-    </item>
+<footer class="footer">
+  <span>&copy; 2025 <a href="https://alvintran.net/">Alvin Tran</a></span><span style="display: inline-block; margin-left: 1em;">
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA</a>
+  </span>
+  <span style="display: inline-block; margin-left: 1em;">
+    Powered by
+    <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+    <a href="https://github.com/reorx/hugo-PaperModX/" rel="noopener" target="_blank">PaperModX</a>
+  </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+    <path d="M12 6H0l6-6z" />
+  </svg>
+</a>
+
+<script>
+  (function() {
+     
+    const disableThemeToggle = '' == '1';
+    if (disableThemeToggle) {
+      return;
+    }
+
+    let button = document.getElementById("theme-toggle")
     
-  </channel>
-</rss>
+    button.removeEventListener('click', toggleThemeListener)
+    
+    button.addEventListener('click', toggleThemeListener)
+  })();
+</script>
+
+<script>
+  (function () {
+    let menu = document.getElementById('menu')
+    if (menu) {
+      menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+      menu.onscroll = function () {
+        localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+      }
+    }
+
+    const disableSmoothScroll = '' == '1';
+    const enableInstantClick = '' == '1';
+    
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || disableSmoothScroll || enableInstantClick) {
+      return;
+    }
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        var id = this.getAttribute("href").substr(1);
+        document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+          behavior: "smooth"
+        });
+        if (id === "top") {
+          history.replaceState(null, null, " ");
+        } else {
+          history.pushState(null, null, `#${id}`);
+        }
+      });
+    });
+  })();
+</script>
+<script>
+  var mybutton = document.getElementById("top-link");
+  window.onscroll = function () {
+    if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+      mybutton.style.visibility = "visible";
+      mybutton.style.opacity = "1";
+    } else {
+      mybutton.style.visibility = "hidden";
+      mybutton.style.opacity = "0";
+    }
+  };
+</script>
+<script>
+  document.querySelectorAll('.masked-email').forEach((el) => {
+    el.innerText = atob(el.innerText);
+    el.classList.remove('masked-email')
+  })
+</script>
+<script>
+  if (window.scrollListeners) {
+    
+    for (const listener of scrollListeners) {
+      window.removeEventListener('scroll', listener)
+    }
+  }
+  window.scrollListeners = []
+</script>
+
+
+
+<script src="/js/medium-zoom.min.js" data-no-instant
+></script>
+
+
+
+
+<script>
+  
+  
+  (function() {
+    const enableTocScroll = '1' == '1'
+    if (!enableTocScroll) {
+      return
+    }
+    if (!document.querySelector('.toc')) {
+      console.log('no toc found, ignore toc scroll')
+      return
+    }
+    
+
+    
+    const scrollListeners = window.scrollListeners
+    const headings = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id]');
+    const activeClass = 'active';
+
+    
+    let activeHeading = headings[0];
+    getLinkByHeading(activeHeading).classList.add(activeClass);
+
+    const onScroll = () => {
+      const passedHeadings = [];
+      for (const h of headings) {
+        
+        if (getOffsetTop(h) < 5) {
+          passedHeadings.push(h)
+        } else {
+          break;
+        }
+      }
+      if (passedHeadings.length > 0) {
+        newActiveHeading = passedHeadings[passedHeadings.length - 1];
+      } else {
+        newActiveHeading = headings[0];
+      }
+      if (activeHeading != newActiveHeading) {
+        getLinkByHeading(activeHeading).classList.remove(activeClass);
+        activeHeading = newActiveHeading;
+        getLinkByHeading(activeHeading).classList.add(activeClass);
+      }
+    }
+
+    let timer = null;
+    const scrollListener = () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(onScroll, 50)
+    }
+    window.addEventListener('scroll', scrollListener, false);
+    scrollListeners.push(scrollListener)
+
+    function getLinkByHeading(heading) {
+      const id = encodeURI(heading.getAttribute('id')).toLowerCase();
+      return document.querySelector(`.toc ul li a[href="#${id}"]`);
+    }
+
+    function getOffsetTop(heading) {
+      if (!heading.getClientRects().length) {
+        return 0;
+      }
+      let rect = heading.getBoundingClientRect();
+      return rect.top
+    }
+  })();
+  </script>
+
+</body>
+
+</html>
